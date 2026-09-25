@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>数字空间一张图</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #fff; overflow: hidden; font-family: "Microsoft YaHei", "PingFang SC", sans-serif; color: #111; }
+  button, input { font-family: inherit; }
+  .viewport { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
+  .board {
+    width: 1920px; height: 1080px; background: #fff; position: relative;
+    transform-origin: center center; display: flex; flex-direction: column;
+    box-shadow: 0 0 0 1px #111;
+  }
+  header.top {
+    height: 52px; background: #fff; position: relative;
+    border-bottom: 1px solid #111; display: flex; align-items: center; justify-content: flex-end; padding: 0 18px; gap: 16px;
+  }
+  .brand {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    text-align: center; pointer-events: none;
+  }
+  .brand h1 { margin: 0; font-size: 26px; letter-spacing: 4px; font-weight: 700; color: #111; text-align: center; white-space: nowrap; }
+  .clock { margin-left: auto; text-align: right; color: #333; font-size: 13px; line-height: 1.35; }
+  .clock b { font-size: 20px; color: #111; font-weight: 600; }
+  .top-actions { display: flex; gap: 8px; margin-left: 16px; }
+  .top-actions button {
+    height: 30px; padding: 0 12px; border: 1px solid #111; background: #fff; color: #111;
+    border-radius: 4px; cursor: pointer; font-size: 13px;
+  }
+  .top-actions button:hover { background: #eee; }
+  nav.tabs {
+    height: 40px; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 0 14px;
+    background: #fff; border-bottom: 1px solid #111;
+  }
+  .city-select { position: relative; display: none; }
+  .city-select > button, .tab {
+    height: 28px; padding: 0 14px; border: none; background: transparent; color: #111;
+    cursor: pointer; font-size: 14px; border-radius: 4px;
+  }
+  .tab.active { background: #111; color: #fff; }
+  .tab:hover:not(.active) { background: #eee; }
+  .city-menu {
+    display: none; position: absolute; top: 32px; left: 0; z-index: 20; width: 140px;
+    background: #fff; border: 1px solid #111; border-radius: 6px; box-shadow: 0 8px 24px rgba(0,0,0,.12); padding: 6px;
+  }
+  .city-menu.open { display: block; }
+  .city-menu button {
+    display: block; width: 100%; text-align: left; border: none; background: transparent;
+    padding: 6px 8px; cursor: pointer; border-radius: 4px; font-size: 13px; color: #111;
+  }
+  .city-menu button:hover, .city-menu button.on { background: #eee; color: #111; }
+  main.layout { flex: 1; display: grid; grid-template-columns: 360px 1fr 400px; gap: 10px; padding: 10px; min-height: 0; }
+  .col { display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+  .card {
+    background: #fff; border: 1px solid #111; border-radius: 8px; padding: 10px 12px;
+  }
+  .card h2 { margin: 0 0 8px; font-size: 14px; color: #111; display: flex; align-items: center; gap: 6px; }
+  .card h2 i { width: 3px; height: 14px; background: #111; display: inline-block; border-radius: 2px; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .stat { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; background: #fff; border: 1px solid #bbb; border-radius: 6px; padding: 6px 8px; cursor: default; min-width: 0; }
+  .stat:hover, .stat.on { border-color: #111; background: #f5f5f5; }
+  .stat .k { font-size: 12px; color: #333; }
+  .stat .v { font-size: 16px; color: #111; font-weight: 650; }
+  .stat .v span { font-size: 12px; font-weight: 400; margin-left: 2px; color: #555; }
+  .today { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .today div { border: 1px solid #bbb; border-radius: 6px; padding: 8px 6px; min-height: 70px; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+  .today span { display: block; font-size: 11px; color: #555; line-height: 1.3; }
+  .today b { display: block; margin-top: 4px; font-size: 14px; color: #111; font-weight: 650; }
+  .index-head { display: flex; justify-content: space-between; align-items: center; }
+  .index-num { font-size: 28px; color: #111; font-weight: 700; }
+  .bars { display: flex; flex-direction: column; gap: 4px; overflow: auto; min-height: 0; flex: 1; }
+  .card.maturity { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .card.sys { flex: 0 0 auto; }
+  .card.sys .bars { flex: none; overflow: visible; }
+  .bars::-webkit-scrollbar { width: 6px; }
+  .bars::-webkit-scrollbar-thumb { background: #bbb; border-radius: 6px; }
+  .unit-sum { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 6px; }
+  .unit-sum span { border: 1px solid #111; border-radius: 6px; padding: 4px 8px; font-size: 12px; color: #333; cursor: pointer; }
+  .unit-sum span:hover, .unit-sum span.on { background: #f5f5f5; }
+  .unit-sum b { color: #111; font-size: 16px; margin: 0 2px; }
+  .net-label { display: flex; justify-content: space-between; font-size: 12px; color: #111; margin: 6px 2px 2px; }
+  .net-label em { font-style: normal; color: #555; }
+  .bar-row { display: grid; grid-template-columns: 148px 1fr 36px; align-items: center; gap: 8px; cursor: pointer; border-radius: 4px; padding: 2px 4px; }
+  #termBars .bar-row { grid-template-columns: 118px 1fr 36px; }
+  .bar-row:hover, .bar-row.on { background: #f2f2f2; outline: 1px solid #111; }
+  .bar-row .name { font-size: 13px; color: #111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .track { height: 8px; background: #fff; border: 1px solid #111; border-radius: 99px; overflow: hidden; }
+  .fill { height: 100%; background: #111; border-radius: 99px; }
+  .bar-row .score { font-size: 13px; color: #111; text-align: right; }
+  .trend { display: grid; grid-template-columns: 1fr 120px; gap: 8px; align-items: center; }
+  .trend-nums { display: flex; gap: 14px; }
+  .trend-nums div { text-align: center; }
+  .trend-nums b { display: block; font-size: 22px; color: #111; }
+  .trend-nums span { font-size: 12px; color: #555; }
+  .legend-dot { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #333; }
+  .legend-dot em { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+  .map-wrap { position: relative; flex: 1; min-height: 0; background: #fff; border: 1px solid #111; border-radius: 8px; overflow: hidden; }
+  .asset-pop {
+    display: none; position: absolute; left: 12px; top: 52px; z-index: 6; width: 380px;
+    max-height: calc(100% - 200px); background: #fff; border: 1px solid #111; border-radius: 8px; padding: 10px 12px;
+  }
+  .asset-pop.show { display: flex; flex-direction: column; }
+  .asset-pop h3 { margin: 0 0 8px; font-size: 14px; color: #111; }
+  .asset-pop .asset-scroll { overflow: auto; min-height: 0; }
+  #mapSvg { width: 100%; height: 100%; display: block; cursor: grab; background: #fff; }
+  #mapSvg:active { cursor: grabbing; }
+  .dist { fill: #ffffff; stroke: #111; stroke-width: 3.4; stroke-linejoin: round; cursor: pointer; }
+  .dist.active { stroke: #111; stroke-width: 6; stroke-dasharray: 8 4; }
+  .dist-label { font-size: 13px; fill: #111; font-weight: 700; pointer-events: none; paint-order: stroke; stroke: #fff; stroke-width: 4px; }
+  .marker { cursor: pointer; }
+  .marker circle, .marker rect { stroke: #111; stroke-width: 1.5; }
+  .map-tools {
+    position: absolute; left: 12px; top: 12px; display: flex; flex-direction: column; gap: 6px; z-index: 3;
+  }
+  .map-tools button, .zoom-tools button {
+    width: 32px; height: 32px; border: 1px solid #111; background: #fff; border-radius: 4px; cursor: pointer; color: #111; font-size: 16px;
+  }
+  .zoom-tools { position: absolute; right: 12px; bottom: 228px; display: flex; flex-direction: column; gap: 6px; z-index: 3; }
+  .layer-panel, .float-card, .tip {
+    position: absolute; z-index: 5; background: #fff; border: 1px solid #111; border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.12);
+  }
+  .layer-panel { left: 52px; top: 12px; width: 230px; padding: 10px 12px; display: none; }
+  .layer-panel.open { display: block; }
+  .layer-panel h3 { margin: 0 0 8px; font-size: 13px; display: flex; justify-content: space-between; color: #111; }
+  .layer-row { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 4px 0; color: #111; cursor: pointer; }
+  .layer-row .cnt { margin-left: auto; color: #555; }
+  .layer-actions { display: flex; gap: 8px; margin-top: 8px; }
+  .layer-actions button {
+    flex: 1; height: 26px; border: 1px solid #111; background: #fff; border-radius: 4px; cursor: pointer; font-size: 12px; color: #111;
+  }
+  .map-legend {
+    position: absolute; left: 12px; bottom: 178px; background: #fff; border: 1px solid #111;
+    border-radius: 6px; padding: 8px 10px; font-size: 12px; color: #111; z-index: 3;
+  }
+  .map-legend div { display: flex; align-items: center; gap: 6px; margin: 3px 0; }
+  .sw { width: 8px; height: 8px; border-radius: 50%; }
+  .map-foot {
+    position: absolute; left: 10px; right: 10px; bottom: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; z-index: 3;
+  }
+  .spark-meta { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; color: #333; }
+  .spark-meta b { font-size: 16px; color: #111; }
+  .spark { width: 100%; height: 64px; display: block; }
+  .spark-legend { display: flex; flex-wrap: wrap; gap: 2px 10px; margin-top: 4px; font-size: 11px; color: #333; }
+  .spark-legend i { display: inline-block; width: 14px; height: 0; border-top: 2px solid #111; margin-right: 4px; vertical-align: middle; }
+  .map-foot .card { padding: 8px 10px; }
+  .mini-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .mini-metrics .m { font-size: 12px; color: #333; }
+  .mini-metrics b { display: block; color: #111; font-size: 13px; margin-top: 2px; }
+  .plan { font-size: 12px; color: #111; display: flex; justify-content: space-between; gap: 8px; }
+  .tag-ok { color: #111; }
+  .tag-bad { color: #111; font-weight: 700; text-decoration: underline; }
+  .map-bar {
+    position: absolute; top: 12px; right: 12px; z-index: 4;
+    display: flex; flex-direction: column; align-items: stretch; gap: 8px;
+    width: 248px; background: #fff; border: 1px solid #111; border-radius: 8px; padding: 8px;
+  }
+  .map-bar .seg { margin: 0; flex-wrap: nowrap; }
+  .map-bar .seg button { padding: 0 8px; }
+  .kpi4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 0; }
+  .kpi4 .k {
+    background: #fff; border: 1px solid #111; border-radius: 6px; text-align: center;
+    padding: 4px 0; cursor: pointer; font-family: inherit; color: #111;
+  }
+  .kpi4 .k.on { background: #111; }
+  .kpi4 .k.on b, .kpi4 .k.on span { color: #fff; }
+  .kpi4 b { display: block; font-size: 18px; color: #111; font-weight: 700; }
+  .kpi4 span { font-size: 12px; color: #333; }
+  .hi, .mid, .lo, .done { color: #111; }
+  .seg { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+  .seg button {
+    height: 24px; padding: 0 10px; border-radius: 12px; border: 1px solid #111; background: #fff; color: #111; cursor: pointer; font-size: 12px;
+  }
+  .seg button.on { background: #111; color: #fff; }
+  .list { overflow: auto; display: flex; flex-direction: column; gap: 6px; min-height: 0; }
+  #evList, #taskList { overflow: hidden; gap: 0; }
+  .ev-track { display: flex; flex-direction: column; }
+  .ev-copy { display: flex; flex-direction: column; gap: 6px; }
+  .ev-track.rolling .ev-copy { padding-bottom: 6px; }
+  .ev-track.rolling { animation: ev-roll linear infinite; }
+  #evList:hover .ev-track.rolling, #evList.hold .ev-track.rolling,
+  #taskList:hover .ev-track.rolling { animation-play-state: paused; }
+  @keyframes ev-roll { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+  .list::-webkit-scrollbar { width: 6px; }
+  .list::-webkit-scrollbar-thumb { background: #bbb; border-radius: 6px; }
+  .ev, .task {
+    border: 1px solid #bbb; border-radius: 6px; padding: 7px 8px; cursor: pointer; background: #fff;
+  }
+  .ev:hover, .task:hover, .ev.on, .task.on { border-color: #111; background: #f5f5f5; }
+  .ev .t, .task .t { font-size: 13px; color: #111; display: flex; align-items: center; gap: 6px; }
+  .lv { font-size: 12px; color: #111; border: 1px solid #111; border-radius: 3px; padding: 0 4px; line-height: 16px; background: #fff; }
+  .lv.高 { background: #111; color: #fff; } .lv.中 { background: #fff; } .lv.低 { color: #555; border-color: #555; }
+  .ev .meta, .task .meta { margin-top: 3px; font-size: 12px; color: #444; display: flex; justify-content: space-between; gap: 8px; }
+  .pill { font-size: 12px; border-radius: 10px; padding: 0 6px; line-height: 18px; border: 1px solid #111; color: #111; white-space: nowrap; }
+  .pill.待处置, .pill.处置中, .pill.已闭环 { color: #111; }
+  .grow { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .float-card { width: 420px; padding: 12px; display: none; }
+  .float-card.show { display: block; }
+  .float-card h3 { margin: 0 0 8px; font-size: 14px; color: #111; }
+  .asset { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .asset th { text-align: left; color: #333; font-weight: 500; padding: 4px; border-bottom: 1px solid #111; }
+  .asset tr.sys-pick { cursor: pointer; }
+  .asset tr.sys-pick.on td, .asset tr.sys-pick:hover td { background: #f2f2f2; }
+  .asset td { padding: 5px 4px; border-bottom: 1px solid #ccc; }
+  .risk-low { color: #111; border: 1px solid #111; border-radius: 8px; padding: 0 6px; }
+  .detail { width: 320px; padding: 12px 14px; }
+  .detail h3 { margin: 0; font-size: 15px; }
+  .detail .sub { color: #111; font-size: 12px; margin: 4px 0 8px; }
+  .kv { display: grid; grid-template-columns: 88px 1fr; font-size: 13px; row-gap: 6px; }
+  .kv span { color: #444; }
+  .dist-card { width: 240px; padding: 10px 12px; }
+  .dist-card h3 { margin: 0 0 6px; font-size: 15px; color: #111; }
+  .dist-card p { margin: 4px 0; font-size: 13px; color: #222; }
+  .toast {
+    position: absolute; top: 108px; left: 50%; transform: translateX(-50%); background: #111;
+    color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 13px; display: none; z-index: 9;
+  }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="board" id="board">
+    <header class="top">
+      <div class="brand">
+        <h1>数字空间一张图</h1>
+      </div>
+      <div class="clock">
+        <div id="dateLine">2026年09月24日 星期四</div>
+        <b id="timeLine">09:15:52</b>
+      </div>
+      <div class="top-actions">
+        <button type="button" id="btnFull">退出全屏</button>
+      </div>
+    </header>
+    <nav class="tabs">
+      <div class="city-select">
+        <button type="button" id="cityBtn">全市 ▾</button>
+        <div class="city-menu" id="cityMenu"></div>
+      </div>
+      <button class="tab" data-tab="综合">综合</button>
+      <button class="tab" data-tab="云">云</button>
+      <button class="tab" data-tab="网">网</button>
+      <button class="tab" data-tab="数">数</button>
+      <button class="tab" data-tab="算">算</button>
+      <button class="tab active" data-tab="安">安</button>
+      <button class="tab" data-tab="产">产</button>
+    </nav>
+    <main class="layout">
+      <section class="col">
+        <div class="card">
+          <h2><i></i>安全防护资产台账</h2>
+          <div class="stats">
+            <div class="stat" data-book="device"><div class="k">设备数量</div><div class="v">17<span>个</span></div></div>
+            <div class="stat" data-book="system"><div class="k">业务系统</div><div class="v">3<span>个</span></div></div>
+            <div class="stat" data-book="cloud"><div class="k">云平台</div><div class="v">2<span>个</span></div></div>
+            <div class="stat" data-book="middleware"><div class="k">中间件</div><div class="v">1<span>个</span></div></div>
+            <div class="stat" data-book="database"><div class="k">数据库</div><div class="v">1<span>个</span></div></div>
+            <div class="stat" data-book="api"><div class="k">API接口</div><div class="v">19<span>条</span></div></div>
+          </div>
+        </div>
+        <div class="card" style="flex-shrink:0">
+          <h2><i></i>今日数据</h2>
+          <div class="today">
+            <div><span>今日访问总量</span><b>186.4万</b></div>
+            <div><span>服务人群</span><b>42.8万</b></div>
+            <div><span>API调用量</span><b>96.3万</b></div>
+            <div><span>今日攻击次数</span><b>1,286</b></div>
+            <div><span>峰值次数</span><b>4,820/分</b></div>
+            <div><span>拦截率</span><b>99.2%</b></div>
+            <div><span>高危事件</span><b>6</b></div>
+            <div><span>较昨日</span><b>+12.5%</b></div>
+          </div>
+        </div>
+        <div class="card">
+          <h2><i></i>安全运行态势</h2>
+          <div class="trend">
+            <div class="trend-nums">
+              <div><b>5</b><span>累计攻击</span></div>
+              <div><b>0</b><span>当日攻击</span></div>
+              <div><b>1</b><span>高危告警</span></div>
+            </div>
+            <div id="donut"></div>
+          </div>
+        </div>
+        <div class="card maturity sys">
+          <h2><i></i>系统</h2>
+          <div class="unit-sum" id="unitSum"></div>
+          <div class="bars" id="unitBars"></div>
+        </div>
+        <div class="card maturity">
+          <h2><i></i>终端</h2>
+          <div class="bars" id="termBars"></div>
+        </div>
+      </section>
+      <section class="col">
+        <div class="map-wrap" id="mapWrap">
+          <svg id="mapSvg"></svg>
+          <div class="asset-pop" id="assetPop"></div>
+          <div class="map-bar">
+            <div class="seg" id="dateSeg"></div>
+            <div class="kpi4" id="levelBar"></div>
+          </div>
+          <div class="map-tools">
+            <button type="button" id="btnLayer" title="图层">☰</button>
+          </div>
+          <div class="layer-panel" id="layerPanel">
+            <h3>图层控制 <span id="layerCount">6/6</span></h3>
+            <div id="layerList"></div>
+            <div class="layer-actions">
+              <button type="button" id="btnAllLayer">全部开启</button>
+              <button type="button" id="btnWarnLayer">仅留预警</button>
+            </div>
+          </div>
+          <div class="zoom-tools">
+            <button type="button" id="zoomIn">+</button>
+            <button type="button" id="zoomOut">−</button>
+            <button type="button" id="zoomReset" title="复位">↺</button>
+          </div>
+          <div class="map-legend">
+            <div><span class="sw" style="background:#111"></span>实心 · 高危 / 紧急</div>
+            <div><span class="sw" style="background:#fff;border:1px solid #111"></span>空心 · 中危 / 预警</div>
+            <div><span class="sw" style="background:#888"></span>灰点 · 低危 / 提示</div>
+          </div>
+          <div class="map-foot">
+            <!-- 暂屏蔽，后续可恢复：合规性（二级等保评比）、安全管控措施
+            <div class="card">
+              <h2><i></i>合规性（二级等保评比）</h2>
+              <div class="mini-metrics">
+                <div class="m">等保备案<b>已备案 66.7%</b></div>
+                <div class="m">密码评测<b>已备案 33.3%</b></div>
+                <div class="m">关基备案<b>已备案 33.3%</b></div>
+                <div class="m">定期风险检查<b class="tag-bad">已过期 1</b></div>
+              </div>
+            </div>
+            <div class="card">
+              <h2><i></i>安全管控措施</h2>
+              <div class="plan"><span>数据安全事件应急处置</span><span class="tag-ok">有效</span></div>
+              <div class="plan"><span>PLAN · 市数据局</span><span>2025-11-17</span></div>
+            </div>
+            -->
+            <div class="card">
+              <h2><i></i>服务请求数</h2>
+              <div class="spark-meta"><span>近时序</span><b id="reqNow">—</b></div>
+              <svg class="spark" id="reqChart" viewBox="0 0 300 64" preserveAspectRatio="none"></svg>
+            </div>
+            <div class="card">
+              <h2><i></i>防御次数</h2>
+              <div class="spark-meta"><span>实时累计</span><b id="defNow">—</b></div>
+              <svg class="spark" id="defChart" viewBox="0 0 300 64" preserveAspectRatio="none"></svg>
+              <div class="spark-legend" id="defLegend"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="col">
+        <div class="card grow" style="flex:1.05">
+          <h2><i></i>风险事件</h2>
+          <div class="seg" id="evSeg"></div>
+          <div class="list" id="evList"></div>
+        </div>
+        <div class="card grow">
+          <h2><i></i>协同处置</h2>
+          <div class="seg" id="taskSeg"></div>
+          <div class="list" id="taskList"></div>
+        </div>
+      </section>
+    </main>
+    <div class="float-card" id="unitPop"></div>
+    <div class="float-card detail" id="evPop"></div>
+    <div class="float-card dist-card" id="distPop"></div>
+    <div class="toast" id="toast"></div>
+  </div>
+</div>
+<script src="shiyan-geo.js"></script>
+<script>
+const NS = "http://www.w3.org/2000/svg";
+const units = [
+  { name: "数据共享交换系统", score: 88.4, radar: [86, 90, 84, 88, 82, 85], assets: [
+    ["中间件 Redis", "中间件", "低"], ["市核心路由器", "网络设备", "低"],
+    ["政务云计算节点A", "服务器", "低"], ["政务云计算节点B", "服务器", "低"], ["数据库 MySQL", "数据库", "低"]
+  ]},
+  { name: "雪亮工程平台", score: 86.2, radar: [84, 88, 80, 86, 90, 83], assets: [
+    ["雪亮工程平台", "业务系统", "高"], ["视频专网防火墙", "安全设备", "低"], ["市局核心交换", "网络设备", "中"]
+  ]},
+  { name: "网络安全通报系统", score: 84.6, radar: [80, 86, 82, 78, 84, 88], assets: [
+    ["通报平台", "业务系统", "低"], ["互联网出口", "网络设备", "中"]
+  ]},
+  { name: "一网通办系统", score: 83.7, radar: [78, 84, 80, 86, 76, 82], assets: [
+    ["一网通办", "业务系统", "低"], ["政务云节点", "服务器", "低"]
+  ]},
+  { name: "水利监测系统", score: 81.4, radar: [74, 80, 78, 76, 82, 70], assets: [
+    ["水库监测站", "物联网", "中"], ["水文数据库", "数据库", "低"]
+  ]},
+  { name: "路网监测系统", score: 80.1, radar: [72, 78, 76, 80, 74, 82], assets: [
+    ["路网监测", "业务系统", "低"], ["卡口相机", "物联网", "中"]
+  ]},
+  { name: "应急指挥系统", score: 79.6, radar: [76, 82, 74, 80, 78, 72], assets: [
+    ["应急指挥平台", "业务系统", "中"], ["值班值守终端", "终端", "低"]
+  ]},
+  { name: "全民健康信息平台", score: 78.8, radar: [74, 80, 76, 72, 78, 70], assets: [
+    ["全民健康平台", "业务系统", "低"], ["区域卫生数据库", "数据库", "中"]
+  ]},
+  { name: "文旅票务系统", score: 77.5, radar: [70, 76, 78, 74, 72, 80], assets: [
+    ["景区票务系统", "业务系统", "低"], ["武当山入口相机", "物联网", "中"]
+  ]},
+  { name: "智慧教育平台", score: 76.9, radar: [72, 78, 70, 76, 74, 68], assets: [
+    ["智慧教育平台", "业务系统", "低"], ["学籍数据库", "数据库", "低"]
+  ]},
+  { name: "预算管理平台", score: 76.2, radar: [80, 74, 72, 78, 70, 76], assets: [
+    ["预算管理平台", "业务系统", "低"], ["国库支付接口", "API接口", "中"]
+  ]},
+  { name: "企业信用平台", score: 75.4, radar: [68, 76, 74, 72, 78, 70], assets: [
+    ["企业信用平台", "业务系统", "低"], ["许可审批系统", "业务系统", "低"]
+  ]},
+  { name: "城管执法平台", score: 74.8, radar: [70, 74, 72, 76, 68, 78], assets: [
+    ["城管执法平台", "业务系统", "中"], ["路灯物联网关", "物联网", "低"]
+  ]},
+  { name: "生态环境监测系统", score: 74.1, radar: [72, 70, 76, 68, 74, 78], assets: [
+    ["环境监测站", "物联网", "低"], ["污染源数据库", "数据库", "中"]
+  ]},
+  { name: "国土空间平台", score: 73.6, radar: [74, 72, 70, 76, 68, 74], assets: [
+    ["国土空间平台", "业务系统", "低"], ["规划一张图", "业务系统", "低"]
+  ]},
+  { name: "三农服务平台", score: 72.9, radar: [66, 74, 72, 70, 76, 68], assets: [
+    ["三农服务平台", "业务系统", "低"], ["农产品追溯系统", "业务系统", "中"]
+  ]},
+  { name: "社保经办系统", score: 72.2, radar: [70, 72, 68, 74, 66, 76], assets: [
+    ["社保经办系统", "业务系统", "低"], ["就业服务网", "业务系统", "低"]
+  ]},
+  { name: "医保结算平台", score: 71.5, radar: [68, 74, 70, 66, 72, 64], assets: [
+    ["医保结算平台", "业务系统", "中"], ["两定机构接口", "API接口", "低"]
+  ]}
+];
+const unitMeta = {
+  "数据共享交换系统": ["自建", "政务外网"],
+  "雪亮工程平台": ["自建", "视频专网"],
+  "网络安全通报系统": ["自建", "政务外网"],
+  "一网通办系统": ["政务", "互联网"],
+  "水利监测系统": ["自建", "业务专网"],
+  "路网监测系统": ["自建", "业务专网"],
+  "应急指挥系统": ["自建", "业务专网"],
+  "全民健康信息平台": ["政务", "业务专网"],
+  "文旅票务系统": ["自建", "互联网"],
+  "智慧教育平台": ["自建", "互联网"],
+  "预算管理平台": ["政务", "政务外网"],
+  "企业信用平台": ["政务", "互联网"],
+  "城管执法平台": ["自建", "视频专网"],
+  "生态环境监测系统": ["自建", "业务专网"],
+  "国土空间平台": ["政务", "政务外网"],
+  "三农服务平台": ["自建", "互联网"],
+  "社保经办系统": ["政务", "业务专网"],
+  "医保结算平台": ["政务", "业务专网"]
+};
+units.forEach(u => { const m = unitMeta[u.name]; u.kind = m[0]; u.net = m[1]; });
+const bureaus = [
+  { name: "市公安局", items: [
+    ["雪亮视频终端", "视频监控", 86], ["卡口相机", "卡口", 42], ["执法记录仪", "移动终端", 38], ["专网解码器", "网络终端", 20]
+  ]},
+  { name: "市数据局", items: [
+    ["政务云运维终端", "运维终端", 48], ["窗口自助终端", "自助终端", 46], ["值班值守终端", "值班终端", 18], ["边界探针", "探针", 12]
+  ]},
+  { name: "市交通运输局", items: [
+    ["交通卡口终端", "卡口", 56], ["路网监测终端", "监测终端", 40]
+  ]},
+  { name: "市应急管理局", items: [
+    ["水库联动终端", "监测终端", 34], ["应急指挥终端", "指挥终端", 22], ["值班坐席", "值班终端", 16]
+  ]},
+  { name: "市文旅局", items: [
+    ["景区广播终端", "广播终端", 30], ["武当山入口相机", "视频监控", 28]
+  ]},
+  { name: "市水利和湖泊局", items: [
+    ["水位监测终端", "监测终端", 26], ["闸门控制终端", "控制终端", 18]
+  ]},
+  { name: "市生态环境局", items: [
+    ["空气质量终端", "监测终端", 20], ["污染源采集终端", "采集终端", 16]
+  ]},
+  { name: "市医保局", items: [
+    ["两定机构终端", "业务终端", 18], ["医保读卡终端", "读卡终端", 10]
+  ]},
+  { name: "市网信办", items: [
+    ["互联网出口探针", "探针", 10], ["专网边界探针", "探针", 8]
+  ]},
+  { name: "市政务服务局", items: [
+    ["办事窗口终端", "窗口终端", 9], ["自助服务终端", "自助终端", 5]
+  ]}
+].map(b => ({ ...b, count: b.items.reduce((s, it) => s + it[2], 0) }))
+  .sort((a, b) => b.count - a.count);
+const events = [
+  { id: "e1", title: "等保到期 雪亮工程", level: "高", find: "自动发现", type: "等保到期", source: "等保到期", target: "市公安局", system: "市公安局", same: 31, status: "待处置", time: "2026-09-18 16:00", org: "市公安局（待处理）", src: "warn-job", impact: "高", lng: 110.78, lat: 32.63, layer: "event", district: "张湾区" },
+  { id: "e2", title: "竹溪暴露面", level: "高", find: "被动发现", type: "暴露面", source: "竹溪县政府", target: "竹溪县政府", system: "政务外网", same: 6, status: "处置中", time: "2026-09-18 07:30", org: "网安（待处置）", src: "竹溪县政府", impact: "高", lng: 109.78, lat: 32.35, layer: "event", district: "竹溪县" },
+  { id: "e3", title: "房县弱口令专项", level: "中", find: "智能发现", type: "弱口令", source: "房县政府", target: "房县政府", system: "门户网站", same: 12, status: "处置中", time: "2026-09-15 07:30", org: "网安（待处理）", src: "房县政府", impact: "中", lng: 110.72, lat: 32.08, layer: "event", district: "房县" },
+  { id: "e4", title: "张湾节点内存触顶", level: "中", find: "自动发现", type: "资源告警", source: "市数据局", target: "市数据局", system: "政务云计算节点A", same: 4, status: "待处置", time: "2026-09-13 07:30", org: "市数据局（待处置）", src: "市数据局", impact: "中", lng: 110.74, lat: 32.66, layer: "event", district: "张湾区" },
+  { id: "e5", title: "保养预警 89d 市核心路由器", level: "低", find: "自动发现", type: "保养预警", source: "warn-job", target: "市数据局", system: "市核心路由器", same: 2, status: "待处置", time: "2026-09-22 16:00", org: "市数据局（待处置）", src: "warn-job", impact: "低", lng: 110.80, lat: 32.59, layer: "event", district: "茅箭区" },
+  { id: "e6", title: "保养预警 89d 市级防火墙", level: "低", find: "自动发现", type: "保养预警", source: "warn-job", target: "市公安局", system: "市级防火墙", same: 3, status: "待处置", time: "2026-09-22 16:00", org: "市公安局（待处置）", src: "warn-job", impact: "低", lng: 110.69, lat: 32.70, layer: "event", district: "郧阳区" },
+  { id: "e7", title: "保养预警 89d 竹溪县政务网", level: "低", find: "自动发现", type: "保养预警", source: "warn-job", target: "市政务服务局", system: "竹溪县政务网", same: 1, status: "待处置", time: "2026-09-22 16:00", org: "市政务服务局（待处置）", src: "warn-job", impact: "低", lng: 109.90, lat: 32.22, layer: "event", district: "竹溪县" },
+  { id: "e8", title: "关基设施巡检异常", level: "高", find: "智能发现", type: "关基告警", source: "市公安局", target: "市公安局", system: "丹江口取水口", same: 2, status: "待处置", time: "2026-09-20 09:10", org: "市公安局（待处理）", src: "市公安局", impact: "高", lng: 111.48, lat: 32.55, layer: "event", district: "丹江口市" },
+  { id: "e9", title: "武当山入口相机离线", level: "中", find: "自动发现", type: "设备离线", source: "市文旅局", target: "市文旅局", system: "入口相机", same: 5, status: "待处置", time: "2026-09-21 11:20", org: "市文旅局（待处置）", src: "warn-job", impact: "中", lng: 111.02, lat: 32.42, layer: "event", district: "丹江口市" },
+  { id: "e10", title: "竹山入境路线预警", level: "中", find: "被动发现", type: "线路预警", source: "市应急管理局", target: "市应急管理局", system: "入境监测", same: 3, status: "待处置", time: "2026-09-19 15:00", org: "市应急管理局", src: "市应急管理局", impact: "中", lng: 110.18, lat: 32.28, layer: "event", district: "竹山县" },
+  { id: "e11", title: "郧西边界探针心跳丢失", level: "低", find: "自动发现", type: "探针离线", source: "市网信办", target: "市网信办", system: "边界探针", same: 1, status: "已闭环", time: "2026-09-10 08:00", org: "市网信办", src: "warn-job", impact: "低", lng: 110.40, lat: 33.02, layer: "event", district: "郧西县" }
+];
+const places = [
+  { layer: "protect", name: "丹江口大坝", lng: 111.51, lat: 32.56, level: "低" },
+  { layer: "protect", name: "武当山金顶", lng: 111.00, lat: 32.40, level: "低" },
+  { layer: "protect", name: "十堰市政府", lng: 110.80, lat: 32.63, level: "低" },
+  { layer: "platform", name: "市级安全平台", lng: 110.79, lat: 32.61, level: "低" },
+  { layer: "sensitive", name: "高危敏感点 · 茅箭", lng: 110.86, lat: 32.57, level: "高" },
+  { layer: "infra", name: "关基 · 汉江取水", lng: 110.85, lat: 32.72, level: "中" }
+];
+const layers = [
+  { id: "protect", name: "防护目标", on: true, warn: false },
+  { id: "platform", name: "安全态势 / 平台", on: true, warn: false },
+  { id: "attack", name: "攻击 / 威胁来源", on: true, warn: true },
+  { id: "sensitive", name: "高危敏感点", on: true, warn: true },
+  { id: "infra", name: "关基设施", on: true, warn: true },
+  { id: "event", name: "安全事件点", on: true, warn: true }
+];
+const districtsMeta = {
+  "茅箭区": { score: 86, events: 2 },
+  "张湾区": { score: 84, events: 3 },
+  "郧阳区": { score: 81, events: 1 },
+  "郧西县": { score: 79, events: 1 },
+  "竹山县": { score: 77, events: 2 },
+  "竹溪县": { score: 74, events: 3 },
+  "房县": { score: 78, events: 2 },
+  "丹江口市": { score: 83, events: 3 }
+};
+
+let evFilter = "全部";
+let taskFilter = "全部";
+let dateRange = "本月";
+let levelFilter = "";
+let activeUnit = null;
+let activeTerm = null;
+let activeEvent = null;
+let activeDistrict = "全市";
+let warnOnly = false;
+
+const tasks = [
+  { title: "保养预警 89d 政务云计算节点A", org: "市数据局", due: "2026-09-23 16:00", status: "待处置", overdue: true },
+  { title: "保养预警 89d 市核心路由器", org: "市数据局", due: "2026-09-23 16:00", status: "待处置", overdue: true },
+  { title: "保养预警 89d 市级防火墙", org: "市数据局", due: "2026-09-23 16:00", status: "待处置", overdue: true },
+  { title: "保养预警 89d 竹山县入境路线", org: "市应急管理局", due: "2026-09-23 15:00", status: "待处置", overdue: true },
+  { title: "保养预警 89d 武当山入口相机", org: "市文旅局", due: "2026-09-23 16:00", status: "待处置", overdue: true },
+  { title: "省巡预警 运管政务云节点 / 市卫健委 3d", org: "市卫健委", due: "2026-09-20 17:00", status: "处置中", overdue: true },
+  { title: "保养预警 63d 政务云计算节点B", org: "市数据局", due: "2026-09-19 16:00", status: "已闭环", overdue: false }
+];
+
+function radarSvg(labels, values, size) {
+  const cx = size / 2, cy = size / 2 + 6, r = size * 0.32, n = labels.length;
+  const pt = (i, t) => {
+    const a = -Math.PI / 2 + i * 2 * Math.PI / n;
+    return [cx + Math.cos(a) * r * t, cy + Math.sin(a) * r * t];
+  };
+  let rings = "";
+  for (let k = 1; k <= 4; k++) {
+    const d = labels.map((_, i) => { const p = pt(i, k / 4); return (i ? "L" : "M") + p[0].toFixed(1) + "," + p[1].toFixed(1); }).join("") + "Z";
+    rings += `<path d="${d}" fill="none" stroke="#bbb" stroke-width="1"/>`;
+  }
+  let axes = "", texts = "";
+  labels.forEach((lb, i) => {
+    const p = pt(i, 1), t = pt(i, 1.28);
+    axes += `<line x1="${cx}" y1="${cy}" x2="${p[0].toFixed(1)}" y2="${p[1].toFixed(1)}" stroke="#bbb"/>`;
+    texts += `<text x="${t[0].toFixed(1)}" y="${t[1].toFixed(1)}" text-anchor="middle" font-size="11" fill="#333">${lb}</text>`;
+  });
+  const poly = values.map((v, i) => { const p = pt(i, v / 100); return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" ");
+  return `<svg viewBox="0 0 ${size} ${size}" width="100%" height="100%">${rings}${axes}<polygon points="${poly}" fill="rgba(0,0,0,.08)" stroke="#111" stroke-width="1.6"/>${texts}</svg>`;
+}
+
+function renderUnits() {
+  const gov = units.filter(u => u.kind === "政务").length;
+  const self = units.filter(u => u.kind === "自建").length;
+  document.getElementById("unitSum").innerHTML = `<span class="kind-card" data-kind="政务">政务 <b>${gov}</b> 套</span><span class="kind-card" data-kind="自建">自建 <b>${self}</b> 套</span>`;
+  const nets = ["政务外网", "互联网", "视频专网", "业务专网"];
+  const max = Math.max(...nets.map(net => units.filter(u => u.net === net).length));
+  document.getElementById("unitBars").innerHTML = nets.map((net, i) => {
+    const n = units.filter(u => u.net === net).length;
+    return `<div class="bar-row${activeUnit === i ? " on" : ""}" data-i="${i}">
+      <div class="name">${net}</div>
+      <div class="track"><div class="fill" style="width:${(n / max * 100).toFixed(1)}%"></div></div>
+      <div class="score">${n}</div>
+    </div>`;
+  }).join("");
+  renderTerms();
+}
+function renderTerms() {
+  const el = document.getElementById("termBars");
+  const max = Math.max(...bureaus.map(b => b.count));
+  el.innerHTML = bureaus.map((b, i) => `
+    <div class="bar-row${activeTerm === i ? " on" : ""}" data-i="${i}">
+      <div class="name">${b.name}</div>
+      <div class="track"><div class="fill" style="width:${(b.count / max * 100).toFixed(1)}%"></div></div>
+      <div class="score">${b.count}</div>
+    </div>`).join("");
+}
+function showTerm(i, anchor) {
+  activeTerm = i;
+  activeUnit = null;
+  document.querySelectorAll("#unitBars .bar-row, #termBars .bar-row").forEach(el => el.classList.remove("on"));
+  const row = document.querySelector(`#termBars .bar-row[data-i="${anchor.dataset.i}"]`);
+  if (row) row.classList.add("on");
+  const b = bureaus[i];
+  const pop = document.getElementById("unitPop");
+  pop.className = "float-card show";
+  pop.innerHTML = `<h3>${b.name}</h3>
+    <div style="font-size:13px;color:#111;margin:4px 0">终端清单 · ${b.count}</div>
+    <table class="asset"><thead><tr><th>终端名</th><th>类型</th><th>数量</th></tr></thead><tbody>
+    ${b.items.map(a => `<tr><td>${a[0]}</td><td>${a[1]}</td><td>${a[2]}</td></tr>`).join("")}
+    </tbody></table>`;
+  placePop(pop, anchor.getBoundingClientRect(), 420, false);
+}
+
+function placePop(pop, r, width, preferLeft) {
+  const br = document.getElementById("board").getBoundingClientRect();
+  const s = scale || 1;
+  let left = preferLeft ? (r.left - br.left) / s - width - 12 : (r.right - br.left) / s + 12;
+  let top = (r.top - br.top) / s - 8;
+  if (left < 12) left = (r.right - br.left) / s + 12;
+  if (left + width > 1900) left = 1900 - width;
+  if (top < 108) top = 108;
+  if (top > 720) top = 720;
+  pop.style.left = left + "px";
+  pop.style.top = top + "px";
+}
+function showCatalog(item, anchor, root) {
+  document.querySelectorAll("#unitBars .bar-row, #termBars .bar-row").forEach(el => el.classList.remove("on"));
+  const row = root.querySelector(`.bar-row[data-i="${anchor.dataset.i}"]`);
+  if (row) row.classList.add("on");
+  const pop = document.getElementById("unitPop");
+  pop.className = "float-card show";
+  pop.innerHTML = `<h3>${item.name}</h3>
+    <div style="font-size:13px;color:#111;margin:4px 0">资产台账</div>
+    <table class="asset"><thead><tr><th>名称</th><th>类型</th><th>风险等级</th></tr></thead><tbody>
+    ${item.assets.map(a => `<tr><td>${a[0]}</td><td>${a[1]}</td><td><span class="risk-low">${a[2]}</span></td></tr>`).join("")}
+    </tbody></table>`;
+  placePop(pop, anchor.getBoundingClientRect(), 420, false);
+}
+function showUnit(i, anchor) {
+  activeUnit = i;
+  activeTerm = null;
+  const nets = ["政务外网", "互联网", "视频专网", "业务专网"];
+  const net = nets[i];
+  const list = units.map((u, idx) => ({ u, idx })).filter(x => x.u.net === net).sort((a, b) => b.u.score - a.u.score);
+  document.querySelectorAll("#unitBars .bar-row, #termBars .bar-row, #unitSum .kind-card").forEach(el => el.classList.remove("on"));
+  const row = document.querySelector(`#unitBars .bar-row[data-i="${anchor.dataset.i}"]`);
+  if (row) row.classList.add("on");
+  const pop = document.getElementById("unitPop");
+  pop.className = "float-card show";
+  pop.innerHTML = `<h3>${net}</h3>
+    <div style="font-size:13px;color:#111;margin:4px 0">系统清单 · ${list.length}套</div>
+    <table class="asset"><thead><tr><th>系统名</th><th>类型</th><th>成熟度</th></tr></thead><tbody>
+    ${list.map(({ u, idx }) => `<tr class="sys-pick" data-i="${idx}"><td>${u.name}</td><td>${u.kind}</td><td>${u.score.toFixed(1)}</td></tr>`).join("")}
+    </tbody></table>
+    <div id="unitAsset"></div>`;
+  placePop(pop, anchor.getBoundingClientRect(), 420, false);
+}
+function showKind(kind, anchor) {
+  activeUnit = null;
+  activeTerm = null;
+  document.querySelectorAll("#unitBars .bar-row, #termBars .bar-row, #unitSum .kind-card").forEach(el => el.classList.remove("on"));
+  anchor.classList.add("on");
+  const list = units.map((u, idx) => ({ u, idx })).filter(x => x.u.kind === kind).sort((a, b) => b.u.score - a.u.score);
+  const pop = document.getElementById("unitPop");
+  pop.className = "float-card show";
+  pop.innerHTML = `<h3>${kind}</h3>
+    <div style="font-size:13px;color:#111;margin:4px 0">系统清单 · ${list.length}套</div>
+    <table class="asset"><thead><tr><th>系统名</th><th>类型</th><th>成熟度</th></tr></thead><tbody>
+    ${list.map(({ u, idx }) => `<tr class="sys-pick" data-i="${idx}"><td>${u.name}</td><td>${u.net}</td><td>${u.score.toFixed(1)}</td></tr>`).join("")}
+    </tbody></table>
+    <div id="unitAsset"></div>`;
+  placePop(pop, anchor.getBoundingClientRect(), 420, false);
+}
+function fillUnitAsset(idx) {
+  const u = units[idx];
+  const box = document.getElementById("unitAsset");
+  if (!u || !box) return;
+  document.querySelectorAll("#unitPop .sys-pick").forEach(el => el.classList.toggle("on", +el.dataset.i === idx));
+  box.innerHTML = `<div style="font-size:13px;color:#111;margin:8px 0 4px">${u.name} · 资产台账</div>
+    <table class="asset"><thead><tr><th>名称</th><th>类型</th><th>风险等级</th></tr></thead><tbody>
+    ${u.assets.map(a => `<tr><td>${a[0]}</td><td>${a[1]}</td><td><span class="risk-low">${a[2]}</span></td></tr>`).join("")}
+    </tbody></table>`;
+}
+
+function parseDay(str) {
+  const m = String(str).match(/(\d{4})-(\d{2})-(\d{2})/);
+  return new Date(+m[1], +m[2] - 1, +m[3]);
+}
+function inDateRange(str) {
+  const d = parseDay(str);
+  const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  if (dateRange === "今日") return d.getTime() === start.getTime();
+  if (dateRange === "本周") {
+    const weekday = start.getDay() || 7;
+    const monday = new Date(start);
+    monday.setDate(start.getDate() - weekday + 1);
+    const next = new Date(monday);
+    next.setDate(monday.getDate() + 7);
+    return d >= monday && d < next;
+  }
+  if (dateRange === "本月") return d.getFullYear() === start.getFullYear() && d.getMonth() === start.getMonth();
+  return d.getFullYear() === start.getFullYear();
+}
+function matchLevel(e) {
+  if (!levelFilter) return true;
+  if (levelFilter === "已闭环") return e.status === "已闭环";
+  return e.level === levelFilter;
+}
+function visibleEvents() {
+  return events.filter(e => inDateRange(e.time) && matchLevel(e) && (evFilter === "全部" || e.find === evFilter));
+}
+function renderLevel() {
+  const dated = events.filter(e => inDateRange(e.time));
+  const items = [
+    ["高", dated.filter(e => e.level === "高").length],
+    ["中", dated.filter(e => e.level === "中").length],
+    ["低", dated.filter(e => e.level === "低").length],
+    ["已闭环", dated.filter(e => e.status === "已闭环").length]
+  ];
+  document.getElementById("levelBar").innerHTML = items.map(([name, count]) =>
+    `<button type="button" class="k${levelFilter === name ? " on" : ""}" data-lv="${name}"><b>${count}</b><span>${name}</span></button>`
+  ).join("");
+}
+function renderEvents() {
+  const list = visibleEvents();
+  const el = document.getElementById("evList");
+  const html = list.map(e => `
+    <div class="ev${activeEvent === e.id ? " on" : ""}" data-id="${e.id}">
+      <div class="t"><span class="lv ${e.level}">${e.level}</span>${e.title}</div>
+      <div class="meta"><span>发现源 ${e.src}　${e.time}</span><span class="pill ${e.status}">${e.status}</span></div>
+      <div class="meta"><span>处理机构 ${e.org}</span></div>
+    </div>`).join("") || `<div style="color:#555;font-size:13px;padding:8px">当前筛选无事件</div>`;
+  el.innerHTML = `<div class="ev-track"><div class="ev-copy">${html}</div></div>`;
+  const track = el.firstElementChild;
+  const copy = track.firstElementChild;
+  if (list.length > 1 && copy.offsetHeight > el.clientHeight + 2) {
+    track.insertAdjacentHTML("beforeend", `<div class="ev-copy">${html}</div>`);
+    track.classList.add("rolling");
+    track.style.animationDuration = Math.max(10, copy.offsetHeight / 26) + "s";
+  }
+}
+
+function showEvent(id, anchor) {
+  const hold = anchor.getBoundingClientRect();
+  activeEvent = id;
+  document.querySelectorAll(".ev").forEach(el => el.classList.toggle("on", el.dataset.id === id));
+  const e = events.find(x => x.id === id);
+  const pop = document.getElementById("evPop");
+  pop.className = "float-card detail show";
+  pop.innerHTML = `<h3>${e.title}</h3><div class="sub">${e.find}</div>
+    <div class="kv">
+      <span>发现方式</span><b>${e.find}</b>
+      <span>等级</span><b>${e.level}</b>
+      <span>影响程度</span><b>${e.impact}</b>
+      <span>类型</span><b>${e.type}</b>
+      <span>来源</span><b>${e.source}</b>
+      <span>目标</span><b>${e.target}</b>
+      <span>被攻击系统</span><b>${e.system}</b>
+      <span>同类事件</span><b>${e.same}</b>
+      <span>状态</span><b>${e.status}</b>
+      <span>发现时间</span><b>${e.time}</b>
+      <span>处理机构</span><b>${e.org}</b>
+      <span>所在区县</span><b>${e.district}</b>
+    </div>`;
+  placePop(pop, hold, 320, true);
+  document.getElementById("evList").classList.add("hold");
+}
+
+function renderTasks() {
+  const list = tasks.filter(t => {
+    if (!inDateRange(t.due)) return false;
+    if (taskFilter === "全部") return true;
+    if (taskFilter === "超期督办") return t.overdue && t.status !== "已闭环";
+    return t.status === taskFilter;
+  });
+  document.getElementById("taskList").innerHTML = list.map(t => `
+    <div class="task">
+      <div class="t">${t.title}</div>
+      <div class="meta"><span>${t.org}　截止 ${t.due}${t.overdue && t.status !== "已闭环" ? "　超期" : ""}</span><span class="pill ${t.status}">${t.status}</span></div>
+    </div>`).join("") || `<div style="color:#555;font-size:13px;padding:8px">当前筛选无任务</div>`;
+  const el = document.getElementById("taskList");
+  const html = el.innerHTML;
+  el.innerHTML = `<div class="ev-track"><div class="ev-copy">${html}</div></div>`;
+  const track = el.firstElementChild;
+  const copy = track.firstElementChild;
+  if (list.length > 1 && copy.offsetHeight > el.clientHeight + 2) {
+    track.insertAdjacentHTML("beforeend", `<div class="ev-copy">${html}</div>`);
+    track.classList.add("rolling");
+    track.style.animationDuration = Math.max(10, copy.offsetHeight / 26) + "s";
+  }
+}
+
+function seg(el, items, current, onChange) {
+  el.innerHTML = items.map(n => `<button type="button" class="${n === current ? "on" : ""}" data-n="${n}">${n}</button>`).join("");
+  el.onclick = (e) => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    onChange(b.dataset.n);
+  };
+}
+
+/* map */
+const svg = document.getElementById("mapSvg");
+let vb = { x: 0, y: 0, w: 1000, h: 700 };
+let base = { x: 0, y: 0, w: 1000, h: 700 };
+let projectFn = null;
+const gDist = document.createElementNS(NS, "g");
+const gMark = document.createElementNS(NS, "g");
+svg.appendChild(gDist);
+svg.appendChild(gMark);
+
+function applyView() {
+  svg.setAttribute("viewBox", `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+}
+
+function buildMap() {
+  const geo = window.SHIYAN_GEO;
+  let minLng = 180, maxLng = -180, minLat = 90, maxLat = -90;
+  geo.features.forEach(f => {
+    f.geometry.coordinates.forEach(poly => poly.forEach(ring => ring.forEach(([lng, lat]) => {
+      minLng = Math.min(minLng, lng); maxLng = Math.max(maxLng, lng);
+      minLat = Math.min(minLat, lat); maxLat = Math.max(maxLat, lat);
+    })));
+  });
+  const cos = Math.cos(((minLat + maxLat) / 2) * Math.PI / 180);
+  const gw = (maxLng - minLng) * cos, gh = (maxLat - minLat);
+  const W = 1000, H = 700, pad = 36;
+  const s = Math.min((W - pad * 2) / gw, (H - pad * 2) / gh);
+  const ox = (W - gw * s) / 2, oy = (H - gh * s) / 2;
+  projectFn = (lng, lat) => [ox + (lng - minLng) * cos * s, oy + (maxLat - lat) * s];
+  const gLabel = document.createElementNS(NS, "g");
+  geo.features.forEach(f => {
+    const name = f.properties.name;
+    const d = f.geometry.coordinates.map(poly => poly.map(ring => ring.map((p, i) => {
+      const [x, y] = projectFn(p[0], p[1]);
+      return (i ? "L" : "M") + x.toFixed(1) + "," + y.toFixed(1);
+    }).join("") + "Z").join("")).join("");
+    const path = document.createElementNS(NS, "path");
+    path.setAttribute("d", d);
+    path.setAttribute("class", "dist");
+    path.dataset.name = name;
+    gDist.appendChild(path);
+    const [clng, clat] = f.properties.centroid || f.properties.center;
+    const nudge = { "张湾区": [-18, -14], "茅箭区": [16, 16], "郧阳区": [0, -8], "竹山县": [8, -6] };
+    const [dx, dy] = nudge[name] || [0, 0];
+    const [lx, ly] = projectFn(clng, clat);
+    const text = document.createElementNS(NS, "text");
+    text.setAttribute("class", "dist-label");
+    text.setAttribute("x", (lx + dx).toFixed(1));
+    text.setAttribute("y", (ly + dy).toFixed(1));
+    text.setAttribute("text-anchor", "middle");
+    text.textContent = name;
+    gLabel.appendChild(text);
+  });
+  gDist.appendChild(gLabel);
+  base = { x: 0, y: 0, w: W, h: H };
+  vb = { ...base };
+  applyView();
+}
+
+function markerVisible(layerId, level) {
+  const layer = layers.find(l => l.id === layerId);
+  if (!layer || !layer.on) return false;
+  if (warnOnly && !layer.warn) return false;
+  if (warnOnly && level === "低") return false;
+  return true;
+}
+
+function drawMarkers() {
+  gMark.innerHTML = "";
+  const items = [
+    ...places.map(p => ({ ...p, kind: "place" })),
+    ...visibleEvents().map(e => ({ layer: "event", name: e.title, lng: e.lng, lat: e.lat, level: e.level, id: e.id, kind: "event" }))
+  ];
+  items.forEach(m => {
+    if (!markerVisible(m.layer, m.level)) return;
+    if (activeDistrict !== "全市") {
+      const hit = m.kind === "event" ? events.find(e => e.id === m.id).district === activeDistrict : true;
+      if (m.kind === "event" && !hit) return;
+    }
+    const [x, y] = projectFn(m.lng, m.lat);
+    const fill = m.level === "高" ? "#111" : m.level === "中" ? "#fff" : "#888";
+    const g = document.createElementNS(NS, "g");
+    g.setAttribute("class", "marker");
+    g.innerHTML = `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${m.kind === "event" ? 6 : 5}" fill="${fill}"></circle>`;
+    g.addEventListener("mouseenter", () => {
+      if (m.kind === "event") showEvent(m.id, g);
+      else toast(m.name);
+    });
+    g.addEventListener("mouseleave", (ev) => {
+      const pop = document.getElementById("evPop");
+      if (ev.relatedTarget && pop.contains(ev.relatedTarget)) return;
+      if (m.kind === "event") scheduleHide(pop, ".ev");
+    });
+    gMark.appendChild(g);
+  });
+}
+
+function highlightDistrict(name) {
+  document.querySelectorAll(".dist").forEach(p => {
+    p.classList.toggle("active", name !== "全市" && p.dataset.name === name);
+  });
+}
+
+function showDistrict(name, clientX, clientY) {
+  const meta = districtsMeta[name];
+  const pop = document.getElementById("distPop");
+  const n = events.filter(e => e.district === name).length;
+  pop.className = "float-card dist-card show";
+  pop.innerHTML = `<h3>${name}</h3>
+    <p>成熟度　<b>${meta.score}</b></p>
+    <p>在册事件　<b>${n}</b></p>
+    <p>范围仅限十堰市，区县边界加粗。</p>`;
+  const br = document.getElementById("board").getBoundingClientRect();
+  pop.style.left = Math.min(1500, (clientX - br.left) / scale + 12) + "px";
+  pop.style.top = Math.min(900, (clientY - br.top) / scale + 12) + "px";
+}
+
+function renderLayers() {
+  const on = layers.filter(l => l.on).length;
+  document.getElementById("layerCount").textContent = on + "/" + layers.length;
+  document.getElementById("layerList").innerHTML = layers.map(l => {
+    const cnt = l.id === "event" ? events.length : l.id === "attack" ? 0 : places.filter(p => p.layer === l.id).length;
+    return `<label class="layer-row"><input type="checkbox" data-layer="${l.id}" ${l.on ? "checked" : ""}/>${l.name}<span class="cnt">${cnt}</span></label>`;
+  }).join("");
+}
+
+function fitBoard() {
+  const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+  scale = s;
+  document.getElementById("board").style.transform = `scale(${s})`;
+}
+let scale = 1;
+
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.style.display = "block";
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { t.style.display = "none"; }, 1600);
+}
+
+function tick() {
+  const d = new Date();
+  const wk = "日一二三四五六"[d.getDay()];
+  const p = n => String(n).padStart(2, "0");
+  document.getElementById("dateLine").textContent = `${d.getFullYear()}年${p(d.getMonth()+1)}月${p(d.getDate())}日 星期${wk}`;
+  document.getElementById("timeLine").textContent = `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+}
+
+document.getElementById("donut").innerHTML = `<svg viewBox="0 0 120 90" width="120" height="88">
+  <circle cx="42" cy="45" r="26" fill="none" stroke="#111" stroke-width="10" stroke-dasharray="38 126" stroke-dashoffset="0"/>
+  <circle cx="42" cy="45" r="26" fill="none" stroke="#777" stroke-width="10" stroke-dasharray="20 144" stroke-dashoffset="-38"/>
+  <circle cx="42" cy="45" r="26" fill="none" stroke="#ccc" stroke-width="10" stroke-dasharray="106 58" stroke-dashoffset="-58"/>
+  <text x="78" y="36" font-size="11" fill="#333">高危</text>
+  <text x="78" y="52" font-size="11" fill="#333">中危</text>
+  <text x="78" y="68" font-size="11" fill="#333">低危</text>
+</svg>`;
+
+function refreshLists() {
+  renderLevel();
+  renderEvents();
+  renderTasks();
+  if (projectFn) drawMarkers();
+}
+function paintFilters() {
+  seg(document.getElementById("dateSeg"), ["今日","本周","本月","本年"], dateRange, n => {
+    dateRange = n; paintFilters();
+  });
+  seg(document.getElementById("evSeg"), ["全部","自动发现","被动发现","智能发现"], evFilter, n => {
+    evFilter = n; paintFilters();
+  });
+  seg(document.getElementById("taskSeg"), ["全部","待处置","处置中","已闭环","超期督办"], taskFilter, n => {
+    taskFilter = n; paintFilters();
+  });
+  refreshLists();
+}
+document.getElementById("levelBar").addEventListener("click", e => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+  levelFilter = levelFilter === btn.dataset.lv ? "" : btn.dataset.lv;
+  refreshLists();
+});
+renderUnits();
+renderEvents();
+renderTasks();
+paintFilters();
+
+const hideTimers = new WeakMap();
+function scheduleHide(pop, itemSel) {
+  clearTimeout(hideTimers.get(pop));
+  hideTimers.set(pop, setTimeout(() => {
+    pop.classList.remove("show");
+    document.querySelectorAll(itemSel).forEach(el => el.classList.remove("on"));
+    if (pop.id === "unitPop") document.querySelectorAll(".kind-card").forEach(el => el.classList.remove("on"));
+    if (pop.id === "evPop") document.getElementById("evList").classList.remove("hold");
+  }, 80));
+}
+function bindHover(root, itemSel, pop, open) {
+  root.addEventListener("mouseover", e => {
+    const row = e.target.closest(itemSel);
+    if (!row || !root.contains(row)) return;
+    clearTimeout(hideTimers.get(pop));
+    open(row);
+  });
+  root.addEventListener("mouseout", e => {
+    const row = e.target.closest(itemSel);
+    if (!row) return;
+    const next = e.relatedTarget;
+    if (next && (row.contains(next) || pop.contains(next))) return;
+    scheduleHide(pop, itemSel);
+  });
+  if (pop.dataset.hoverBound) return;
+  pop.dataset.hoverBound = "1";
+  pop.addEventListener("mouseenter", () => clearTimeout(hideTimers.get(pop)));
+  pop.addEventListener("mouseleave", () => scheduleHide(pop, itemSel));
+}
+bindHover(document.getElementById("unitBars"), ".bar-row", document.getElementById("unitPop"), row => showUnit(+row.dataset.i, row));
+bindHover(document.getElementById("unitSum"), ".kind-card", document.getElementById("unitPop"), row => showKind(row.dataset.kind, row));
+document.getElementById("unitPop").addEventListener("mouseover", e => {
+  const row = e.target.closest(".sys-pick");
+  if (!row) return;
+  fillUnitAsset(+row.dataset.i);
+});
+bindHover(document.getElementById("termBars"), ".bar-row", document.getElementById("unitPop"), row => showTerm(+row.dataset.i, row));
+bindHover(document.getElementById("evList"), ".ev", document.getElementById("evPop"), row => showEvent(row.dataset.id, row));
+const assetBooks = {
+  device: { title: "设备清单", unit: "个", rows: [
+    ["市核心路由器", "市数据局", "茅箭区", "低"], ["市级防火墙", "市公安局", "张湾区", "低"],
+    ["政务云核心交换", "市数据局", "茅箭区", "低"], ["边界探针", "市网信办", "郧西县", "低"],
+    ["武当山入口相机", "市文旅局", "丹江口市", "中"], ["竹山入境监测", "市应急管理局", "竹山县", "中"],
+    ["视频专网防火墙", "市公安局", "张湾区", "低"], ["市局核心交换", "市公安局", "张湾区", "中"],
+    ["互联网出口网关", "市网信办", "茅箭区", "中"], ["水库监测站", "市水利和湖泊局", "丹江口市", "中"],
+    ["路网监测终端", "市交通运输局", "张湾区", "低"], ["卡口相机", "市交通运输局", "茅箭区", "中"],
+    ["城管物联网关", "市城管执法委", "茅箭区", "低"], ["环境监测站", "市生态环境局", "张湾区", "低"],
+    ["值班值守终端", "市应急管理局", "茅箭区", "低"], ["雪亮视频交换机", "市公安局", "郧阳区", "低"],
+    ["医保专网网关", "市医保局", "茅箭区", "低"]
+  ]},
+  system: { title: "业务系统", unit: "个", rows: [
+    ["雪亮工程平台", "市公安局", "张湾区", "高"], ["一网通办", "市政务服务局", "茅箭区", "低"],
+    ["应急指挥平台", "市应急管理局", "茅箭区", "中"]
+  ]},
+  cloud: { title: "云平台", unit: "个", rows: [
+    ["政务云计算节点A", "市数据局", "茅箭区", "低"], ["政务云计算节点B", "市数据局", "茅箭区", "低"]
+  ]},
+  middleware: { title: "中间件", unit: "个", rows: [
+    ["中间件 Redis", "市数据局", "茅箭区", "低"]
+  ]},
+  database: { title: "数据库", unit: "个", rows: [
+    ["数据库 MySQL", "市数据局", "茅箭区", "低"]
+  ]},
+  api: { title: "API接口", unit: "条", rows: [
+    ["统一身份认证", "市数据局", "茅箭区", "低"], ["一网通办办件", "市政务服务局", "茅箭区", "低"],
+    ["电子证照共享", "市政务服务局", "茅箭区", "低"], ["雪亮视频调阅", "市公安局", "张湾区", "中"],
+    ["人口基础查询", "市公安局", "张湾区", "低"], ["应急事件上报", "市应急管理局", "茅箭区", "中"],
+    ["水库水情", "市水利和湖泊局", "丹江口市", "低"], ["路网运行", "市交通运输局", "张湾区", "低"],
+    ["社保缴费", "市人社局", "茅箭区", "低"], ["医保结算", "市医保局", "茅箭区", "中"],
+    ["公积金查询", "市数据局", "茅箭区", "低"], ["市场主体登记", "市市场监管局", "茅箭区", "低"],
+    ["不动产登记", "市自然资源和规划局", "茅箭区", "低"], ["教育学籍", "市教育局", "茅箭区", "低"],
+    ["卫健诊疗", "市卫健委", "茅箭区", "低"], ["文旅票务", "市文旅局", "丹江口市", "低"],
+    ["生态环境监测", "市生态环境局", "张湾区", "低"], ["财政支付", "市财政局", "茅箭区", "中"],
+    ["城管案件", "市城管执法委", "茅箭区", "低"]
+  ]}
+};
+function showAsset(key) {
+  const book = assetBooks[key];
+  const pop = document.getElementById("assetPop");
+  document.querySelectorAll(".stat").forEach(el => el.classList.toggle("on", el.dataset.book === key));
+  pop.className = "asset-pop show";
+  pop.innerHTML = `<h3>${book.title} · ${book.rows.length}${book.unit}</h3>
+    <div class="asset-scroll"><table class="asset"><thead><tr><th>名称</th><th>所属单位</th><th>位置</th><th>等级</th></tr></thead><tbody>
+    ${book.rows.map(a => `<tr><td>${a[0]}</td><td>${a[1]}</td><td>${a[2]}</td><td><span class="risk-low">${a[3]}</span></td></tr>`).join("")}
+    </tbody></table></div>`;
+}
+bindHover(document.querySelector(".stats"), ".stat", document.getElementById("assetPop"), row => showAsset(row.dataset.book));
+
+const cityMenu = document.getElementById("cityMenu");
+["全市", ...Object.keys(districtsMeta)].forEach(n => {
+  const b = document.createElement("button");
+  b.textContent = n;
+  b.onclick = (e) => {
+    e.stopPropagation();
+    activeDistrict = n;
+    document.getElementById("cityBtn").textContent = n + " ▾";
+    cityMenu.classList.remove("open");
+    highlightDistrict(n);
+    drawMarkers();
+    if (n === "全市") document.getElementById("distPop").classList.remove("show");
+  };
+  cityMenu.appendChild(b);
+});
+document.getElementById("cityBtn").onclick = (e) => { e.stopPropagation(); cityMenu.classList.toggle("open"); };
+
+document.querySelectorAll(".tab").forEach(btn => btn.onclick = () => {
+  document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  if (btn.dataset.tab !== "安") toast(btn.dataset.tab + " 为同屏入口，当前展示安");
+});
+
+document.getElementById("btnLayer").onclick = () => document.getElementById("layerPanel").classList.toggle("open");
+document.getElementById("layerList").addEventListener("change", e => {
+  const id = e.target.dataset.layer;
+  const layer = layers.find(l => l.id === id);
+  if (layer) layer.on = e.target.checked;
+  warnOnly = false;
+  renderLayers();
+  drawMarkers();
+});
+document.getElementById("btnAllLayer").onclick = () => {
+  warnOnly = false;
+  layers.forEach(l => l.on = true);
+  renderLayers();
+  drawMarkers();
+};
+document.getElementById("btnWarnLayer").onclick = () => {
+  warnOnly = true;
+  layers.forEach(l => l.on = true);
+  renderLayers();
+  drawMarkers();
+  toast("仅显示预警相关图层的中、高点位");
+};
+
+function zoom(factor, cx, cy) {
+  const nx = cx - (cx - vb.x) * factor;
+  const ny = cy - (cy - vb.y) * factor;
+  vb = { x: nx, y: ny, w: vb.w * factor, h: vb.h * factor };
+  applyView();
+}
+document.getElementById("zoomIn").onclick = () => zoom(0.8, vb.x + vb.w / 2, vb.y + vb.h / 2);
+document.getElementById("zoomOut").onclick = () => zoom(1.25, vb.x + vb.w / 2, vb.y + vb.h / 2);
+document.getElementById("zoomReset").onclick = () => { vb = { ...base }; applyView(); };
+
+svg.addEventListener("wheel", e => {
+  e.preventDefault();
+  const rect = svg.getBoundingClientRect();
+  const px = (e.clientX - rect.left) / rect.width;
+  const py = (e.clientY - rect.top) / rect.height;
+  zoom(e.deltaY < 0 ? 0.9 : 1.1, vb.x + vb.w * px, vb.y + vb.h * py);
+}, { passive: false });
+
+let drag = null;
+svg.addEventListener("pointerdown", e => {
+  if (e.target.closest && e.target.classList && e.target.classList.contains("dist")) return;
+  drag = { x: e.clientX, y: e.clientY, vb: { ...vb } };
+});
+window.addEventListener("pointermove", e => {
+  if (!drag) return;
+  const rect = svg.getBoundingClientRect();
+  const dx = (e.clientX - drag.x) / rect.width * drag.vb.w;
+  const dy = (e.clientY - drag.y) / rect.height * drag.vb.h;
+  vb.x = drag.vb.x - dx;
+  vb.y = drag.vb.y - dy;
+  applyView();
+});
+window.addEventListener("pointerup", () => { drag = null; });
+
+svg.addEventListener("click", e => {
+  const path = e.target.closest ? e.target : null;
+  if (path && path.classList && path.classList.contains("dist")) {
+    const name = path.dataset.name;
+    activeDistrict = name;
+    document.getElementById("cityBtn").textContent = name + " ▾";
+    highlightDistrict(name);
+    drawMarkers();
+    showDistrict(name, e.clientX, e.clientY);
+    return;
+  }
+  document.getElementById("distPop").classList.remove("show");
+});
+
+document.getElementById("btnFull").onclick = () => {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+};
+document.addEventListener("click", e => {
+  if (!e.target.closest(".city-select")) cityMenu.classList.remove("open");
+});
+
+function walkValue(prev, base, amp) {
+  const n = prev + (Math.random() - 0.48) * amp;
+  return Math.max(2, Math.min(base * 2.4, n));
+}
+function seedLine(base, amp, n) {
+  const a = [];
+  let v = base;
+  for (let i = 0; i < n; i++) { v = walkValue(v, base, amp); a.push(v); }
+  return a;
+}
+const sparkN = 28;
+const reqN = 168;
+function nextReq(prev) {
+  const jump = 28000 + Math.random() * 46000;
+  let n = prev + (prev > 72000 ? -1 : 1) * jump;
+  if (Math.random() < 0.15) n = prev + (Math.random() < 0.5 ? -1 : 1) * jump;
+  if (n < 18000) n = 18000 + Math.random() * 6000;
+  if (n > 136000) n = 136000 - Math.random() * 6000;
+  return n;
+}
+let reqVals = [];
+{
+  let v = 72000;
+  for (let i = 0; i < reqN; i++) { v = nextReq(v); reqVals.push(v); }
+}
+const defenses = [
+  { name: "DDoS攻击", stroke: "#111", dash: "", base: 38, amp: 16 },
+  { name: "木马/恶意代码", stroke: "#111", dash: "5 3", base: 22, amp: 10 },
+  { name: "暴力破解", stroke: "#555", dash: "", base: 16, amp: 8 },
+  { name: "漏洞端口扫描", stroke: "#555", dash: "5 3", base: 28, amp: 12 },
+  { name: "越权", stroke: "#888", dash: "", base: 9, amp: 5 },
+  { name: "DNS劫持", stroke: "#888", dash: "2 2", base: 6, amp: 4 }
+];
+defenses.forEach(d => { d.values = seedLine(d.base, d.amp, sparkN); });
+function sparkPoints(values, max) {
+  return values.map((v, i) => {
+    const x = (i / (values.length - 1)) * 300;
+    const y = 62 - (v / max) * 56;
+    return x.toFixed(1) + "," + y.toFixed(1);
+  }).join(" ");
+}
+function sparkPointsSpan(values, min, max) {
+  const span = Math.max(1, max - min);
+  return values.map((v, i) => {
+    const x = (i / (values.length - 1)) * 300;
+    const y = 62 - ((v - min) / span) * 56;
+    return x.toFixed(1) + "," + y.toFixed(1);
+  }).join(" ");
+}
+function drawReq() {
+  const lo = Math.min(...reqVals);
+  const hi = Math.max(...reqVals);
+  const pad = Math.max(8, (hi - lo) * 0.02);
+  document.getElementById("reqChart").innerHTML =
+    `<polyline fill="none" stroke="#111" stroke-width="1" points="${sparkPointsSpan(reqVals, lo - pad, hi + pad)}" />`;
+  document.getElementById("reqNow").textContent = Math.round(reqVals[reqVals.length - 1]).toLocaleString() + " 次";
+}
+function tickReq() {
+  reqVals.push(nextReq(reqVals[reqVals.length - 1]));
+  reqVals.shift();
+  drawReq();
+}
+function drawSpark(svg, series, max) {
+  svg.innerHTML = series.map(s =>
+    `<polyline fill="none" stroke="${s.stroke}" stroke-width="1.6" stroke-dasharray="${s.dash}" points="${sparkPoints(s.values, max)}" />`
+  ).join("");
+}
+function tickCharts() {
+  defenses.forEach(d => {
+    d.values.push(walkValue(d.values[d.values.length - 1], d.base, d.amp));
+    d.values.shift();
+  });
+  const peak = Math.max(...defenses.flatMap(d => d.values));
+  drawSpark(document.getElementById("defChart"), defenses, peak * 1.2);
+  const sum = defenses.reduce((s, d) => s + d.values[d.values.length - 1], 0);
+  document.getElementById("defNow").textContent = Math.round(sum).toLocaleString() + " 次";
+}
+document.getElementById("defLegend").innerHTML = defenses.map(d =>
+  `<span><i style="border-top-color:${d.stroke};border-top-style:${d.dash ? "dashed" : "solid"}"></i>${d.name}</span>`
+).join("");
+
+buildMap();
+renderLayers();
+drawMarkers();
+fitBoard();
+window.addEventListener("resize", fitBoard);
+tick();
+setInterval(tick, 1000);
+tickReq();
+setInterval(tickReq, 160);
+tickCharts();
+setInterval(tickCharts, 1200);
+</script>
+</body>
+</html>
