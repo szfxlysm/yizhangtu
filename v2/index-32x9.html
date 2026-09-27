@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>十堰数字空间一张图 · 32:9</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #fff; overflow: hidden; font-family: "Microsoft YaHei", "PingFang SC", sans-serif; color: #111; }
+  button, input { font-family: inherit; }
+  .viewport { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+  .board {
+    position: absolute; left: 50%; top: 50%; width: 3840px; height: 1080px;
+    background: #fff; transform-origin: center center; display: flex; flex-direction: column;
+    box-shadow: 0 0 0 1px #111;
+  }
+  header.top {
+    height: 64px; background: #fff; position: relative;
+    border-bottom: 1px solid #111; display: flex; align-items: center; justify-content: flex-end; padding: 0 18px; gap: 16px;
+  }
+  .brand {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    text-align: center; pointer-events: none;
+  }
+  .brand h1 { margin: 0; font-size: 26px; letter-spacing: 4px; font-weight: 700; color: #111; text-align: center; white-space: nowrap; }
+  .brand p { margin: 4px 0 0; font-size: 12px; letter-spacing: 1px; color: #666; text-align: center; white-space: nowrap; }
+  .clock { margin-left: auto; text-align: right; color: #333; font-size: 13px; line-height: 1.35; }
+  .clock b { font-size: 20px; color: #111; font-weight: 600; }
+  .top-actions { display: flex; gap: 8px; margin-left: 16px; }
+  .top-actions button {
+    height: 30px; padding: 0 12px; border: 1px solid #111; background: #fff; color: #111;
+    border-radius: 4px; cursor: pointer; font-size: 13px;
+  }
+  .top-actions a {
+    height: 30px; padding: 0 12px; border: 1px solid #111; background: #fff; color: #111;
+    border-radius: 4px; cursor: pointer; font-size: 13px; line-height: 28px; text-decoration: none;
+  }
+  .top-actions button:hover, .top-actions a:hover { background: #eee; }
+  nav.tabs {
+    height: 40px; display: flex; align-items: center; gap: 6px; padding: 0 14px;
+    background: #fff; border-bottom: 1px solid #111;
+  }
+  .city-select { position: relative; display: none; }
+  .city-select > button, .tab {
+    height: 28px; padding: 0 14px; border: none; background: transparent; color: #111;
+    cursor: pointer; font-size: 14px; border-radius: 4px;
+  }
+  .tab.active { background: #111; color: #fff; }
+  .tab:hover:not(.active) { background: #eee; }
+  .city-menu {
+    display: none; position: absolute; top: 32px; left: 0; z-index: 20; width: 140px;
+    background: #fff; border: 1px solid #111; border-radius: 6px; box-shadow: 0 8px 24px rgba(0,0,0,.12); padding: 6px;
+  }
+  .city-menu.open { display: block; }
+  .city-menu button {
+    display: block; width: 100%; text-align: left; border: none; background: transparent;
+    padding: 6px 8px; cursor: pointer; border-radius: 4px; font-size: 13px; color: #111;
+  }
+  .city-menu button:hover, .city-menu button.on { background: #eee; color: #111; }
+  main.layout { flex: 1; display: grid; grid-template-columns: 2fr 2fr 1fr 1fr; gap: 10px; padding: 10px; min-height: 0; }
+  .col { display: flex; flex-direction: column; gap: 10px; min-height: 0; min-width: 0; }
+  .map-pane { display: flex; flex-direction: column; min-width: 0; min-height: 0; height: 100%; }
+  .right-pane { display: contents; }
+  .card {
+    background: #fff; border: 1px solid #111; border-radius: 8px; padding: 10px 12px;
+  }
+  .card h2 { margin: 0 0 8px; font-size: 14px; color: #111; display: flex; align-items: center; gap: 6px; }
+  .card h2 i { width: 3px; height: 14px; background: #111; display: inline-block; border-radius: 2px; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .ov-label { margin: 8px 0 6px; font-size: 12px; color: #333; }
+  .card.overview .ov-label:first-of-type { margin-top: 0; }
+  .left-board { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.25fr 0.9fr 1fr; grid-template-rows: auto auto minmax(0, 1fr); gap: 10px; }
+  .card.overview { grid-column: 1; grid-row: 1; }
+  .card.index { grid-column: 2; grid-row: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+  .card.maturity { grid-column: 3; grid-row: 1 / span 2; min-width: 0; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
+  .card.trend-card { grid-column: 1; grid-row: 2; min-width: 0; }
+  .card.pie { grid-column: 2; grid-row: 2; min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+  .card.comp { grid-column: 1 / span 2; grid-row: 3; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
+  .card.ctrl { grid-column: 3; grid-row: 3; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
+  .radar-box { flex: 1; min-height: 0; overflow: hidden; }
+  .bars { flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 7px; }
+  .trend-nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .trend-nums div { border: 1px solid #bbb; border-radius: 6px; padding: 6px 4px; text-align: center; background: #fff; }
+  #donut { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; }
+  #donut svg { width: 100%; height: 100%; }
+  .stat { background: #fff; border: 1px solid #bbb; border-radius: 6px; padding: 8px 8px 6px; }
+  .stat .k { font-size: 12px; color: #555; }
+  .stat .v { font-size: 20px; color: #111; font-weight: 650; }
+  .stat .v span { font-size: 12px; font-weight: 400; margin-left: 2px; color: #555; }
+  .index-head { display: flex; justify-content: space-between; align-items: center; }
+  .index-num { font-size: 28px; color: #111; font-weight: 700; }
+  .bar-row { display: grid; grid-template-columns: 92px 1fr 36px; align-items: center; gap: 8px; cursor: pointer; border-radius: 4px; padding: 2px 4px; }
+  .bar-row:hover, .bar-row.on { background: #f2f2f2; outline: 1px solid #111; }
+  .bar-row .name { font-size: 13px; color: #111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .track { height: 8px; background: #fff; border: 1px solid #111; border-radius: 99px; overflow: hidden; }
+  .fill { height: 100%; background: #111; border-radius: 99px; }
+  .bar-row .score { font-size: 13px; color: #111; text-align: right; }
+  .trend-nums b { display: block; font-size: 26px; color: #111; }
+  .trend-nums span { font-size: 12px; color: #555; }
+  .legend-dot { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #333; }
+  .legend-dot em { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+  .map-wrap { position: relative; flex: 1 1 auto; min-height: 0; height: 100%; background: #fff; border: 1px solid #111; border-radius: 8px; overflow: hidden; }
+  #mapSvg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; cursor: grab; background: #fff; }
+  .map-cities {
+    position: absolute; top: 12px; left: 56px; right: 12px; z-index: 4;
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .map-cities button {
+    height: 28px; padding: 0 12px; border: 1px solid #111; background: #fff; color: #111;
+    border-radius: 4px; cursor: pointer; font-size: 13px;
+  }
+  .map-cities button.on { background: #111; color: #fff; }
+  #mapSvg:active { cursor: grabbing; }
+  .dist { fill: #ffffff; stroke: #111; stroke-width: 3.4; stroke-linejoin: round; cursor: pointer; }
+  .dist.active { stroke: #111; stroke-width: 6; stroke-dasharray: 8 4; }
+  .dist-label { font-size: 13px; fill: #111; font-weight: 700; pointer-events: none; paint-order: stroke; stroke: #fff; stroke-width: 4px; }
+  .marker { cursor: pointer; }
+  .marker circle, .marker rect { stroke: #111; stroke-width: 1.5; }
+  .map-tools {
+    position: absolute; left: 12px; top: 12px; display: flex; flex-direction: column; gap: 6px; z-index: 3;
+  }
+  .map-tools button, .zoom-tools button {
+    width: 32px; height: 32px; border: 1px solid #111; background: #fff; border-radius: 4px; cursor: pointer; color: #111; font-size: 16px;
+  }
+  .zoom-tools { position: absolute; right: 12px; bottom: 12px; display: flex; flex-direction: column; gap: 6px; z-index: 3; }
+  .layer-panel, .float-card, .tip {
+    position: absolute; z-index: 5; background: #fff; border: 1px solid #111; border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.12);
+  }
+  .layer-panel { left: 52px; top: 12px; width: 230px; padding: 10px 12px; display: none; }
+  .layer-panel.open { display: block; }
+  .layer-panel h3 { margin: 0 0 8px; font-size: 13px; display: flex; justify-content: space-between; color: #111; }
+  .layer-row { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 4px 0; color: #111; cursor: pointer; }
+  .layer-row .cnt { margin-left: auto; color: #555; }
+  .layer-actions { display: flex; gap: 8px; margin-top: 8px; }
+  .layer-actions button {
+    flex: 1; height: 26px; border: 1px solid #111; background: #fff; border-radius: 4px; cursor: pointer; font-size: 12px; color: #111;
+  }
+  .map-legend {
+    position: absolute; left: 12px; bottom: 12px; background: #fff; border: 1px solid #111;
+    border-radius: 6px; padding: 8px 10px; font-size: 12px; color: #111; z-index: 3;
+  }
+  .map-legend div { display: flex; align-items: center; gap: 6px; margin: 3px 0; }
+  .sw { width: 8px; height: 8px; border-radius: 50%; }
+  .comp-grid { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; }
+  .comp-box { border: 1px solid #bbb; border-radius: 6px; padding: 8px 10px; display: flex; flex-direction: column; justify-content: space-between; min-height: 0; }
+  .comp-box .hd { font-size: 13px; font-weight: 650; color: #111; }
+  .comp-box .pct { font-size: 22px; font-weight: 700; color: #111; line-height: 1.2; }
+  .comp-box .sub { font-size: 12px; color: #444; line-height: 1.45; }
+  .measure { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 8px; }
+  .measure .blk { flex: 1; border: 1px solid #bbb; border-radius: 6px; padding: 8px 10px; display: flex; flex-direction: column; justify-content: center; gap: 4px; min-height: 0; }
+  .measure .blk b { font-size: 13px; }
+  .measure .blk p { margin: 0; font-size: 12px; color: #333; line-height: 1.45; }
+  .plan { font-size: 12px; color: #111; display: flex; justify-content: space-between; gap: 8px; border-bottom: 1px solid #ddd; padding: 6px 0; }
+  .tag-ok { color: #111; }
+  .tag-bad { color: #111; font-weight: 700; text-decoration: underline; }
+  .kpi4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 8px; }
+  .kpi4 .k { background: #fff; border: 1px solid #111; border-radius: 6px; text-align: center; padding: 6px 0; }
+  .kpi4 b { display: block; font-size: 20px; color: #111; }
+  .kpi4 span { font-size: 12px; color: #333; }
+  .hi, .mid, .lo, .done { color: #111; }
+  .seg { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+  .seg button {
+    height: 24px; padding: 0 10px; border-radius: 12px; border: 1px solid #111; background: #fff; color: #111; cursor: pointer; font-size: 12px;
+  }
+  .seg button.on { background: #111; color: #fff; }
+  .list { overflow: auto; display: flex; flex-direction: column; gap: 6px; min-height: 0; flex: 1; }
+  .list::-webkit-scrollbar { width: 6px; }
+  .list::-webkit-scrollbar-thumb { background: #bbb; border-radius: 6px; }
+  .ev, .task {
+    border: 1px solid #bbb; border-radius: 6px; padding: 7px 8px; cursor: pointer; background: #fff;
+  }
+  .ev:hover, .task:hover, .ev.on, .task.on { border-color: #111; background: #f5f5f5; }
+  .ev .t, .task .t { font-size: 13px; color: #111; display: flex; align-items: center; gap: 6px; }
+  .lv { font-size: 12px; color: #111; border: 1px solid #111; border-radius: 3px; padding: 0 4px; line-height: 16px; background: #fff; }
+  .lv.高 { background: #111; color: #fff; } .lv.中 { background: #fff; } .lv.低 { color: #555; border-color: #555; }
+  .ev .meta, .task .meta { margin-top: 3px; font-size: 12px; color: #444; display: flex; justify-content: space-between; gap: 8px; }
+  .pill { font-size: 12px; border-radius: 10px; padding: 0 6px; line-height: 18px; border: 1px solid #111; color: #111; white-space: nowrap; }
+  .pill.待处置, .pill.处置中, .pill.已闭环 { color: #111; }
+  .grow { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .float-card { width: 420px; padding: 12px; display: none; }
+  .float-card.show { display: block; }
+  .float-card h3 { margin: 0 0 8px; font-size: 14px; color: #111; }
+  .asset { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .asset th { text-align: left; color: #333; font-weight: 500; padding: 4px; border-bottom: 1px solid #111; }
+  .asset td { padding: 5px 4px; border-bottom: 1px solid #ccc; }
+  .risk-low { color: #111; border: 1px solid #111; border-radius: 8px; padding: 0 6px; }
+  .detail { width: 320px; padding: 12px 14px; }
+  .detail h3 { margin: 0; font-size: 15px; }
+  .detail .sub { color: #111; font-size: 12px; margin: 4px 0 8px; }
+  .kv { display: grid; grid-template-columns: 88px 1fr; font-size: 13px; row-gap: 6px; }
+  .kv span { color: #444; }
+  .dist-card { width: 240px; padding: 10px 12px; }
+  .dist-card h3 { margin: 0 0 6px; font-size: 15px; color: #111; }
+  .dist-card p { margin: 4px 0; font-size: 13px; color: #222; }
+  .toast {
+    position: absolute; top: 108px; left: 50%; transform: translateX(-50%); background: #111;
+    color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 13px; display: none; z-index: 9;
+  }
+</style>
+</head>
+<body>
+<div class="viewport">
+  <div class="board" id="board">
+    <header class="top">
+      <div class="brand">
+        <h1>十堰数字空间一张图</h1>
+        <p>32:9 · 3840×1080 · CLOUD / NETWORK / DATA / COMPUTING / SECURITY / INDUSTRY</p>
+      </div>
+      <div class="clock">
+        <div id="dateLine">2026年09月24日 星期四</div>
+        <b id="timeLine">09:15:52</b>
+      </div>
+      <div class="top-actions">
+        <a href="index.html">16:9 对照</a>
+        <button type="button" id="btnFull">退出全屏</button>
+        <button type="button" id="btnBack">返回后台</button>
+      </div>
+    </header>
+    <nav class="tabs">
+      <div class="city-select">
+        <button type="button" id="cityBtn">全市 ▾</button>
+        <div class="city-menu" id="cityMenu"></div>
+      </div>
+      <button class="tab" data-tab="综合">综合</button>
+      <button class="tab" data-tab="云">云</button>
+      <button class="tab" data-tab="网">网</button>
+      <button class="tab" data-tab="数">数</button>
+      <button class="tab" data-tab="算">算</button>
+      <button class="tab active" data-tab="安">安</button>
+      <button class="tab" data-tab="产">产</button>
+    </nav>
+    <main class="layout">
+      <section class="col">
+        <div class="left-board">
+          <div class="card overview">
+            <h2><i></i>总体安全概况</h2>
+            <div class="ov-label">防护资产台账</div>
+            <div class="stats">
+              <div class="stat"><div class="k">设备数量</div><div class="v">17<span>个</span></div></div>
+              <div class="stat"><div class="k">业务系统</div><div class="v">3<span>个</span></div></div>
+              <div class="stat"><div class="k">云平台</div><div class="v">2<span>个</span></div></div>
+              <div class="stat"><div class="k">中间件</div><div class="v">1<span>个</span></div></div>
+              <div class="stat"><div class="k">数据库</div><div class="v">1<span>个</span></div></div>
+              <div class="stat"><div class="k">API接口</div><div class="v">19<span>条</span></div></div>
+            </div>
+            <div class="ov-label">整体指标</div>
+            <div class="stats">
+              <div class="stat"><div class="k">自动发现</div><div class="v">7<span>起</span></div></div>
+              <div class="stat"><div class="k">被动发现</div><div class="v">2<span>起</span></div></div>
+              <div class="stat"><div class="k">主动发现</div><div class="v">2<span>起</span></div></div>
+              <div class="stat"><div class="k">两高一弱</div><div class="v">6<span>项</span></div></div>
+              <div class="stat"><div class="k">高危端口</div><div class="v">4<span>个</span></div></div>
+              <div class="stat"><div class="k">预警待处置</div><div class="v">5<span>条</span></div></div>
+            </div>
+          </div>
+          <div class="card index">
+            <div class="index-head"><h2><i></i>安全指数</h2><div class="index-num">73</div></div>
+            <div class="radar-box" id="indexRadar"></div>
+          </div>
+          <div class="card maturity">
+            <h2><i></i>单位安全成熟度</h2>
+            <div class="bars" id="unitBars"></div>
+          </div>
+          <div class="card trend-card">
+            <h2><i></i>安全运行态势</h2>
+            <div class="trend-nums">
+              <div><b>5</b><span>累计攻击</span></div>
+              <div><b>0</b><span>当日攻击</span></div>
+              <div><b>1</b><span>高危告警</span></div>
+              <div><b>8</b><span>漏洞数量</span></div>
+              <div><b>3</b><span>弱口令</span></div>
+              <div><b>2</b><span>基线偏离</span></div>
+              <div><b>1</b><span>恶意程序</span></div>
+              <div><b>0</b><span>违规外联</span></div>
+              <div><b>4</b><span>已处置</span></div>
+            </div>
+          </div>
+          <div class="card pie">
+            <h2><i></i>攻击类型</h2>
+            <div id="donut"></div>
+          </div>
+          <div class="card comp">
+            <h2><i></i>合规性（三同步一评估）</h2>
+            <div class="comp-grid">
+              <div class="comp-box">
+                <div class="hd">等保情况</div>
+                <div class="pct">66.7%</div>
+                <div class="sub">总量 3 · 已备案 2<br>等级 二级 · 证书 DJ-2024-018<br>有效期至 2027-06</div>
+              </div>
+              <div class="comp-box">
+                <div class="hd">密评情况</div>
+                <div class="pct">33.3%</div>
+                <div class="sub">总量 3 · 已测评 1<br>等级 二级 · 证书 MP-2025-006<br>有效期至 2026-12</div>
+              </div>
+              <div class="comp-box">
+                <div class="hd">关基评估</div>
+                <div class="pct">33.3%</div>
+                <div class="sub">总量 3 · 已评估 1<br>关键基础设施纳入清单</div>
+              </div>
+              <div class="comp-box">
+                <div class="hd">定期风险评估</div>
+                <div class="pct">已过期 1</div>
+                <div class="sub">2026-03 年度评估 · 等级 中<br>整改未销号</div>
+              </div>
+            </div>
+          </div>
+          <div class="card ctrl">
+            <h2><i></i>安全管控措施</h2>
+            <div class="measure">
+              <div class="blk">
+                <b>管理办法、预案</b>
+                <p>数据安全管理办法 · 有效</p>
+                <p>网络安全事件应急预案 · 有效</p>
+                <p>数据安全事件应急处置 · 2025-11-17</p>
+              </div>
+              <div class="blk">
+                <b>组织建设</b>
+                <p>责任单位 市数据局</p>
+                <p>责任处室 安全科</p>
+                <p>最近更新 2025-11-17</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="map-pane">
+        <div class="map-wrap" id="mapWrap">
+          <svg id="mapSvg"></svg>
+          <div class="map-cities" id="mapCities"></div>
+          <div class="map-tools">
+            <button type="button" id="btnLayer" title="图层">☰</button>
+          </div>
+          <div class="layer-panel" id="layerPanel">
+            <h3>图层控制 <span id="layerCount">6/6</span></h3>
+            <div id="layerList"></div>
+            <div class="layer-actions">
+              <button type="button" id="btnAllLayer">全部开启</button>
+              <button type="button" id="btnWarnLayer">仅留预警</button>
+            </div>
+          </div>
+          <div class="zoom-tools">
+            <button type="button" id="zoomIn">+</button>
+            <button type="button" id="zoomOut">−</button>
+            <button type="button" id="zoomReset" title="复位">↺</button>
+          </div>
+          <div class="map-legend">
+            <div><span class="sw" style="background:#111"></span>实心 · 高危 / 紧急</div>
+            <div><span class="sw" style="background:#fff;border:1px solid #111"></span>空心 · 中危 / 预警</div>
+            <div><span class="sw" style="background:#888"></span>灰点 · 低危 / 提示</div>
+          </div>
+        </div>
+      </section>
+      <section class="right-pane">
+        <div class="card grow">
+          <h2><i></i>风险事件</h2>
+          <div class="kpi4">
+            <div class="k"><b class="hi">10</b><span>高</span></div>
+            <div class="k"><b class="mid">11</b><span>中</span></div>
+            <div class="k"><b class="lo">13</b><span>低</span></div>
+            <div class="k"><b class="done">7</b><span>已闭环</span></div>
+          </div>
+          <div class="seg" id="evSeg"></div>
+          <div class="list" id="evList"></div>
+        </div>
+        <div class="card grow">
+          <h2><i></i>协同处置</h2>
+          <div class="seg" id="taskSeg"></div>
+          <div class="list" id="taskList"></div>
+        </div>
+      </section>
+    </main>
+    <div class="float-card" id="unitPop"></div>
+    <div class="float-card detail" id="evPop"></div>
+    <div class="float-card dist-card" id="distPop"></div>
+    <div class="toast" id="toast"></div>
+  </div>
+</div>
+<script src="shiyan-geo.js"></script>
+<script>
+const NS = "http://www.w3.org/2000/svg";
+const units = [
+  { name: "市数据局", score: 88.4, radar: [86, 90, 84, 88, 82, 85], assets: [
+    ["中间件 Redis", "中间件", "低"], ["市核心路由器", "网络设备", "低"],
+    ["政务云计算节点A", "服务器", "低"], ["政务云计算节点B", "服务器", "低"], ["数据库 MySQL", "数据库", "低"]
+  ]},
+  { name: "市公安局", score: 86.2, radar: [84, 88, 80, 86, 90, 83], assets: [
+    ["雪亮工程平台", "业务系统", "高"], ["视频专网防火墙", "安全设备", "低"], ["市局核心交换", "网络设备", "中"]
+  ]},
+  { name: "市网信办", score: 84.6, radar: [80, 86, 82, 78, 84, 88], assets: [
+    ["通报平台", "业务系统", "低"], ["互联网出口", "网络设备", "中"]
+  ]},
+  { name: "市政务服务局", score: 83.7, radar: [78, 84, 80, 86, 76, 82], assets: [
+    ["一网通办", "业务系统", "低"], ["政务云节点", "服务器", "低"]
+  ]},
+  { name: "市水利和湖泊局", score: 81.4, radar: [74, 80, 78, 76, 82, 70], assets: [
+    ["水库监测站", "物联网", "中"], ["水文数据库", "数据库", "低"]
+  ]},
+  { name: "市交通运输局", score: 80.1, radar: [72, 78, 76, 80, 74, 82], assets: [
+    ["路网监测", "业务系统", "低"], ["卡口相机", "物联网", "中"]
+  ]},
+  { name: "市生态环境局", score: 79.2, radar: [76, 74, 80, 72, 78, 70], assets: [
+    ["污染源监控", "物联网", "中"], ["环境数据库", "数据库", "低"]
+  ]},
+  { name: "市卫健委", score: 78.5, radar: [70, 82, 74, 76, 80, 72], assets: [
+    ["区域卫生平台", "业务系统", "中"], ["医院专网防火墙", "安全设备", "低"]
+  ]},
+  { name: "市文旅局", score: 76.0, radar: [68, 74, 78, 70, 72, 76], assets: [
+    ["武当山入口相机", "物联网", "中"], ["文旅门户", "业务系统", "低"]
+  ]},
+  { name: "市应急管理局", score: 75.4, radar: [74, 70, 76, 80, 72, 68], assets: [
+    ["入境监测", "业务系统", "中"], ["应急指挥终端", "网络设备", "低"]
+  ]},
+  { name: "市教育局", score: 74.8, radar: [72, 76, 70, 74, 68, 78], assets: [
+    ["智慧教育平台", "业务系统", "低"], ["校园出口防火墙", "安全设备", "低"]
+  ]},
+  { name: "市财政局", score: 73.6, radar: [80, 72, 68, 74, 76, 70], assets: [
+    ["预算管理", "业务系统", "低"], ["财政专网", "网络设备", "中"]
+  ]},
+  { name: "市住建局", score: 72.1, radar: [66, 70, 74, 72, 68, 76], assets: [
+    ["智慧工地", "物联网", "中"], ["住建门户", "业务系统", "低"]
+  ]},
+  { name: "市市场监管局", score: 71.5, radar: [70, 68, 72, 74, 66, 78], assets: [
+    ["企业信用平台", "业务系统", "低"], ["监管数据库", "数据库", "低"]
+  ]},
+  { name: "市农业农村局", score: 70.2, radar: [64, 72, 70, 68, 74, 66], assets: [
+    ["农情监测站", "物联网", "中"], ["农机调度", "业务系统", "低"]
+  ]},
+  { name: "市人社局", score: 69.4, radar: [66, 70, 68, 72, 64, 74], assets: [
+    ["社保信息平台", "业务系统", "中"], ["人社专网", "网络设备", "低"]
+  ]},
+  { name: "市自然资源局", score: 68.6, radar: [62, 70, 74, 66, 68, 72], assets: [
+    ["国土空间平台", "业务系统", "低"], ["测绘数据库", "数据库", "中"]
+  ]},
+  { name: "市城管执法委", score: 67.8, radar: [64, 66, 70, 68, 72, 60], assets: [
+    ["智慧城管", "业务系统", "低"], ["路灯监控", "物联网", "中"]
+  ]},
+  { name: "市医保局", score: 67.1, radar: [70, 64, 66, 72, 60, 68], assets: [
+    ["医保结算平台", "业务系统", "中"], ["医保专网防火墙", "安全设备", "低"]
+  ]},
+  { name: "市司法局", score: 66.4, radar: [60, 68, 64, 70, 66, 72], assets: [
+    ["公共法律服务", "业务系统", "低"], ["普法门户", "业务系统", "低"]
+  ]},
+  { name: "市科技局", score: 65.7, radar: [68, 62, 66, 64, 70, 58], assets: [
+    ["科技项目管理", "业务系统", "低"], ["创新平台", "业务系统", "低"]
+  ]},
+  { name: "市商务局", score: 64.9, radar: [62, 66, 60, 68, 64, 70], assets: [
+    ["电商监测", "业务系统", "低"], ["商务数据库", "数据库", "低"]
+  ]},
+  { name: "市审计局", score: 64.2, radar: [72, 60, 64, 66, 58, 62], assets: [
+    ["审计作业平台", "业务系统", "低"], ["审计专网", "网络设备", "中"]
+  ]}
+];
+const events = [
+  { id: "e1", title: "等保到期 雪亮工程", level: "高", find: "自动发现", type: "等保到期", source: "等保到期", target: "市公安局", system: "市公安局", same: 31, status: "待处置", time: "2026-09-18 16:00", org: "市公安局（待处理）", src: "warn-job", impact: "高", lng: 110.78, lat: 32.63, layer: "event", district: "张湾区" },
+  { id: "e2", title: "竹溪暴露面", level: "高", find: "被动发现", type: "暴露面", source: "竹溪县政府", target: "竹溪县政府", system: "政务外网", same: 6, status: "处置中", time: "2026-09-18 07:30", org: "网安（待处置）", src: "竹溪县政府", impact: "高", lng: 109.78, lat: 32.35, layer: "event", district: "竹溪县" },
+  { id: "e3", title: "房县弱口令专项", level: "中", find: "智能发现", type: "弱口令", source: "房县政府", target: "房县政府", system: "门户网站", same: 12, status: "处置中", time: "2026-09-15 07:30", org: "网安（待处理）", src: "房县政府", impact: "中", lng: 110.72, lat: 32.08, layer: "event", district: "房县" },
+  { id: "e4", title: "张湾节点内存触顶", level: "中", find: "自动发现", type: "资源告警", source: "市数据局", target: "市数据局", system: "政务云计算节点A", same: 4, status: "待处置", time: "2026-09-13 07:30", org: "市数据局（待处置）", src: "市数据局", impact: "中", lng: 110.74, lat: 32.66, layer: "event", district: "张湾区" },
+  { id: "e5", title: "保养预警 89d 市核心路由器", level: "低", find: "自动发现", type: "保养预警", source: "warn-job", target: "市数据局", system: "市核心路由器", same: 2, status: "待处置", time: "2026-09-22 16:00", org: "市数据局（待处置）", src: "warn-job", impact: "低", lng: 110.80, lat: 32.59, layer: "event", district: "茅箭区" },
+  { id: "e6", title: "保养预警 89d 市级防火墙", level: "低", find: "自动发现", type: "保养预警", source: "warn-job", target: "市公安局", system: "市级防火墙", same: 3, status: "待处置", time: "2026-09-22 16:00", org: "市公安局（待处置）", src: "warn-job", impact: "低", lng: 110.69, lat: 32.70, layer: "event", district: "郧阳区" },
+  { id: "e7", title: "保养预警 89d 竹溪县政务网", level: "低", find: "自动发现", type: "保养预警", source: "warn-job", target: "市政务服务局", system: "竹溪县政务网", same: 1, status: "待处置", time: "2026-09-22 16:00", org: "市政务服务局（待处置）", src: "warn-job", impact: "低", lng: 109.90, lat: 32.22, layer: "event", district: "竹溪县" },
+  { id: "e8", title: "关基设施巡检异常", level: "高", find: "智能发现", type: "关基告警", source: "市公安局", target: "市公安局", system: "丹江口取水口", same: 2, status: "待处置", time: "2026-09-20 09:10", org: "市公安局（待处理）", src: "市公安局", impact: "高", lng: 111.48, lat: 32.55, layer: "event", district: "丹江口市" },
+  { id: "e9", title: "武当山入口相机离线", level: "中", find: "自动发现", type: "设备离线", source: "市文旅局", target: "市文旅局", system: "入口相机", same: 5, status: "待处置", time: "2026-09-21 11:20", org: "市文旅局（待处置）", src: "warn-job", impact: "中", lng: 111.02, lat: 32.42, layer: "event", district: "丹江口市" },
+  { id: "e10", title: "竹山入境路线预警", level: "中", find: "被动发现", type: "线路预警", source: "市应急管理局", target: "市应急管理局", system: "入境监测", same: 3, status: "待处置", time: "2026-09-19 15:00", org: "市应急管理局", src: "市应急管理局", impact: "中", lng: 110.18, lat: 32.28, layer: "event", district: "竹山县" },
+  { id: "e11", title: "郧西边界探针心跳丢失", level: "低", find: "自动发现", type: "探针离线", source: "市网信办", target: "市网信办", system: "边界探针", same: 1, status: "已闭环", time: "2026-09-10 08:00", org: "市网信办", src: "warn-job", impact: "低", lng: 110.40, lat: 33.02, layer: "event", district: "郧西县" }
+];
+const places = [
+  { layer: "protect", name: "丹江口大坝", lng: 111.51, lat: 32.56, level: "低" },
+  { layer: "protect", name: "武当山金顶", lng: 111.00, lat: 32.40, level: "低" },
+  { layer: "protect", name: "十堰市政府", lng: 110.80, lat: 32.63, level: "低" },
+  { layer: "platform", name: "市级安全平台", lng: 110.79, lat: 32.61, level: "低" },
+  { layer: "sensitive", name: "高危敏感点 · 茅箭", lng: 110.86, lat: 32.57, level: "高" },
+  { layer: "infra", name: "关基 · 汉江取水", lng: 110.85, lat: 32.72, level: "中" }
+];
+const layers = [
+  { id: "protect", name: "防护目标", on: true, warn: false },
+  { id: "platform", name: "安全态势 / 平台", on: true, warn: false },
+  { id: "attack", name: "攻击 / 威胁来源", on: true, warn: true },
+  { id: "sensitive", name: "高危敏感点", on: true, warn: true },
+  { id: "infra", name: "关基设施", on: true, warn: true },
+  { id: "event", name: "安全事件点", on: true, warn: true }
+];
+const districtsMeta = {
+  "茅箭区": { score: 86, events: 2 },
+  "张湾区": { score: 84, events: 3 },
+  "郧阳区": { score: 81, events: 1 },
+  "郧西县": { score: 79, events: 1 },
+  "竹山县": { score: 77, events: 2 },
+  "竹溪县": { score: 74, events: 3 },
+  "房县": { score: 78, events: 2 },
+  "丹江口市": { score: 83, events: 3 }
+};
+
+let evFilter = "全部";
+let taskFilter = "全部";
+let activeUnit = null;
+let activeEvent = null;
+let activeDistrict = "全市";
+let warnOnly = false;
+
+const tasks = [
+  { title: "保养预警 89d 政务云计算节点A", org: "市数据局", due: "2026-09-23 16:00", status: "待处置", overdue: true },
+  { title: "保养预警 89d 市核心路由器", org: "市数据局", due: "2026-09-23 16:00", status: "待处置", overdue: true },
+  { title: "保养预警 89d 市级防火墙", org: "市数据局", due: "2026-09-23 16:00", status: "待处置", overdue: true },
+  { title: "保养预警 89d 竹山县入境路线", org: "市应急管理局", due: "2026-09-23 15:00", status: "待处置", overdue: true },
+  { title: "保养预警 89d 武当山入口相机", org: "市文旅局", due: "2026-09-23 16:00", status: "待处置", overdue: true },
+  { title: "省巡预警 运管政务云节点 / 市卫健委 3d", org: "市卫健委", due: "2026-09-20 17:00", status: "处置中", overdue: true },
+  { title: "保养预警 63d 政务云计算节点B", org: "市数据局", due: "2026-09-19 16:00", status: "已闭环", overdue: false }
+];
+
+function radarSvg(labels, values, size) {
+  const cx = size / 2, cy = size / 2 + 6, r = size * 0.32, n = labels.length;
+  const pt = (i, t) => {
+    const a = -Math.PI / 2 + i * 2 * Math.PI / n;
+    return [cx + Math.cos(a) * r * t, cy + Math.sin(a) * r * t];
+  };
+  let rings = "";
+  for (let k = 1; k <= 4; k++) {
+    const d = labels.map((_, i) => { const p = pt(i, k / 4); return (i ? "L" : "M") + p[0].toFixed(1) + "," + p[1].toFixed(1); }).join("") + "Z";
+    rings += `<path d="${d}" fill="none" stroke="#bbb" stroke-width="1"/>`;
+  }
+  let axes = "", texts = "";
+  labels.forEach((lb, i) => {
+    const p = pt(i, 1), t = pt(i, 1.28);
+    axes += `<line x1="${cx}" y1="${cy}" x2="${p[0].toFixed(1)}" y2="${p[1].toFixed(1)}" stroke="#bbb"/>`;
+    texts += `<text x="${t[0].toFixed(1)}" y="${t[1].toFixed(1)}" text-anchor="middle" font-size="11" fill="#333">${lb}</text>`;
+  });
+  const poly = values.map((v, i) => { const p = pt(i, v / 100); return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" ");
+  return `<svg viewBox="0 0 ${size} ${size}" width="100%" height="100%">${rings}${axes}<polygon points="${poly}" fill="rgba(0,0,0,.08)" stroke="#111" stroke-width="1.6"/>${texts}</svg>`;
+}
+
+function renderUnits() {
+  document.getElementById("unitBars").innerHTML = units.map((u, i) => `
+    <div class="bar-row${activeUnit === i ? " on" : ""}" data-i="${i}">
+      <div class="name">${u.name}</div>
+      <div class="track"><div class="fill" style="width:${u.score}%"></div></div>
+      <div class="score">${u.score.toFixed(1)}</div>
+    </div>`).join("");
+}
+
+function placePop(pop, r, width, preferLeft) {
+  const br = document.getElementById("board").getBoundingClientRect();
+  const s = scale || 1;
+  let left = preferLeft ? (r.left - br.left) / s - width - 12 : (r.right - br.left) / s + 12;
+  let top = (r.top - br.top) / s - 8;
+  if (left < 12) left = (r.right - br.left) / s + 12;
+  if (left + width > 3824) left = 3824 - width;
+  if (top < 108) top = 108;
+  const maxTop = 1064 - (pop.offsetHeight || 360);
+  if (top > maxTop) top = Math.max(108, maxTop);
+  pop.style.left = left + "px";
+  pop.style.top = top + "px";
+}
+function showUnit(i, anchor) {
+  const hold = anchor.getBoundingClientRect();
+  activeUnit = i;
+  document.querySelectorAll(".bar-row").forEach(el => el.classList.toggle("on", el.dataset.i === String(i)));
+  const u = units[i];
+  const pop = document.getElementById("unitPop");
+  pop.className = "float-card show";
+  pop.innerHTML = `<h3>${u.name} · 单位安全能力画像</h3>
+    <div style="height:180px">${radarSvg(["识别","防护","恢复","响应","处置","监测"], u.radar, 220)}</div>
+    <div style="font-size:13px;color:#111;margin:4px 0">资产台账</div>
+    <table class="asset"><thead><tr><th>名称</th><th>类型</th><th>风险等级</th></tr></thead><tbody>
+    ${u.assets.map(a => `<tr><td>${a[0]}</td><td>${a[1]}</td><td><span class="risk-low">${a[2]}</span></td></tr>`).join("")}
+    </tbody></table>`;
+  placePop(pop, hold, 420, false);
+}
+
+function renderEvents() {
+  const list = events.filter(e => evFilter === "全部" || e.find === evFilter);
+  document.getElementById("evList").innerHTML = list.map(e => `
+    <div class="ev${activeEvent === e.id ? " on" : ""}" data-id="${e.id}">
+      <div class="t"><span class="lv ${e.level}">${e.level}</span>${e.title}</div>
+      <div class="meta"><span>发现源 ${e.src}　${e.time}</span><span class="pill ${e.status}">${e.status}</span></div>
+      <div class="meta"><span>处理机构 ${e.org}</span></div>
+    </div>`).join("") || `<div style="color:#555;font-size:13px;padding:8px">当前筛选无事件</div>`;
+}
+
+function showEvent(id, anchor) {
+  const hold = anchor.getBoundingClientRect();
+  activeEvent = id;
+  document.querySelectorAll(".ev").forEach(el => el.classList.toggle("on", el.dataset.id === id));
+  const e = events.find(x => x.id === id);
+  const pop = document.getElementById("evPop");
+  pop.className = "float-card detail show";
+  pop.innerHTML = `<h3>${e.title}</h3><div class="sub">${e.find}</div>
+    <div class="kv">
+      <span>发现方式</span><b>${e.find}</b>
+      <span>等级</span><b>${e.level}</b>
+      <span>影响程度</span><b>${e.impact}</b>
+      <span>类型</span><b>${e.type}</b>
+      <span>来源</span><b>${e.source}</b>
+      <span>目标</span><b>${e.target}</b>
+      <span>被攻击系统</span><b>${e.system}</b>
+      <span>同类事件</span><b>${e.same}</b>
+      <span>状态</span><b>${e.status}</b>
+      <span>发现时间</span><b>${e.time}</b>
+      <span>处理机构</span><b>${e.org}</b>
+      <span>所在区县</span><b>${e.district}</b>
+    </div>`;
+  placePop(pop, hold, 320, true);
+}
+
+function renderTasks() {
+  const list = tasks.filter(t => {
+    if (taskFilter === "全部") return true;
+    if (taskFilter === "超期督办") return t.overdue && t.status !== "已闭环";
+    return t.status === taskFilter;
+  });
+  document.getElementById("taskList").innerHTML = list.map(t => `
+    <div class="task">
+      <div class="t">${t.title}</div>
+      <div class="meta"><span>${t.org}　截止 ${t.due}${t.overdue && t.status !== "已闭环" ? "　超期" : ""}</span><span class="pill ${t.status}">${t.status}</span></div>
+    </div>`).join("") || `<div style="color:#555;font-size:13px;padding:8px">当前筛选无任务</div>`;
+}
+
+function seg(el, items, current, onChange) {
+  el.innerHTML = items.map(n => `<button type="button" class="${n === current ? "on" : ""}" data-n="${n}">${n}</button>`).join("");
+  el.onclick = (e) => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    onChange(b.dataset.n);
+  };
+}
+
+/* map */
+const svg = document.getElementById("mapSvg");
+let vb = { x: 0, y: 0, w: 1000, h: 700 };
+let base = { x: 0, y: 0, w: 1000, h: 700 };
+let projectFn = null;
+const gDist = document.createElementNS(NS, "g");
+const gMark = document.createElementNS(NS, "g");
+svg.appendChild(gDist);
+svg.appendChild(gMark);
+
+function applyView() {
+  svg.setAttribute("viewBox", `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+}
+
+function buildMap() {
+  const wrap = document.getElementById("mapWrap");
+  const rect = wrap.getBoundingClientRect();
+  const sc = scale || 1;
+  const W = Math.max(600, Math.round(rect.width / sc));
+  const H = Math.max(400, Math.round(rect.height / sc));
+  if (!rect.width || !rect.height) return;
+  gDist.replaceChildren();
+  const geo = window.SHIYAN_GEO;
+  let minLng = 180, maxLng = -180, minLat = 90, maxLat = -90;
+  geo.features.forEach(f => {
+    f.geometry.coordinates.forEach(poly => poly.forEach(ring => ring.forEach(([lng, lat]) => {
+      minLng = Math.min(minLng, lng); maxLng = Math.max(maxLng, lng);
+      minLat = Math.min(minLat, lat); maxLat = Math.max(maxLat, lat);
+    })));
+  });
+  const cos = Math.cos(((minLat + maxLat) / 2) * Math.PI / 180);
+  const gw = (maxLng - minLng) * cos, gh = (maxLat - minLat);
+  const pad = 28;
+  const s = Math.min((W - pad * 2) / gw, (H - pad * 2) / gh);
+  const ox = (W - gw * s) / 2, oy = (H - gh * s) / 2;
+  projectFn = (lng, lat) => [ox + (lng - minLng) * cos * s, oy + (maxLat - lat) * s];
+  const gLabel = document.createElementNS(NS, "g");
+  geo.features.forEach(f => {
+    const name = f.properties.name;
+    const d = f.geometry.coordinates.map(poly => poly.map(ring => ring.map((p, i) => {
+      const [x, y] = projectFn(p[0], p[1]);
+      return (i ? "L" : "M") + x.toFixed(1) + "," + y.toFixed(1);
+    }).join("") + "Z").join("")).join("");
+    const path = document.createElementNS(NS, "path");
+    path.setAttribute("d", d);
+    path.setAttribute("class", "dist");
+    path.dataset.name = name;
+    gDist.appendChild(path);
+    const [clng, clat] = f.properties.centroid || f.properties.center;
+    const nudge = { "张湾区": [-18, -14], "茅箭区": [16, 16], "郧阳区": [0, -8], "竹山县": [8, -6] };
+    const [dx, dy] = nudge[name] || [0, 0];
+    const [lx, ly] = projectFn(clng, clat);
+    const text = document.createElementNS(NS, "text");
+    text.setAttribute("class", "dist-label");
+    text.setAttribute("x", (lx + dx).toFixed(1));
+    text.setAttribute("y", (ly + dy).toFixed(1));
+    text.setAttribute("text-anchor", "middle");
+    text.textContent = name;
+    gLabel.appendChild(text);
+  });
+  gDist.appendChild(gLabel);
+  base = { x: 0, y: 0, w: W, h: H };
+  vb = { ...base };
+  svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+  applyView();
+}
+
+function markerVisible(layerId, level) {
+  const layer = layers.find(l => l.id === layerId);
+  if (!layer || !layer.on) return false;
+  if (warnOnly && !layer.warn) return false;
+  if (warnOnly && level === "低") return false;
+  return true;
+}
+
+function drawMarkers() {
+  gMark.innerHTML = "";
+  const items = [
+    ...places.map(p => ({ ...p, kind: "place" })),
+    ...events.map(e => ({ layer: "event", name: e.title, lng: e.lng, lat: e.lat, level: e.level, id: e.id, kind: "event" }))
+  ];
+  items.forEach(m => {
+    if (!markerVisible(m.layer, m.level)) return;
+    if (activeDistrict !== "全市") {
+      const hit = m.kind === "event" ? events.find(e => e.id === m.id).district === activeDistrict : true;
+      if (m.kind === "event" && !hit) return;
+    }
+    const [x, y] = projectFn(m.lng, m.lat);
+    const fill = m.level === "高" ? "#111" : m.level === "中" ? "#fff" : "#888";
+    const g = document.createElementNS(NS, "g");
+    g.setAttribute("class", "marker");
+    g.innerHTML = `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${m.kind === "event" ? 6 : 5}" fill="${fill}"></circle>`;
+    g.addEventListener("mouseenter", () => {
+      if (m.kind === "event") showEvent(m.id, g);
+      else toast(m.name);
+    });
+    g.addEventListener("mouseleave", (ev) => {
+      const pop = document.getElementById("evPop");
+      if (ev.relatedTarget && pop.contains(ev.relatedTarget)) return;
+      if (m.kind === "event") scheduleHide(pop, ".ev");
+    });
+    gMark.appendChild(g);
+  });
+}
+
+function highlightDistrict(name) {
+  document.querySelectorAll(".dist").forEach(p => {
+    p.classList.toggle("active", name !== "全市" && p.dataset.name === name);
+  });
+}
+
+function showDistrict(name, clientX, clientY) {
+  const meta = districtsMeta[name];
+  const pop = document.getElementById("distPop");
+  const n = events.filter(e => e.district === name).length;
+  pop.className = "float-card dist-card show";
+  pop.innerHTML = `<h3>${name}</h3>
+    <p>安全指数　<b>${meta.score}</b></p>
+    <p>在册事件　<b>${n}</b></p>
+    <p>范围仅限十堰市，区县边界加粗。</p>`;
+  const br = document.getElementById("board").getBoundingClientRect();
+  pop.style.left = Math.min(3580, (clientX - br.left) / scale + 12) + "px";
+  pop.style.top = Math.min(920, (clientY - br.top) / scale + 12) + "px";
+}
+
+function renderLayers() {
+  const on = layers.filter(l => l.on).length;
+  document.getElementById("layerCount").textContent = on + "/" + layers.length;
+  document.getElementById("layerList").innerHTML = layers.map(l => {
+    const cnt = l.id === "event" ? events.length : l.id === "attack" ? 0 : places.filter(p => p.layer === l.id).length;
+    return `<label class="layer-row"><input type="checkbox" data-layer="${l.id}" ${l.on ? "checked" : ""}/>${l.name}<span class="cnt">${cnt}</span></label>`;
+  }).join("");
+}
+
+function fitBoard() {
+  const s = Math.min(window.innerWidth / 3840, window.innerHeight / 1080);
+  scale = s;
+  document.getElementById("board").style.transform = `translate(-50%, -50%) scale(${s})`;
+  buildMap();
+  drawMarkers();
+}
+let scale = 1;
+
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.style.display = "block";
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { t.style.display = "none"; }, 1600);
+}
+
+function tick() {
+  const d = new Date();
+  const wk = "日一二三四五六"[d.getDay()];
+  const p = n => String(n).padStart(2, "0");
+  document.getElementById("dateLine").textContent = `${d.getFullYear()}年${p(d.getMonth()+1)}月${p(d.getDate())}日 星期${wk}`;
+  document.getElementById("timeLine").textContent = `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+}
+
+document.getElementById("indexRadar").innerHTML = radarSvg(["漏洞整改","加密传输","防泄露","总体安全","通报管控","高危拦截"], [78, 72, 80, 73, 68, 76], 220);
+document.getElementById("donut").innerHTML = `<svg viewBox="0 0 240 180" width="100%" height="100%">
+  <circle cx="112" cy="86" r="52" fill="none" stroke="#111" stroke-width="16" stroke-dasharray="64 263" stroke-dashoffset="0"/>
+  <circle cx="112" cy="86" r="52" fill="none" stroke="#555" stroke-width="16" stroke-dasharray="55 272" stroke-dashoffset="-64"/>
+  <circle cx="112" cy="86" r="52" fill="none" stroke="#888" stroke-width="16" stroke-dasharray="73 254" stroke-dashoffset="-119"/>
+  <circle cx="112" cy="86" r="52" fill="none" stroke="#bbb" stroke-width="16" stroke-dasharray="61 266" stroke-dashoffset="-192"/>
+  <circle cx="112" cy="86" r="52" fill="none" stroke="#ddd" stroke-width="16" stroke-dasharray="74 253" stroke-dashoffset="-253"/>
+  <text x="178" y="42" font-size="13" fill="#333">DDoS</text>
+  <text x="186" y="92" font-size="13" fill="#333">漏洞扫描</text>
+  <text x="158" y="152" font-size="13" fill="#333">暴力破解</text>
+  <text x="112" y="174" font-size="13" fill="#333" text-anchor="middle">API</text>
+  <text x="2" y="92" font-size="13" fill="#333">高危端口</text>
+</svg>`;
+
+function paintFilters() {
+  seg(document.getElementById("evSeg"), ["全部","自动发现","被动发现","智能发现"], evFilter, n => {
+    evFilter = n; renderEvents(); paintFilters();
+  });
+  seg(document.getElementById("taskSeg"), ["全部","待处置","处置中","已闭环","超期督办"], taskFilter, n => {
+    taskFilter = n; renderTasks(); paintFilters();
+  });
+}
+renderUnits();
+renderEvents();
+renderTasks();
+paintFilters();
+
+const hideTimers = new WeakMap();
+function scheduleHide(pop, itemSel) {
+  clearTimeout(hideTimers.get(pop));
+  hideTimers.set(pop, setTimeout(() => {
+    pop.classList.remove("show");
+    document.querySelectorAll(itemSel).forEach(el => el.classList.remove("on"));
+  }, 80));
+}
+function bindHover(root, itemSel, pop, open) {
+  root.addEventListener("mouseover", e => {
+    const row = e.target.closest(itemSel);
+    if (!row || !root.contains(row)) return;
+    clearTimeout(hideTimers.get(pop));
+    open(row);
+  });
+  root.addEventListener("mouseout", e => {
+    const row = e.target.closest(itemSel);
+    if (!row) return;
+    const next = e.relatedTarget;
+    if (next && (row.contains(next) || pop.contains(next))) return;
+    scheduleHide(pop, itemSel);
+  });
+  pop.addEventListener("mouseenter", () => clearTimeout(hideTimers.get(pop)));
+  pop.addEventListener("mouseleave", () => scheduleHide(pop, itemSel));
+}
+bindHover(document.getElementById("unitBars"), ".bar-row", document.getElementById("unitPop"), row => showUnit(+row.dataset.i, row));
+bindHover(document.getElementById("evList"), ".ev", document.getElementById("evPop"), row => showEvent(row.dataset.id, row));
+
+function selectDistrict(n) {
+  activeDistrict = n;
+  const cityBtn = document.getElementById("cityBtn");
+  if (cityBtn) cityBtn.textContent = n + " ▾";
+  document.querySelectorAll("#mapCities button").forEach(b => b.classList.toggle("on", b.dataset.n === n));
+  cityMenu.classList.remove("open");
+  highlightDistrict(n);
+  drawMarkers();
+  if (n === "全市") document.getElementById("distPop").classList.remove("show");
+}
+const cityMenu = document.getElementById("cityMenu");
+const mapCities = document.getElementById("mapCities");
+["全市", ...Object.keys(districtsMeta)].forEach(n => {
+  const b = document.createElement("button");
+  b.textContent = n.replace(/区|县|市$/, "") === "丹江口" ? "丹江口" : n.replace(/区|县|市$/, "");
+  if (n === "全市") b.textContent = "全市";
+  b.dataset.n = n;
+  b.className = n === "全市" ? "on" : "";
+  b.onclick = (e) => { e.stopPropagation(); selectDistrict(n); };
+  mapCities.appendChild(b);
+  const menuBtn = b.cloneNode(true);
+  menuBtn.onclick = (e) => { e.stopPropagation(); selectDistrict(n); };
+  cityMenu.appendChild(menuBtn);
+});
+document.getElementById("cityBtn").onclick = (e) => { e.stopPropagation(); cityMenu.classList.toggle("open"); };
+
+document.querySelectorAll(".tab").forEach(btn => btn.onclick = () => {
+  document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  if (btn.dataset.tab !== "安") toast(btn.dataset.tab + " 为同屏入口，当前展示安");
+});
+
+document.getElementById("btnLayer").onclick = () => document.getElementById("layerPanel").classList.toggle("open");
+document.getElementById("layerList").addEventListener("change", e => {
+  const id = e.target.dataset.layer;
+  const layer = layers.find(l => l.id === id);
+  if (layer) layer.on = e.target.checked;
+  warnOnly = false;
+  renderLayers();
+  drawMarkers();
+});
+document.getElementById("btnAllLayer").onclick = () => {
+  warnOnly = false;
+  layers.forEach(l => l.on = true);
+  renderLayers();
+  drawMarkers();
+};
+document.getElementById("btnWarnLayer").onclick = () => {
+  warnOnly = true;
+  layers.forEach(l => l.on = true);
+  renderLayers();
+  drawMarkers();
+  toast("仅显示预警相关图层的中、高点位");
+};
+
+function zoom(factor, cx, cy) {
+  const nx = cx - (cx - vb.x) * factor;
+  const ny = cy - (cy - vb.y) * factor;
+  vb = { x: nx, y: ny, w: vb.w * factor, h: vb.h * factor };
+  applyView();
+}
+document.getElementById("zoomIn").onclick = () => zoom(0.8, vb.x + vb.w / 2, vb.y + vb.h / 2);
+document.getElementById("zoomOut").onclick = () => zoom(1.25, vb.x + vb.w / 2, vb.y + vb.h / 2);
+document.getElementById("zoomReset").onclick = () => { vb = { ...base }; applyView(); };
+
+svg.addEventListener("wheel", e => {
+  e.preventDefault();
+  const rect = svg.getBoundingClientRect();
+  const px = (e.clientX - rect.left) / rect.width;
+  const py = (e.clientY - rect.top) / rect.height;
+  zoom(e.deltaY < 0 ? 0.9 : 1.1, vb.x + vb.w * px, vb.y + vb.h * py);
+}, { passive: false });
+
+let drag = null;
+svg.addEventListener("pointerdown", e => {
+  if (e.target.closest && e.target.classList && e.target.classList.contains("dist")) return;
+  drag = { x: e.clientX, y: e.clientY, vb: { ...vb } };
+});
+window.addEventListener("pointermove", e => {
+  if (!drag) return;
+  const rect = svg.getBoundingClientRect();
+  const dx = (e.clientX - drag.x) / rect.width * drag.vb.w;
+  const dy = (e.clientY - drag.y) / rect.height * drag.vb.h;
+  vb.x = drag.vb.x - dx;
+  vb.y = drag.vb.y - dy;
+  applyView();
+});
+window.addEventListener("pointerup", () => { drag = null; });
+
+svg.addEventListener("click", e => {
+  const path = e.target.closest ? e.target : null;
+  if (path && path.classList && path.classList.contains("dist")) {
+    const name = path.dataset.name;
+    selectDistrict(name);
+    showDistrict(name, e.clientX, e.clientY);
+    return;
+  }
+  document.getElementById("distPop").classList.remove("show");
+});
+
+document.getElementById("btnFull").onclick = () => {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+};
+document.getElementById("btnBack").onclick = () => toast("已返回后台入口（演示）");
+
+document.addEventListener("click", e => {
+  if (!e.target.closest(".city-select")) cityMenu.classList.remove("open");
+});
+
+renderLayers();
+fitBoard();
+window.addEventListener("resize", fitBoard);
+tick();
+setInterval(tick, 1000);
+</script>
+</body>
+</html>
