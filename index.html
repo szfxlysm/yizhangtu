@@ -65,14 +65,12 @@
   .board.mode-calc .map-legend.pane-calc { display: block; }
   .board.mode-calc .map-foot.pane-calc { display: grid; }
   .board.mode-calc .map-bar.pane-calc { display: flex; }
-  .board.mode-calc .channel-note.pane-calc { display: block; }
   .pane-data { display: none; }
   .board.mode-data .pane-an { display: none !important; }
   .board.mode-data .pane-data.stack { display: flex; }
   .board.mode-data .map-legend.pane-data { display: block; }
   .board.mode-data .map-foot.pane-data { display: grid; }
   .board.mode-data .map-bar.pane-data { display: flex; }
-  .board.mode-data .channel-note.pane-data { display: block; }
   .map-legend.pane-data { width: 268px; }
   .pane-ind { display: none; }
   .board.mode-ind .pane-an { display: none !important; }
@@ -114,6 +112,18 @@
   .card h2 i { width: 3px; height: 14px; background: #111; display: inline-block; border-radius: 2px; }
   .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
   .stat { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; background: #fff; border: 1px solid #bbb; border-radius: 6px; padding: 6px 8px; cursor: default; min-width: 0; }
+  .pane-cloud .stat, .pane-net .stat, #calcArch, #dataGrade, #dataFlow { cursor: pointer; }
+  .pane-cloud .stat:hover, .pane-cloud .stat.on, .pane-net .stat:hover, .pane-net .stat.on,
+  #calcArch:hover, #calcArch.on, #dataGrade:hover, #dataGrade.on, #dataFlow:hover, #dataFlow.on { border-color: #111; background: #f5f5f5; }
+  .flow .hit, .net-link .hit, .calc-channel .hit { cursor: pointer; }
+  .pane-an .stats .stat { cursor: pointer; }
+  .pane-an .stats .stat:hover, .pane-an .stats .stat.on { border-color: #111; background: #f5f5f5; }
+  .kind-card { cursor: pointer; }
+  .pop-x {
+    position: absolute; right: 8px; top: 8px; width: 22px; height: 22px; padding: 0;
+    border: 1px solid #111; background: #fff; border-radius: 4px; cursor: pointer; color: #111; font-size: 16px; line-height: 18px;
+  }
+  .float-card.has-x h3, .asset-pop.has-x h3 { padding-right: 26px; }
   .stat:hover, .stat.on { border-color: #111; background: #f5f5f5; }
   .stat .k { font-size: 12px; color: #333; }
   .stat .v { font-size: 16px; color: #111; font-weight: 650; }
@@ -205,12 +215,38 @@
   .sw.gray { background: #888; }
   .sw.sq { border-radius: 1px; }
   .sw.dia { width: 8px; height: 8px; border-radius: 0; background: #fff; border: 1px solid #111; transform: rotate(45deg); }
+  .sw.dashline { width: 16px; height: 0; border-radius: 0; background: none; border: none; border-top: 1.5px dashed #111; }
+  .calc-channel line { stroke: #111; stroke-width: 1.4; stroke-dasharray: 7 5; fill: none; pointer-events: none; }
+  .calc-channel .hit { stroke: transparent; stroke-width: 14; stroke-dasharray: none; pointer-events: stroke; }
+  .sw.net-wan { width: 16px; height: 5px; border-radius: 0; background: none; border-top: 1.6px solid #111; border-bottom: 1.6px solid #111; }
+  .sw.net-man { width: 14px; height: 9px; border-radius: 8px; background: none; border: 1.5px solid #111; }
+  .sw.net-star { width: 16px; height: 0; border-radius: 0; background: none; border: none; border-top: 1.5px solid #888; }
+  .net-link text { font-size: 12px; fill: #111; font-weight: 700; text-anchor: middle; paint-order: stroke; stroke: #fff; stroke-width: 4px; pointer-events: none; }
+  .net-star line:not(.hit) { stroke: #888; stroke-width: 1.15; fill: none; pointer-events: none; }
+  .net-ch line:not(.hit) { stroke: #111; stroke-width: 1.35; stroke-dasharray: 7 5; fill: none; pointer-events: none; }
+  .net-man path:not(.hit) { fill: none; stroke: #111; stroke-width: 2; pointer-events: none; }
+  .net-wan line:not(.hit) { stroke: #111; stroke-width: 1.5; fill: none; pointer-events: none; }
+  .net-link .hit { stroke: transparent; stroke-width: 12; stroke-dasharray: none; fill: none; pointer-events: stroke; }
+  .sw.dotline { width: 16px; height: 0; border-radius: 0; background: none; border: none; border-top: 1.5px dotted #111; }
+  .sw.dashpair { width: 16px; height: 5px; border-radius: 0; background: none; border-top: 1.5px dashed #111; border-bottom: 1.5px dashed #111; }
+  .flow text { font-size: 12px; fill: #111; font-weight: 700; text-anchor: middle; paint-order: stroke; stroke: #fff; stroke-width: 4px; pointer-events: none; }
+  .flow polygon { stroke: none; pointer-events: none; }
+  .flow-up line:not(.hit), .flow-in line:not(.hit) { stroke: #111; stroke-width: 1.3; stroke-dasharray: 7 5; fill: none; pointer-events: none; }
+  .flow-use line:not(.hit) { stroke: #111; stroke-width: 1.25; stroke-dasharray: 1.5 3.5; fill: none; pointer-events: none; }
+  .flow-back line:not(.hit) { stroke: #888; stroke-width: 1.05; fill: none; pointer-events: none; }
+  .flow-live line:not(.hit) { stroke: #111; stroke-width: 1.45; fill: none; pointer-events: none; }
+  .flow-pub line:not(.hit) { stroke: #111; stroke-width: 1.35; stroke-dasharray: 6 4; fill: none; pointer-events: none; }
+  .flow-in polygon, .flow-use polygon, .flow-live polygon { fill: #111; }
+  .flow-back polygon { fill: #888; }
+  .flow .hit { stroke: transparent; stroke-width: 12; stroke-dasharray: none; fill: none; pointer-events: stroke; }
+  .calc-channel text { font-size: 12px; fill: #111; font-weight: 700; text-anchor: middle; paint-order: stroke; stroke: #fff; stroke-width: 4px; pointer-events: none; }
   .map-foot {
     position: absolute; left: 10px; right: 10px; bottom: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; z-index: 3;
   }
   .spark-meta { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; color: #333; }
   .spark-meta b { font-size: 16px; color: #111; }
   .spark { width: 100%; height: 64px; display: block; }
+  .spark.ind-q { height: 92px; }
   .spark-legend { display: flex; flex-wrap: wrap; gap: 2px 10px; margin-top: 4px; font-size: 11px; color: #333; }
   .spark-legend i { display: inline-block; width: 14px; height: 0; border-top: 2px solid #111; margin-right: 4px; vertical-align: middle; }
   .map-foot .card { padding: 8px 10px; }
@@ -589,9 +625,11 @@
             <div class="kpi4" id="cloudLevelBar"></div>
           </div>
           <div class="map-legend pane-cloud">
-            <div><span class="sw solid"></span>实心圆 · 政务云</div>
-            <div><span class="sw hollow"></span>空心圆 · 部门自建</div>
-            <div><span class="sw gray"></span>灰点 · 公有云</div>
+            <div><span class="sw solid"></span>实心云 · 政务云</div>
+            <div><span class="sw hollow"></span>空心圆 · 部门机房</div>
+            <div><span class="sw net-wan"></span>双线 · 双活</div>
+            <div><span class="sw dashline"></span>虚线 · 上云</div>
+            <div><span class="sw dashpair"></span>虚线双线 · 公有云专线</div>
           </div>
           <div class="map-foot pane-cloud">
             <div class="card">
@@ -616,14 +654,16 @@
             <div><span class="sw solid"></span>实心圆 · 政务外网</div>
             <div><span class="sw hollow"></span>空心圆 · 部门专网</div>
             <div><span class="sw gray"></span>灰点 · 互联网</div>
+            <div><span class="sw net-wan"></span>双线 · 广域网</div>
+            <div><span class="sw net-man"></span>环线 · 城域网</div>
+            <div><span class="sw dashline"></span>虚线 · 网络通道</div>
+            <div><span class="sw net-star"></span>灰线 · 市县辐射</div>
           </div>
           <div class="map-foot pane-net">
             <div class="card">
               <h2><i></i>实时传输速率</h2>
-              <svg class="spark" viewBox="0 0 300 64" preserveAspectRatio="none">
-                <polyline fill="none" stroke="#111" stroke-width="1.4" points="0,40 20,36 40,42 60,28 80,30 100,22 120,26 140,18 160,24 180,16 200,20 220,14 240,18 260,12 280,16 300,10"/>
-              </svg>
-              <div class="spark-legend"><span>市县出口 · 当前 27.2Gbps</span></div>
+              <svg class="spark" id="netRateChart" viewBox="0 0 300 64" preserveAspectRatio="none"></svg>
+              <div class="spark-legend"><span id="netRateNow">市县出口 · 当前 27.2Gbps</span></div>
             </div>
             <div class="card">
               <h2><i></i>地址改造</h2>
@@ -646,6 +686,7 @@
             <div><span class="sw solid"></span>实心圆 · 算力中心</div>
             <div><span class="sw hollow"></span>空心圆 · 本地消纳</div>
             <div><span class="sw gray"></span>灰点 · 外销客户</div>
+            <div><span class="sw dashline"></span>虚线 · 算力通道</div>
           </div>
           <div class="map-foot pane-calc">
             <div class="card">
@@ -674,9 +715,12 @@
             <div class="kpi4" id="dataLevelBar"></div>
           </div>
           <div class="map-legend pane-data">
-            <div><span class="sw solid"></span>实心 · 库 · 汇聚节点</div>
-            <div><span class="sw hollow"></span>空心 · 应急 / 河湖 / 国土 / 营商 / 基层</div>
-            <div><span class="sw gray"></span>灰底 · 政务 / 医疗 / 热线 / 教育</div>
+            <div><span class="sw solid"></span>实心库 · 市级 / 部门仓</div>
+            <div><span class="sw hollow"></span>空心 · 领域场景</div>
+            <div><span class="sw gray"></span>灰底 · 民生服务</div>
+            <div><span class="sw dashline"></span>虚线 · 归集</div>
+            <div><span class="sw net-star"></span>灰线 · 回流</div>
+            <div><span class="sw dotline"></span>点线 · 调用</div>
           </div>
           <div class="map-foot pane-data">
             <div class="card">
@@ -711,10 +755,8 @@
           <div class="map-foot pane-ind">
             <div class="card">
               <h2><i></i>规上产值</h2>
-              <svg class="spark" viewBox="0 0 300 64" preserveAspectRatio="none">
-                <polyline fill="none" stroke="#111" stroke-width="1.4" points="0,48 24,46 48,42 72,44 96,36 120,34 144,30 168,28 192,24 216,22 240,16 264,14 300,8"/>
-              </svg>
-              <div class="spark-legend"><span>近时序 · 体量约 486 亿</span></div>
+              <svg class="spark ind-q" id="indOutputChart" viewBox="0 0 460 96" preserveAspectRatio="xMidYMid meet"></svg>
+              <div class="spark-legend"><span>当季产值 · 亿元 · 2025全年 486亿</span></div>
             </div>
             <div class="card">
               <h2><i></i>兑付与申报</h2>
@@ -1066,8 +1108,8 @@ function showTerm(i, anchor) {
   if (row) row.classList.add("on");
   const b = bureaus[i];
   const pop = document.getElementById("unitPop");
-  pop.className = "float-card show";
-  pop.innerHTML = `<h3>${b.name}</h3>
+  pop.className = "float-card show has-x";
+  pop.innerHTML = `<button type="button" class="pop-x" aria-label="关闭">×</button><h3>${b.name}</h3>
     <div style="font-size:13px;color:#111;margin:4px 0">终端清单 · ${b.count}</div>
     <table class="asset"><thead><tr><th>终端名</th><th>类型</th><th>数量</th></tr></thead><tbody>
     ${b.items.map(a => `<tr><td>${a[0]}</td><td>${a[1]}</td><td>${a[2]}</td></tr>`).join("")}
@@ -1110,8 +1152,8 @@ function showUnit(i, anchor) {
   const row = document.querySelector(`#unitBars .bar-row[data-i="${anchor.dataset.i}"]`);
   if (row) row.classList.add("on");
   const pop = document.getElementById("unitPop");
-  pop.className = "float-card show";
-  pop.innerHTML = `<h3>${net}</h3>
+  pop.className = "float-card show has-x";
+  pop.innerHTML = `<button type="button" class="pop-x" aria-label="关闭">×</button><h3>${net}</h3>
     <div style="font-size:13px;color:#111;margin:4px 0">系统清单 · ${list.length}套</div>
     <table class="asset"><thead><tr><th>系统名</th><th>类型</th><th>成熟度</th></tr></thead><tbody>
     ${list.map(({ u, idx }) => `<tr class="sys-pick" data-i="${idx}"><td>${u.name}</td><td>${u.kind}</td><td>${u.score.toFixed(1)}</td></tr>`).join("")}
@@ -1126,8 +1168,8 @@ function showKind(kind, anchor) {
   anchor.classList.add("on");
   const list = units.map((u, idx) => ({ u, idx })).filter(x => x.u.kind === kind).sort((a, b) => b.u.score - a.u.score);
   const pop = document.getElementById("unitPop");
-  pop.className = "float-card show";
-  pop.innerHTML = `<h3>${kind}</h3>
+  pop.className = "float-card show has-x";
+  pop.innerHTML = `<button type="button" class="pop-x" aria-label="关闭">×</button><h3>${kind}</h3>
     <div style="font-size:13px;color:#111;margin:4px 0">系统清单 · ${list.length}套</div>
     <table class="asset"><thead><tr><th>系统名</th><th>类型</th><th>成熟度</th></tr></thead><tbody>
     ${list.map(({ u, idx }) => `<tr class="sys-pick" data-i="${idx}"><td>${u.name}</td><td>${u.net}</td><td>${u.score.toFixed(1)}</td></tr>`).join("")}
@@ -1198,8 +1240,8 @@ function showEvent(id, anchor) {
   document.querySelectorAll(".ev").forEach(el => el.classList.toggle("on", el.dataset.id === id));
   const e = events.find(x => x.id === id);
   const pop = document.getElementById("evPop");
-  pop.className = "float-card detail show";
-  pop.innerHTML = `<h3>${e.title}</h3><div class="sub">${e.find}</div>
+  pop.className = "float-card detail show has-x";
+  pop.innerHTML = `<button type="button" class="pop-x" aria-label="关闭">×</button><h3>${e.title}</h3><div class="sub">${e.find}</div>
     <div class="kv">
       <span>发现方式</span><b>${e.find}</b>
       <span>等级</span><b>${e.level}</b>
@@ -1671,36 +1713,124 @@ function drawIndMarkers() {
     else if (m.kind === "opc") shape = `<circle r="9" fill="#fff"></circle>${indGlyph(m.kind, "#111")}`;
     else shape = `<circle r="9" fill="#111"></circle>${indGlyph(m.kind, "#fff")}`;
     g.innerHTML = shape;
-    g.addEventListener("mouseenter", () => showCloudCard(m.name, m.rows, g));
-    g.addEventListener("mouseleave", ev => {
-      const pop = document.getElementById("unitPop");
-      if (ev.relatedTarget && pop.contains(ev.relatedTarget)) return;
-      scheduleHide(pop, ".app-row");
-    });
+    bindMapCard(g, m.name, m.rows);
     gMark.appendChild(g);
   });
 }
+function flowPair(x1, y1, x2, y2, gap) {
+  const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy) || 1;
+  const ux = dx / len, uy = dy / len;
+  return { ux, uy, len, ax: x1 + ux * gap, ay: y1 + uy * gap, bx: x2 - ux * gap, by: y2 - uy * gap };
+}
+function bindMapCard(g, title, rows) {
+  g.addEventListener("click", ev => {
+    ev.stopPropagation();
+    showCloudCard(title, rows, g, true);
+  });
+}
+function bindFlow(g, title, rows) {
+  bindMapCard(g, title, rows);
+}
+function addFlowLink(cls, x1, y1, x2, y2, label, title, rows, opt) {
+  const gap = opt && opt.gap != null ? opt.gap : 14;
+  const wantArrow = !opt || opt.arrow !== false;
+  const e = flowPair(x1, y1, x2, y2, gap);
+  if (e.len < 10) return;
+  const size = 8;
+  const px = -e.uy, py = e.ux;
+  const tipx = e.bx, tipy = e.by;
+  const lx = wantArrow ? tipx - e.ux * size : e.bx;
+  const ly = wantArrow ? tipy - e.uy * size : e.by;
+  const arrow = wantArrow ? `<polygon points="${tipx.toFixed(1)},${tipy.toFixed(1)} ${(tipx - e.ux * size + px * 3.6).toFixed(1)},${(tipy - e.uy * size + py * 3.6).toFixed(1)} ${(tipx - e.ux * size - px * 3.6).toFixed(1)},${(tipy - e.uy * size - py * 3.6).toFixed(1)}"></polygon>` : "";
+  const tx = e.ax + (lx - e.ax) * 0.55, ty = e.ay + (ly - e.ay) * 0.55;
+  const g = document.createElementNS(NS, "g");
+  g.setAttribute("class", "flow " + cls);
+  g.innerHTML = `<line class="hit" x1="${e.ax.toFixed(1)}" y1="${e.ay.toFixed(1)}" x2="${lx.toFixed(1)}" y2="${ly.toFixed(1)}"></line><line x1="${e.ax.toFixed(1)}" y1="${e.ay.toFixed(1)}" x2="${lx.toFixed(1)}" y2="${ly.toFixed(1)}"></line>${arrow}` + (label ? `<text x="${tx.toFixed(1)}" y="${ty.toFixed(1)}">${label}</text>` : "");
+  bindFlow(g, title, rows);
+  gMark.appendChild(g);
+}
+function addDoubleFlow(cls, x1, y1, x2, y2, label, at, title, rows) {
+  const e = flowPair(x1, y1, x2, y2, 12);
+  if (e.len < 24) return;
+  const [a, b, c, d] = netOffset(e.ax, e.ay, e.bx, e.by, 3);
+  const [p, q, r, s] = netOffset(e.ax, e.ay, e.bx, e.by, -3);
+  const tx = e.ax + (e.bx - e.ax) * at, ty = e.ay + (e.by - e.ay) * at;
+  const g = document.createElementNS(NS, "g");
+  g.setAttribute("class", "flow " + cls);
+  g.innerHTML = `<line class="hit" x1="${e.ax.toFixed(1)}" y1="${e.ay.toFixed(1)}" x2="${e.bx.toFixed(1)}" y2="${e.by.toFixed(1)}"></line><line x1="${a.toFixed(1)}" y1="${b.toFixed(1)}" x2="${c.toFixed(1)}" y2="${d.toFixed(1)}"></line><line x1="${p.toFixed(1)}" y1="${q.toFixed(1)}" x2="${r.toFixed(1)}" y2="${s.toFixed(1)}"></line>` + (label ? `<text x="${tx.toFixed(1)}" y="${ty.toFixed(1)}">${label}</text>` : "");
+  bindFlow(g, title, rows);
+  gMark.appendChild(g);
+}
 function drawDataMarkers() {
+  const hub = dataNodes.find(n => n.name === "市级数据仓");
+  const [hx, hy] = projectFn(hub.lng, hub.lat);
+  const ok = name => activeDistrict === "全市" || name === activeDistrict;
+  const cents = {};
+  window.SHIYAN_GEO.features.forEach(f => {
+    cents[f.properties.name] = f.properties.centroid || f.properties.center;
+  });
+  dataNodes.filter(m => m.kind === "hub" && m !== hub).forEach(m => {
+    if (!ok(m.district) && !ok(hub.district)) return;
+    const [x, y] = projectFn(m.lng, m.lat);
+    const [a, b, c, d] = netOffset(x, y, hx, hy, 7);
+    addFlowLink("flow-in", a, b, c, d, "", m.name + "归集", [["类型", "归集"], ["来源", m.name], ["汇入", "市级数据仓"]]);
+  });
+  Object.entries(cents).forEach(([name, ll]) => {
+    if (!ok(name)) return;
+    const [x, y] = projectFn(ll[0], ll[1]);
+    addFlowLink("flow-back", hx, hy, x, y, "", name + "回流", [["类型", "数据回流"], ["区县", name], ["来源", "市级数据仓"]]);
+  });
+  dataNodes.filter(m => m.kind === "scene").forEach(m => {
+    if (!ok(m.district)) return;
+    const [x, y] = projectFn(m.lng, m.lat);
+    const [a, b, c, d] = netOffset(hx, hy, x, y, 8);
+    addFlowLink("flow-use", a, b, c, d, "", m.name + "调用", [["类型", "场景调用"], ["场景", m.name], ["来源", "市级数据仓"], ["区县", m.district]]);
+  });
   dataNodes.forEach(m => {
     if (activeDistrict !== "全市" && m.district !== activeDistrict) return;
     const [x, y] = projectFn(m.lng, m.lat);
     const fill = m.kind === "hub" ? "#111" : m.kind === "scene" ? "#fff" : "#888";
     const ink = m.kind === "scene" ? "#111" : "#fff";
+    const r = m.name === "市级数据仓" ? 13 : 9;
     const g = document.createElementNS(NS, "g");
     g.setAttribute("class", "marker");
     g.setAttribute("data-name", m.name);
     g.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
-    g.innerHTML = `<circle r="9" fill="${fill}"></circle>${dataGlyph(m.icon, ink)}`;
-    g.addEventListener("mouseenter", () => showCloudCard(m.name, m.rows, g));
-    g.addEventListener("mouseleave", ev => {
-      const pop = document.getElementById("unitPop");
-      if (ev.relatedTarget && pop.contains(ev.relatedTarget)) return;
-      scheduleHide(pop, ".app-row");
-    });
+    g.innerHTML = `<circle r="${r}" fill="${fill}"></circle>${dataGlyph(m.icon, ink)}`;
+    bindMapCard(g, m.name, m.rows);
+    gMark.appendChild(g);
+  });
+}
+function drawCalcChannels() {
+  const hub = calcNodes.find(n => n.name === "市级智算中心") || calcNodes.find(n => n.kind === "center");
+  const [hx, hy] = projectFn(hub.lng, hub.lat);
+  const pad = 56;
+  const x0 = base.x + pad, y0 = base.y + pad, x1 = base.x + base.w - pad, y1 = base.y + base.h - pad;
+  const channels = [
+    { name: "西安—京津冀", deg: 42, rows: [["方向", "东北"], ["通道", "西安—京津冀"], ["说明", "示意线，止于十堰图廓"]] },
+    { name: "西安—庆阳", deg: 322, rows: [["方向", "西北"], ["通道", "西安—庆阳"], ["说明", "示意线，止于十堰图廓"]] },
+    { name: "武汉—长三角", deg: 86, rows: [["方向", "东"], ["通道", "武汉—长三角"], ["说明", "示意线，止于十堰图廓"]] },
+    { name: "武汉—粤港澳", deg: 168, rows: [["方向", "南"], ["通道", "武汉—粤港澳大湾区"], ["说明", "示意线，止于十堰图廓"]] }
+  ];
+  channels.forEach(ch => {
+    const rad = ch.deg * Math.PI / 180;
+    const dx = Math.sin(rad), dy = -Math.cos(rad);
+    let t = 1e9;
+    if (dx > 1e-4) t = Math.min(t, (x1 - hx) / dx);
+    else if (dx < -1e-4) t = Math.min(t, (x0 - hx) / dx);
+    if (dy > 1e-4) t = Math.min(t, (y1 - hy) / dy);
+    else if (dy < -1e-4) t = Math.min(t, (y0 - hy) / dy);
+    const ex = hx + dx * t, ey = hy + dy * t;
+    const lx = hx + dx * t * 0.62, ly = hy + dy * t * 0.62;
+    const g = document.createElementNS(NS, "g");
+    g.setAttribute("class", "calc-channel");
+    g.innerHTML = `<line class="hit" x1="${hx.toFixed(1)}" y1="${hy.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}"></line><line x1="${hx.toFixed(1)}" y1="${hy.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}"></line><text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}">${ch.name}</text>`;
+    bindMapCard(g, ch.name, ch.rows);
     gMark.appendChild(g);
   });
 }
 function drawCalcMarkers() {
+  drawCalcChannels();
   calcNodes.forEach(m => {
     if (activeDistrict !== "全市" && m.district !== activeDistrict) return;
     const [x, y] = projectFn(m.lng, m.lat);
@@ -1708,16 +1838,87 @@ function drawCalcMarkers() {
     const g = document.createElementNS(NS, "g");
     g.setAttribute("class", "marker");
     g.innerHTML = `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="${fill}"></circle>`;
-    g.addEventListener("mouseenter", () => showCloudCard(m.name, m.rows, g));
-    g.addEventListener("mouseleave", ev => {
-      const pop = document.getElementById("unitPop");
-      if (ev.relatedTarget && pop.contains(ev.relatedTarget)) return;
-      scheduleHide(pop, ".app-row");
-    });
+    bindMapCard(g, m.name, m.rows);
     gMark.appendChild(g);
   });
 }
+function addNetLink(cls, x1, y1, x2, y2, label, lx, ly, title, rows) {
+  const g = document.createElementNS(NS, "g");
+  g.setAttribute("class", "net-link " + cls);
+  const line = (xa, ya, xb, yb, hit) => `<line${hit ? ' class="hit"' : ""} x1="${xa.toFixed(1)}" y1="${ya.toFixed(1)}" x2="${xb.toFixed(1)}" y2="${yb.toFixed(1)}"></line>`;
+  g.innerHTML = line(x1, y1, x2, y2, true) + line(x1, y1, x2, y2, false) + (label ? `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}">${label}</text>` : "");
+  bindMapCard(g, title, rows);
+  gMark.appendChild(g);
+}
+function netOffset(x1, y1, x2, y2, px) {
+  const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy) || 1;
+  const ox = -dy / len * px, oy = dx / len * px;
+  return [x1 + ox, y1 + oy, x2 + ox, y2 + oy];
+}
+function drawNetLinks() {
+  const cents = {};
+  window.SHIYAN_GEO.features.forEach(f => {
+    cents[f.properties.name] = f.properties.centroid || f.properties.center;
+  });
+  const hub = netNodes.find(n => n.name === "市政务外网核心");
+  const land = netNodes.find(n => n.name === "省干落地");
+  const [hx, hy] = projectFn(hub.lng, hub.lat);
+  const [px, py] = projectFn(land.lng, land.lat);
+  const ok = name => activeDistrict === "全市" || name === activeDistrict;
+  Object.entries(cents).forEach(([name, ll]) => {
+    if (!ok(name)) return;
+    const [x, y] = projectFn(ll[0], ll[1]);
+    if (Math.hypot(x - hx, y - hy) < 16) return;
+    addNetLink("net-star", hx, hy, x, y, "", 0, 0, name + "接入", [["类型", "市县网络辐射"], ["区县", name], ["拓扑", "市核心星型"], ["时延", "市县均值 12ms"], ["覆盖", "100%"]]);
+  });
+  [
+    { name: "西北通道", district: "郧西县", off: 10 },
+    { name: "西部通道", district: "竹溪县", off: 11 },
+    { name: "西南通道", district: "竹山县", off: -11 },
+    { name: "南部通道", district: "房县", off: 10 },
+    { name: "东部通道", district: "丹江口市", off: -10, at: 0.4 }
+  ].forEach(ch => {
+    if (!ok(ch.district)) return;
+    const [x, y] = projectFn(cents[ch.district][0], cents[ch.district][1]);
+    const [a, b, c, d] = netOffset(hx, hy, x, y, ch.off);
+    addNetLink("net-ch", a, b, c, d, ch.name, a + (c - a) * (ch.at || 0.55), b + (d - b) * (ch.at || 0.55), ch.name, [["类型", "网络通道"], ["到达", ch.district], ["带宽", "1Gbps"], ["说明", "市到县干线"]]);
+  });
+  if (activeDistrict === "全市" || activeDistrict === "茅箭区" || activeDistrict === "张湾区") {
+    const ring = [[110.675, 32.668], [110.865, 32.658], [110.882, 32.572], [110.778, 32.542], [110.668, 32.598]];
+    const pts = ring.map(([lng, lat]) => projectFn(lng, lat));
+    const d = pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + "," + p[1].toFixed(1)).join("") + "Z";
+    const [tx, ty] = [pts.reduce((m, p) => Math.min(m, p[0]), 1e9), pts.reduce((m, p) => Math.min(m, p[1]), 1e9)];
+    const g = document.createElementNS(NS, "g");
+    g.setAttribute("class", "net-link net-man");
+    g.innerHTML = `<path class="hit" d="${d}"></path><path d="${d}"></path><text x="${(tx - 8).toFixed(1)}" y="${(ty - 14).toFixed(1)}">城域网</text>`;
+    bindMapCard(g, "城域网", [["范围", "茅箭、张湾城区"], ["节点", "市核心 · 区接入 · 教育城域网"], ["出口", "电信 / 移动"], ["说明", "城区环网"]]);
+    gMark.appendChild(g);
+  }
+  if (activeDistrict === "全市" || activeDistrict === "茅箭区") {
+    const pair = (x1, y1, x2, y2) => {
+      const [a, b, c, d] = netOffset(x1, y1, x2, y2, 3.2);
+      const [e, f, h, i] = netOffset(x1, y1, x2, y2, -3.2);
+      return `<line class="hit" x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"></line><line x1="${a.toFixed(1)}" y1="${b.toFixed(1)}" x2="${c.toFixed(1)}" y2="${d.toFixed(1)}"></line><line x1="${e.toFixed(1)}" y1="${f.toFixed(1)}" x2="${h.toFixed(1)}" y2="${i.toFixed(1)}"></line>`;
+    };
+    const rad = 108 * Math.PI / 180;
+    const dx = Math.sin(rad), dy = -Math.cos(rad);
+    const pad = 48;
+    const x0 = base.x + pad, y0 = base.y + pad, x1 = base.x + base.w - pad, y1 = base.y + base.h - pad;
+    let t = 1e9;
+    if (dx > 1e-4) t = Math.min(t, (x1 - px) / dx);
+    else if (dx < -1e-4) t = Math.min(t, (x0 - px) / dx);
+    if (dy > 1e-4) t = Math.min(t, (y1 - py) / dy);
+    else if (dy < -1e-4) t = Math.min(t, (y0 - py) / dy);
+    const ex = px + dx * t, ey = py + dy * t;
+    const g = document.createElementNS(NS, "g");
+    g.setAttribute("class", "net-link net-wan");
+    g.innerHTML = pair(hx, hy, px, py) + pair(px, py, ex, ey) + `<text x="${(px + (ex - px) * 0.42).toFixed(1)}" y="${(py + (ey - py) * 0.42).toFixed(1)}">广域网</text>`;
+    bindMapCard(g, "广域网", [["落地", "省干落地"], ["对端", "省政务外网"], ["带宽", "10Gbps"], ["时延", "8ms"], ["说明", "出市方向，止于十堰图廓"]]);
+    gMark.appendChild(g);
+  }
+}
 function drawNetMarkers() {
+  drawNetLinks();
   netNodes.forEach(m => {
     if (activeDistrict !== "全市" && m.district !== activeDistrict) return;
     const [x, y] = projectFn(m.lng, m.lat);
@@ -1725,37 +1926,75 @@ function drawNetMarkers() {
     const g = document.createElementNS(NS, "g");
     g.setAttribute("class", "marker");
     g.innerHTML = `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="${fill}"></circle>`;
-    g.addEventListener("mouseenter", () => showCloudCard(m.name, m.rows, g));
-    g.addEventListener("mouseleave", ev => {
-      const pop = document.getElementById("unitPop");
-      if (ev.relatedTarget && pop.contains(ev.relatedTarget)) return;
-      scheduleHide(pop, ".app-row");
-    });
+    bindMapCard(g, m.name, m.rows);
     gMark.appendChild(g);
   });
 }
-function showCloudCard(title, rows, anchor) {
+function showCloudCard(title, rows, anchor, click) {
   document.querySelectorAll(".app-row, .alarm-row, #cloudBooks .stat, #netBooks .stat, #calcArch, #dataGrade, #dataFlow, #ovAlarmSum").forEach(el => el.classList.remove("on"));
   if (anchor && anchor.classList) anchor.classList.add("on");
   const pop = document.getElementById("unitPop");
-  pop.className = "float-card show";
-  pop.innerHTML = `<h3>${title}</h3><table class="asset"><tbody>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</tbody></table>`;
+  pop.dataset.pinned = click ? "1" : "";
+  pop.className = click ? "float-card show has-x" : "float-card show";
+  const close = click ? `<button type="button" class="pop-x" aria-label="关闭">×</button>` : "";
+  pop.innerHTML = `${close}<h3>${title}</h3><table class="asset"><tbody>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</tbody></table>`;
   placePop(pop, anchor.getBoundingClientRect(), 380, false);
 }
+function cloudGlyph() {
+  return `<path d="M-4.4 1.5 A2.2 2.2 0 0 1 -2.1 -.9 A2.6 2.6 0 0 1 1.5 -2 A2 2 0 0 1 4 .1 A1.8 1.8 0 0 1 2.3 1.5 Z" fill="none" stroke="#fff" stroke-width="1.3" stroke-linejoin="round"></path>`;
+}
+function drawCloudLinks() {
+  const gov = cloudNodes.filter(n => n.kind === "gov");
+  const a = gov.find(n => n.name === "政务云一节点");
+  const b = gov.find(n => n.name === "政务云二节点");
+  const ok = name => activeDistrict === "全市" || name === activeDistrict;
+  const [ax, ay] = projectFn(a.lng, a.lat);
+  const [bx, by] = projectFn(b.lng, b.lat);
+  if (ok(a.district) || ok(b.district)) {
+    const [x1, y1, x2, y2] = netOffset(ax, ay, bx, by, 14);
+    addDoubleFlow("flow-live", x1, y1, x2, y2, "双活", 0.5, "双活", [["类型", "同城双活"], ["节点", "政务云一节点 · 二节点"], ["说明", "两节点互备"]]);
+  }
+  cloudNodes.filter(n => n.kind === "dept").forEach(m => {
+    if (!ok(m.district)) return;
+    let near = gov[0], best = 1e9;
+    gov.forEach(g => {
+      const d = Math.hypot(g.lng - m.lng, g.lat - m.lat);
+      if (d < best) { best = d; near = g; }
+    });
+    const [x, y] = projectFn(m.lng, m.lat);
+    const [gx, gy] = projectFn(near.lng, near.lat);
+    const dist = Math.hypot(gx - x, gy - y);
+    const [p, q, r, s] = netOffset(x, y, gx, gy, dist < 40 ? 16 : 6);
+    const plan = (m.rows.find(row => row[0] === "上云计划") || ["", ""])[1];
+    const label = dist > 70 ? m.name.replace(/^市/, "").replace(/和湖泊局机房|局机房/, "") + "上云" : "";
+    addFlowLink("flow-up", p, q, r, s, label, m.name + "上云", [["类型", "上云"], ["机房", m.name], ["接入", near.name], ["上云计划", plan]], { gap: dist < 40 ? 2 : 14, arrow: dist >= 40 });
+  });
+  if (ok(a.district)) {
+    const rad = 155 * Math.PI / 180;
+    const dx = Math.sin(rad), dy = -Math.cos(rad);
+    const pad = 52;
+    const x0 = base.x + pad, y0 = base.y + pad, x1 = base.x + base.w - pad, y1 = base.y + base.h - pad;
+    let t = 1e9;
+    if (dx > 1e-4) t = Math.min(t, (x1 - ax) / dx);
+    else if (dx < -1e-4) t = Math.min(t, (x0 - ax) / dx);
+    if (dy > 1e-4) t = Math.min(t, (y1 - ay) / dy);
+    else if (dy < -1e-4) t = Math.min(t, (y0 - ay) / dy);
+    addDoubleFlow("flow-pub", ax, ay, ax + dx * t, ay + dy * t, "公有云专线", 0.46, "公有云专线", [["类型", "公有云专线"], ["接入", "电信 · 移动 · 联通 · 广电"], ["说明", "出市方向，止于十堰图廓"]]);
+  }
+}
 function drawCloudMarkers() {
+  drawCloudLinks();
   cloudNodes.forEach(m => {
+    if (m.kind === "pub") return;
     if (activeDistrict !== "全市" && m.district !== activeDistrict) return;
     const [x, y] = projectFn(m.lng, m.lat);
-    const fill = m.kind === "gov" ? "#111" : m.kind === "dept" ? "#fff" : "#888";
     const g = document.createElementNS(NS, "g");
     g.setAttribute("class", "marker");
-    g.innerHTML = `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="${fill}"></circle>`;
-    g.addEventListener("mouseenter", () => showCloudCard(m.name, m.rows, g));
-    g.addEventListener("mouseleave", ev => {
-      const pop = document.getElementById("unitPop");
-      if (ev.relatedTarget && pop.contains(ev.relatedTarget)) return;
-      scheduleHide(pop, ".app-row");
-    });
+    g.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+    g.innerHTML = m.kind === "gov"
+      ? `<circle r="10" fill="#111"></circle>${cloudGlyph()}`
+      : `<circle r="8" fill="#fff"></circle>`;
+    bindMapCard(g, m.name, m.rows);
     gMark.appendChild(g);
   });
 }
@@ -1769,7 +2008,10 @@ function setMode(mode) {
   board.classList.toggle("mode-ind", mode === "产");
   board.classList.toggle("mode-ov", mode === "综合");
   document.getElementById("unitPop").classList.remove("show");
+  document.getElementById("unitPop").dataset.pinned = "";
   document.getElementById("evPop").classList.remove("show");
+  document.getElementById("evPop").dataset.pinned = "";
+  document.getElementById("assetPop").classList.remove("show");
   const panel = document.getElementById("layerPanel");
   if (panel) panel.classList.remove("open");
   if (projectFn) drawMarkers();
@@ -1918,8 +2160,10 @@ function drawMarkers() {
     g.setAttribute("class", "marker");
     g.innerHTML = `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${m.kind === "event" ? 6 : 5}" fill="${dot.fill}" stroke-dasharray="${dot.dash}"></circle>`;
     g.addEventListener("mouseenter", () => {
-      if (m.kind === "event") showEvent(m.id, g);
-      else toast(m.name);
+      if (m.kind !== "event") { toast(m.name); return; }
+      const pop = document.getElementById("evPop");
+      if (pop.dataset.pinned === "1") return;
+      showEvent(m.id, g);
     });
     g.addEventListener("mouseleave", (ev) => {
       const pop = document.getElementById("evPop");
@@ -2056,6 +2300,7 @@ paintFilters();
 
 const hideTimers = new WeakMap();
 function scheduleHide(pop, itemSel) {
+  if (pop.dataset.pinned === "1") return;
   clearTimeout(hideTimers.get(pop));
   hideTimers.set(pop, setTimeout(() => {
     pop.classList.remove("show");
@@ -2082,103 +2327,108 @@ function bindHover(root, itemSel, pop, open) {
   pop.addEventListener("mouseenter", () => clearTimeout(hideTimers.get(pop)));
   pop.addEventListener("mouseleave", () => scheduleHide(pop, itemSel));
 }
-bindHover(document.getElementById("unitBars"), ".bar-row", document.getElementById("unitPop"), row => showUnit(+row.dataset.i, row));
+function bindClick(root, itemSel, pop, open) {
+  root.addEventListener("click", e => {
+    const row = e.target.closest(itemSel);
+    if (!row || !root.contains(row)) return;
+    clearTimeout(hideTimers.get(pop));
+    pop.dataset.pinned = "1";
+    open(row);
+  });
+}
+function bindPopClose(pop, clearSel) {
+  pop.addEventListener("click", e => {
+    if (!e.target.closest(".pop-x")) return;
+    e.stopPropagation();
+    pop.dataset.pinned = "";
+    pop.classList.remove("show");
+    if (pop.id === "evPop") activeEvent = null;
+    if (pop.id === "unitPop") { activeUnit = null; activeTerm = null; }
+    if (clearSel) document.querySelectorAll(clearSel).forEach(el => el.classList.remove("on"));
+  });
+}
+bindClick(document.getElementById("unitBars"), ".bar-row", document.getElementById("unitPop"), row => showUnit(+row.dataset.i, row));
 renderCloudLists();
-bindHover(document.getElementById("cloudBooks"), ".stat", document.getElementById("unitPop"), row => {
+bindClick(document.getElementById("cloudBooks"), ".stat", document.getElementById("unitPop"), row => {
   const kind = row.dataset.kind;
   const list = cloudNodes.filter(n => n.kind === kind);
-  showCloudCard(row.querySelector(".k").textContent, list.map(n => [n.district, n.name]), row);
+  showCloudCard(row.querySelector(".k").textContent, list.map(n => [n.district, n.name]), row, true);
 });
-bindHover(document.getElementById("cloudApps"), ".app-row", document.getElementById("unitPop"), row => {
+bindClick(document.getElementById("cloudApps"), ".app-row", document.getElementById("unitPop"), row => {
   const a = cloudApps[+row.dataset.i];
-  showCloudCard(a.system, [["单位", a.unit], ["主要功能", a.func], ["上线时间", a.online], ["计算用量", a.cpu], ["存储用量", a.store], ["费用预估", a.cost], ["合理性评估", a.eval]], row);
+  showCloudCard(a.system, [["单位", a.unit], ["主要功能", a.func], ["上线时间", a.online], ["计算用量", a.cpu], ["存储用量", a.store], ["费用预估", a.cost], ["合理性评估", a.eval]], row, true);
 });
-bindHover(document.getElementById("cloudAlarms"), ".alarm-row", document.getElementById("unitPop"), row => {
+bindClick(document.getElementById("cloudAlarms"), ".alarm-row", document.getElementById("unitPop"), row => {
   const a = cloudAlarms[+row.dataset.i];
-  showCloudCard(a.title, a.rows, row);
+  showCloudCard(a.title, a.rows, row, true);
 });
-bindHover(document.getElementById("cloudOrders"), ".alarm-row", document.getElementById("unitPop"), row => {
+bindClick(document.getElementById("cloudOrders"), ".alarm-row", document.getElementById("unitPop"), row => {
   const a = cloudOrders[+row.dataset.i];
-  showCloudCard(a.title, a.rows, row);
+  showCloudCard(a.title, a.rows, row, true);
 });
 renderNetLists();
-bindHover(document.getElementById("netBooks"), ".stat", document.getElementById("unitPop"), row => {
+bindClick(document.getElementById("netBooks"), ".stat", document.getElementById("unitPop"), row => {
   const kind = row.dataset.kind;
   const titles = { gov: [["总带宽", "40Gbps"], ["拓扑", "市核心—县区星型"], ["联系人", "市数据局 周宁"]], dept: [["数量", "6 张"], ["与政务网", "隔离或互通"], ["整合迁移", "进度 46%"]], pub: [["出口带宽", "合计 48Gbps"], ["5G基站", "2,460"], ["双千兆", "已达标"]] };
-  showCloudCard(row.querySelector(".k").textContent, titles[kind].concat(netNodes.filter(n => n.kind === kind).map(n => [n.district, n.name])), row);
+  showCloudCard(row.querySelector(".k").textContent, titles[kind].concat(netNodes.filter(n => n.kind === kind).map(n => [n.district, n.name])), row, true);
 });
-bindHover(document.getElementById("netUnits"), ".app-row", document.getElementById("unitPop"), row => {
+bindClick(document.getElementById("netUnits"), ".app-row", document.getElementById("unitPop"), row => {
   const a = netUnits[+row.dataset.i];
-  showCloudCard(a.name, a.rows, row);
+  showCloudCard(a.name, a.rows, row, true);
 });
-bindHover(document.getElementById("netAlarms"), ".alarm-row", document.getElementById("unitPop"), row => {
+bindClick(document.getElementById("netAlarms"), ".alarm-row", document.getElementById("unitPop"), row => {
   const a = netAlarms[+row.dataset.i];
-  showCloudCard(a.title, a.rows, row);
+  showCloudCard(a.title, a.rows, row, true);
 });
-bindHover(document.getElementById("netOrders"), ".alarm-row", document.getElementById("unitPop"), row => {
+bindClick(document.getElementById("netOrders"), ".alarm-row", document.getElementById("unitPop"), row => {
   const a = netOrders[+row.dataset.i];
-  showCloudCard(a.title, a.rows, row);
+  showCloudCard(a.title, a.rows, row, true);
 });
 renderCalcLists();
-document.getElementById("calcArch").addEventListener("mouseenter", () => showCloudCard("算力网架构", [["调度管理", "全市算力统一调度"], ["算法仓库", "模型与算法目录"], ["智能体开发平台", "试运行"]], document.getElementById("calcArch")));
-document.getElementById("calcArch").addEventListener("mouseleave", ev => {
-  const pop = document.getElementById("unitPop");
-  if (ev.relatedTarget && pop.contains(ev.relatedTarget)) return;
-  scheduleHide(pop, "#calcArch");
-});
-bindHover(document.getElementById("calcCenters"), ".app-row", document.getElementById("unitPop"), row => {
+document.getElementById("calcArch").addEventListener("click", () => showCloudCard("算力网架构", [["调度管理", "全市算力统一调度"], ["算法仓库", "模型与算法目录"], ["智能体开发平台", "试运行"]], document.getElementById("calcArch"), true));
+bindClick(document.getElementById("calcCenters"), ".app-row", document.getElementById("unitPop"), row => {
   const a = calcCenters[+row.dataset.i];
-  showCloudCard(a.name, a.rows, row);
+  showCloudCard(a.name, a.rows, row, true);
 });
-bindHover(document.getElementById("calcAlarms"), ".alarm-row", document.getElementById("unitPop"), row => {
+bindClick(document.getElementById("calcAlarms"), ".alarm-row", document.getElementById("unitPop"), row => {
   const a = calcAlarms[+row.dataset.i];
-  showCloudCard(a.title, a.rows, row);
+  showCloudCard(a.title, a.rows, row, true);
 });
-bindHover(document.getElementById("calcOrders"), ".alarm-row", document.getElementById("unitPop"), row => {
+bindClick(document.getElementById("calcOrders"), ".alarm-row", document.getElementById("unitPop"), row => {
   const a = calcOrders[+row.dataset.i];
-  showCloudCard(a.title, a.rows, row);
+  showCloudCard(a.title, a.rows, row, true);
 });
 renderDataLists();
-document.getElementById("dataGrade").addEventListener("mouseenter", () => showCloudCard("分级分类清单", [["公共数据分级", "核心 / 重要 / 一般"], ["分类", "按领域 12 类"], ["健康度", "全市均分 86"]], document.getElementById("dataGrade")));
-document.getElementById("dataGrade").addEventListener("mouseleave", ev => {
-  const pop = document.getElementById("unitPop");
-  if (ev.relatedTarget && pop.contains(ev.relatedTarget)) return;
-  scheduleHide(pop, "#dataGrade");
-});
-document.getElementById("dataFlow").addEventListener("mouseenter", () => showCloudCard("授权运营", [["运营项目", "8 项"], ["数据产品", "24 个"], ["沙箱调用", "1.6万次"], ["总体收益", "1,260万"], ["高频共享", "人口 · 法人 · 证照"]], document.getElementById("dataFlow")));
-document.getElementById("dataFlow").addEventListener("mouseleave", ev => {
-  const pop = document.getElementById("unitPop");
-  if (ev.relatedTarget && pop.contains(ev.relatedTarget)) return;
-  scheduleHide(pop, "#dataFlow");
-});
-bindHover(document.getElementById("dataUnits"), ".app-row", document.getElementById("unitPop"), row => {
+document.getElementById("dataGrade").addEventListener("click", () => showCloudCard("分级分类清单", [["公共数据分级", "核心 / 重要 / 一般"], ["分类", "按领域 12 类"], ["健康度", "全市均分 86"]], document.getElementById("dataGrade"), true));
+document.getElementById("dataFlow").addEventListener("click", () => showCloudCard("授权运营", [["运营项目", "8 项"], ["数据产品", "24 个"], ["沙箱调用", "1.6万次"], ["总体收益", "1,260万"], ["高频共享", "人口 · 法人 · 证照"]], document.getElementById("dataFlow"), true));
+bindClick(document.getElementById("dataUnits"), ".app-row", document.getElementById("unitPop"), row => {
   const a = dataUnits[+row.dataset.i];
-  showCloudCard(a.name, a.rows, row);
+  showCloudCard(a.name, a.rows, row, true);
 });
-bindHover(document.getElementById("dataAlarms"), ".alarm-row", document.getElementById("unitPop"), row => {
+bindClick(document.getElementById("dataAlarms"), ".alarm-row", document.getElementById("unitPop"), row => {
   const a = dataAlarms[+row.dataset.i];
-  showCloudCard(a.title, a.rows, row);
+  showCloudCard(a.title, a.rows, row, true);
 });
-bindHover(document.getElementById("dataOrders"), ".alarm-row", document.getElementById("unitPop"), row => {
+bindClick(document.getElementById("dataOrders"), ".alarm-row", document.getElementById("unitPop"), row => {
   const a = dataOrders[+row.dataset.i];
-  showCloudCard(a.title, a.rows, row);
+  showCloudCard(a.title, a.rows, row, true);
 });
 renderIndLists();
-bindHover(document.getElementById("indParks"), ".app-row", document.getElementById("unitPop"), row => {
+bindClick(document.getElementById("indParks"), ".app-row", document.getElementById("unitPop"), row => {
   const a = indParks[+row.dataset.i];
-  showCloudCard(a.name, a.rows, row);
+  showCloudCard(a.name, a.rows, row, true);
 });
-bindHover(document.getElementById("indFirms"), ".app-row", document.getElementById("unitPop"), row => {
+bindClick(document.getElementById("indFirms"), ".app-row", document.getElementById("unitPop"), row => {
   const a = indFirms[+row.dataset.i];
-  showCloudCard(a.name, a.rows, row);
+  showCloudCard(a.name, a.rows, row, true);
 });
-bindHover(document.getElementById("indAlarms"), ".alarm-row", document.getElementById("unitPop"), row => {
+bindClick(document.getElementById("indAlarms"), ".alarm-row", document.getElementById("unitPop"), row => {
   const a = indAlarms[+row.dataset.i];
-  showCloudCard(a.title, a.rows, row);
+  showCloudCard(a.title, a.rows, row, true);
 });
-bindHover(document.getElementById("indOrders"), ".alarm-row", document.getElementById("unitPop"), row => {
+bindClick(document.getElementById("indOrders"), ".alarm-row", document.getElementById("unitPop"), row => {
   const a = indOrders[+row.dataset.i];
-  showCloudCard(a.title, a.rows, row);
+  showCloudCard(a.title, a.rows, row, true);
 });
 renderOvLists();
 document.getElementById("ovAlarmSum").addEventListener("mouseenter", () => showCloudCard("六域告警合计", [["红色", "15"], ["橙色", "16"], ["黄色", "13"], ["蓝色", "11"], ["合计", "55"]], document.getElementById("ovAlarmSum")));
@@ -2203,14 +2453,18 @@ bindHover(document.getElementById("ovOrders"), ".alarm-row", document.getElement
   const a = ovOrders[+row.dataset.i];
   showCloudCard(a.title, a.rows, row);
 });
-bindHover(document.getElementById("unitSum"), ".kind-card", document.getElementById("unitPop"), row => showKind(row.dataset.kind, row));
-document.getElementById("unitPop").addEventListener("mouseover", e => {
+bindClick(document.getElementById("unitSum"), ".kind-card", document.getElementById("unitPop"), row => showKind(row.dataset.kind, row));
+document.getElementById("unitPop").addEventListener("click", e => {
   const row = e.target.closest(".sys-pick");
   if (!row) return;
   fillUnitAsset(+row.dataset.i);
 });
-bindHover(document.getElementById("termBars"), ".bar-row", document.getElementById("unitPop"), row => showTerm(+row.dataset.i, row));
-bindHover(document.getElementById("evList"), ".ev", document.getElementById("evPop"), row => showEvent(row.dataset.id, row));
+bindPopClose(document.getElementById("unitPop"), "#unitBars .bar-row, #termBars .bar-row, #unitSum .kind-card, .app-row, .alarm-row, #cloudBooks .stat, #netBooks .stat, #calcArch, #dataGrade, #dataFlow, .marker, .flow, .net-link, .net-man, .net-wan, .calc-channel");
+bindClick(document.getElementById("termBars"), ".bar-row", document.getElementById("unitPop"), row => showTerm(+row.dataset.i, row));
+bindClick(document.getElementById("evList"), ".ev", document.getElementById("evPop"), row => showEvent(row.dataset.id, row));
+bindPopClose(document.getElementById("evPop"), ".ev");
+document.getElementById("evPop").addEventListener("mouseenter", () => clearTimeout(hideTimers.get(document.getElementById("evPop"))));
+document.getElementById("evPop").addEventListener("mouseleave", () => scheduleHide(document.getElementById("evPop"), ".ev"));
 const assetBooks = {
   device: { title: "设备清单", unit: "个", rows: [
     ["市核心路由器", "市数据局", "茅箭区", "低"], ["市级防火墙", "市公安局", "张湾区", "低"],
@@ -2253,13 +2507,14 @@ function showAsset(key) {
   const book = assetBooks[key];
   const pop = document.getElementById("assetPop");
   document.querySelectorAll(".stat").forEach(el => el.classList.toggle("on", el.dataset.book === key));
-  pop.className = "asset-pop show";
-  pop.innerHTML = `<h3>${book.title} · ${book.rows.length}${book.unit}</h3>
+  pop.className = "asset-pop show has-x";
+  pop.innerHTML = `<button type="button" class="pop-x" aria-label="关闭">×</button><h3>${book.title} · ${book.rows.length}${book.unit}</h3>
     <div class="asset-scroll"><table class="asset"><thead><tr><th>名称</th><th>所属单位</th><th>位置</th><th>等级</th></tr></thead><tbody>
     ${book.rows.map(a => `<tr><td>${a[0]}</td><td>${a[1]}</td><td>${a[2]}</td><td><span class="risk-low">${a[3]}</span></td></tr>`).join("")}
     </tbody></table></div>`;
 }
-bindHover(document.querySelector(".stats"), ".stat", document.getElementById("assetPop"), row => showAsset(row.dataset.book));
+bindClick(document.querySelector(".pane-an .stats"), ".stat", document.getElementById("assetPop"), row => showAsset(row.dataset.book));
+bindPopClose(document.getElementById("assetPop"), ".pane-an .stats .stat");
 
 const cityMenu = document.getElementById("cityMenu");
 ["全市", ...Object.keys(districtsMeta)].forEach(n => {
@@ -2449,15 +2704,73 @@ document.getElementById("defLegend").innerHTML = defenses.map(d =>
   `<span><i style="border-top-color:${d.stroke};border-top-style:${d.dash ? "dashed" : "solid"}"></i>${d.name}</span>`
 ).join("");
 
+function drawIndOutput() {
+  const data = [
+    [2024, 1, 92], [2024, 2, 108], [2024, 3, 114], [2024, 4, 136],
+    [2025, 1, 100], [2025, 2, 118], [2025, 3, 124], [2025, 4, 144],
+    [2026, 1, 108], [2026, 2, 128], [2026, 3, 134]
+  ];
+  const W = 460, H = 96, l = 18, r = 14, t = 14, axis = 68;
+  const n = data.length;
+  const min = 78, max = 158;
+  const x = i => l + (i / (n - 1)) * (W - l - r);
+  const y = v => t + (1 - (v - min) / (max - min)) * (axis - t);
+  const pts = data.map((d, i) => x(i).toFixed(1) + "," + y(d[2]).toFixed(1)).join(" ");
+  let html = `<polyline fill="none" stroke="#111" stroke-width="1.4" points="${pts}"></polyline>`;
+  [[3, 4], [7, 8]].forEach(([a, b]) => {
+    const xx = (x(a) + x(b)) / 2;
+    html += `<line x1="${xx.toFixed(1)}" y1="${t}" x2="${xx.toFixed(1)}" y2="${axis + 2}" stroke="#ccc" stroke-width="1"></line>`;
+  });
+  data.forEach((d, i) => {
+    const cx = x(i), cy = y(d[2]);
+    const last = i === n - 1;
+    html += `<g><title>${d[0]}年Q${d[1]} · ${d[2]}亿</title><circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${last ? 3.2 : 2.2}" fill="#111"></circle><text x="${cx.toFixed(1)}" y="${(cy - 5).toFixed(1)}" text-anchor="middle" font-size="10" fill="#111">${d[2]}</text><text x="${cx.toFixed(1)}" y="82" text-anchor="middle" font-size="9" fill="#333">Q${d[1]}</text></g>`;
+  });
+  [[2024, 0, 3], [2025, 4, 7], [2026, 8, 10]].forEach(([name, a, b]) => {
+    const cx = (x(a) + x(b)) / 2;
+    html += `<text x="${cx.toFixed(1)}" y="94" text-anchor="middle" font-size="10" font-weight="700" fill="#111">${name}</text>`;
+  });
+  document.getElementById("indOutputChart").innerHTML = html;
+}
 buildMap();
 renderLayers();
 drawMarkers();
 fitBoard();
 window.addEventListener("resize", fitBoard);
+const netRateN = 36;
+function nextNetRate(prev) {
+  const pull = (27.2 - prev) * 0.22;
+  let n = prev + pull + (Math.random() - 0.5) * 2.8;
+  if (n < 20) n = 20 + Math.random() * 1.2;
+  if (n > 34) n = 34 - Math.random() * 1.2;
+  return n;
+}
+let netRateVals = [];
+{
+  let v = 27.2;
+  for (let i = 0; i < netRateN; i++) { v = nextNetRate(v); netRateVals.push(v); }
+}
+function drawNetRate() {
+  const lo = Math.min(...netRateVals);
+  const hi = Math.max(...netRateVals);
+  const pad = Math.max(0.6, (hi - lo) * 0.12);
+  document.getElementById("netRateChart").innerHTML =
+    `<polyline fill="none" stroke="#111" stroke-width="1.4" points="${sparkPointsSpan(netRateVals, lo - pad, hi + pad)}" />`;
+  const now = netRateVals[netRateVals.length - 1];
+  document.getElementById("netRateNow").textContent = "市县出口 · 当前 " + now.toFixed(1) + "Gbps";
+}
+function tickNetRate() {
+  netRateVals.push(nextNetRate(netRateVals[netRateVals.length - 1]));
+  netRateVals.shift();
+  drawNetRate();
+}
+drawIndOutput();
 tickReq();
 setInterval(tickReq, 160);
 tickCharts();
 setInterval(tickCharts, 1200);
+tickNetRate();
+setInterval(tickNetRate, 400);
 </script>
 </body>
 </html>
