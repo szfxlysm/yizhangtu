@@ -2370,8 +2370,7 @@ function showDistrict(name, clientX, clientY) {
     const n = events.filter(e => e.district === name).length;
     pop.innerHTML = `<h3>${name}</h3>
     <p>成熟度　<b>${meta.score}</b></p>
-    <p>在册事件　<b>${n}</b></p>
-    <p>范围仅限十堰市，区县边界加粗。</p>`;
+    <p>在册事件　<b>${n}</b></p>`;
   }
   const br = document.getElementById("board").getBoundingClientRect();
   pop.style.left = Math.min(1500, (clientX - br.left) / scale + 12) + "px";

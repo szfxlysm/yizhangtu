@@ -742,8 +742,7 @@ function showDistrict(name, clientX, clientY) {
   pop.className = "float-card dist-card show";
   pop.innerHTML = `<h3>${name}</h3>
     <p>安全指数　<b>${meta.score}</b></p>
-    <p>在册事件　<b>${n}</b></p>
-    <p>范围仅限十堰市，区县边界加粗。</p>`;
+    <p>在册事件　<b>${n}</b></p>`;
   const br = document.getElementById("board").getBoundingClientRect();
   pop.style.left = Math.min(3580, (clientX - br.left) / scale + 12) + "px";
   pop.style.top = Math.min(920, (clientY - br.top) / scale + 12) + "px";
