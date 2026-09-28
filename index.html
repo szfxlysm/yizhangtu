@@ -80,7 +80,11 @@
   .board.mode-ind .map-bar.pane-ind { display: flex; }
   .board.mode-ind .channel-note.pane-ind { display: block; }
   .map-legend.pane-ind { width: 280px; }
-  .pane-ind .res-row { margin: 3px 0; }
+  .ind-pie { display: flex; align-items: center; gap: 10px; }
+  .ind-pie svg { width: 132px; height: 132px; flex: none; }
+  .ind-pie .lg { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 8px; font-size: 12px; color: #111; min-width: 0; }
+  .ind-pie .lg span { display: flex; align-items: center; gap: 4px; }
+  .ind-pie .lg i { width: 10px; height: 10px; border: 1px solid #111; flex: none; }
   .pane-ov { display: none; }
   .board.mode-ov .pane-an { display: none !important; }
   .board.mode-ov .pane-ov.stack { display: flex; }
@@ -94,6 +98,34 @@
   .ov-radar svg { display: block; height: 196px; }
   #ovAxes { margin-top: 6px; }
   .pane-ov .today { grid-template-columns: repeat(3, 1fr); }
+  .ov-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .ov-cell { border: 1px solid #bbb; border-radius: 6px; padding: 5px 7px; cursor: pointer; min-width: 0; background: #fff; }
+  .ov-cell.span2 { grid-column: 1 / -1; }
+  .ov-cell.focus { border-color: #111; }
+  .ov-cell:hover, .ov-cell.on { border-color: #111; background: #f5f5f5; }
+  .ov-cell .k { font-size: 11px; color: #555; line-height: 1.3; }
+  .ov-cell .v { margin-top: 2px; font-size: 14px; color: #111; font-weight: 650; line-height: 1.25; }
+  .ov-cell .v em { font-style: normal; font-size: 11px; font-weight: 400; color: #555; margin-left: 4px; }
+  .ov-sub { margin-top: 6px; }
+  .ov-sub .cap { font-size: 12px; color: #111; margin: 0 0 4px; }
+  .ov-mini { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .ov-lines { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
+  .ov-lines .ov-cell { padding: 4px 7px; }
+  .ov-lines .ov-cell .v { font-size: 13px; }
+  #ovSankey { width: 100%; height: 92px; display: block; }
+  .pane-ov .ov-data { display: flex; flex-direction: column; min-height: 0; }
+  .pane-ov .ov-data .ov-sankey { display: flex; flex-direction: column; margin-top: 6px; }
+  .pane-ov .ov-data .ov-sankey svg { width: 100%; height: 78px; display: block; }
+  .pane-ov .ov-sec { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+  .pane-ov .ov-sec .cloud-list { overflow: auto; min-height: 72px; flex: 1; }
+  .pane-ov .ov-prod { flex: 0 0 auto; }
+  .ov-risk { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .pane-ov .cloud-list { margin-top: 6px; }
+  .ov-pie { display: flex; align-items: center; gap: 8px; }
+  .ov-pie svg { width: 96px; height: 96px; flex: none; }
+  .ov-pie .lg { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 3px 6px; font-size: 11px; color: #111; min-width: 0; }
+  .ov-pie .lg span { display: flex; align-items: center; gap: 4px; }
+  .ov-pie .lg i { width: 8px; height: 8px; border: 1px solid #111; flex: none; }
   .channel-note {
     display: none;
     position: absolute; left: 12px; top: 12px; z-index: 3; width: 196px;
@@ -101,9 +133,9 @@
   }
   .channel-note h3 { margin: 0 0 6px; font-size: 13px; }
   .channel-note div { margin: 3px 0; color: #333; }
-  .lv.红色 { background: #111; color: #fff; }
-  .lv.橙色 { background: #fff; }
-  .lv.黄色 { color: #555; border-color: #555; }
+  .lv.红色, .lv.红 { background: #111; color: #fff; }
+  .lv.橙色, .lv.橙 { background: #fff; }
+  .lv.黄色, .lv.黄 { color: #555; border-color: #555; }
   .lv.蓝色 { color: #888; border-color: #888; }
   .card {
     background: #fff; border: 1px solid #111; border-radius: 8px; padding: 10px 12px;
@@ -290,7 +322,7 @@
   .ev:hover, .task:hover, .ev.on, .task.on { border-color: #111; background: #f5f5f5; }
   .ev .t, .task .t { font-size: 13px; color: #111; display: flex; align-items: center; gap: 6px; }
   .lv { font-size: 12px; color: #111; border: 1px solid #111; border-radius: 3px; padding: 0 4px; line-height: 16px; background: #fff; }
-  .lv.高危 { background: #111; color: #fff; } .lv.中危 { background: #fff; } .lv.低危 { color: #555; border-color: #555; } .lv.可忽略 { color: #888; border-color: #888; }
+  .lv.高危 { background: #111; color: #fff; } .lv.中危 { background: #fff; } .lv.低危 { color: #555; border-color: #555; } .lv.蓝 { color: #888; border-color: #888; }
   .ev .meta, .task .meta { margin-top: 3px; font-size: 12px; color: #444; display: flex; justify-content: space-between; gap: 8px; }
   .pill { font-size: 12px; border-radius: 10px; padding: 0 6px; line-height: 18px; border: 1px solid #111; color: #111; white-space: nowrap; }
   .pill.待处置, .pill.处置中, .pill.已闭环 { color: #111; }
@@ -519,14 +551,10 @@
           </div>
           <div class="card">
             <h2><i></i>县市区占比</h2>
-            <div class="res-row"><div class="top"><span>茅箭</span><span class="res-meta">22%</span></div><div class="track"><div class="fill" style="width:22%"></div></div></div>
-            <div class="res-row"><div class="top"><span>张湾</span><span class="res-meta">18%</span></div><div class="track"><div class="fill" style="width:18%"></div></div></div>
-            <div class="res-row"><div class="top"><span>丹江口</span><span class="res-meta">16%</span></div><div class="track"><div class="fill" style="width:16%"></div></div></div>
-            <div class="res-row"><div class="top"><span>郧阳</span><span class="res-meta">14%</span></div><div class="track"><div class="fill" style="width:14%"></div></div></div>
-            <div class="res-row"><div class="top"><span>郧西</span><span class="res-meta">8%</span></div><div class="track"><div class="fill" style="width:8%"></div></div></div>
-            <div class="res-row"><div class="top"><span>竹山</span><span class="res-meta">8%</span></div><div class="track"><div class="fill" style="width:8%"></div></div></div>
-            <div class="res-row"><div class="top"><span>房县</span><span class="res-meta">8%</span></div><div class="track"><div class="fill" style="width:8%"></div></div></div>
-            <div class="res-row"><div class="top"><span>竹溪</span><span class="res-meta">6%</span></div><div class="track"><div class="fill" style="width:6%"></div></div></div>
+            <div class="ind-pie">
+              <svg id="indPie" viewBox="0 0 160 160"></svg>
+              <div class="lg" id="indPieLegend"></div>
+            </div>
           </div>
           <div class="card">
             <h2><i></i>园区与社区</h2>
@@ -539,26 +567,59 @@
         </div>
         <div class="pane-ov stack">
           <div class="card">
-            <h2><i></i>综合指数</h2>
-            <div class="ov-score"><b>82.8</b><span>六域平均</span></div>
-            <div class="ov-radar" id="ovRadar"></div>
-            <div class="stats" id="ovAxes"></div>
+            <h2><i></i>云</h2>
+            <div class="ov-grid">
+              <div class="ov-cell" data-k="cloudSys"><div class="k">上云系统数，占比</div><div class="v">186<em>72%</em></div></div>
+              <div class="ov-cell" data-k="cloudOrg"><div class="k">上云单位数，占比</div><div class="v">64<em>81%</em></div></div>
+              <div class="ov-cell" data-k="cloudUse"><div class="k">用量 · CPU / 内存 / 存储</div><div class="v">62% · 71% · 54%</div></div>
+              <div class="ov-cell" data-k="cloudSave"><div class="k">节约指标 · 统筹 / 集约化</div><div class="v">0.86 · 0.74</div></div>
+            </div>
           </div>
           <div class="card">
-            <h2><i></i>整体指标</h2>
-            <div class="today">
-              <div><span>今日访问</span><b>186.4万</b></div>
-              <div><span>拦截率</span><b>99.2%</b></div>
-              <div><span>目录</span><b>1,286</b></div>
-              <div><span>算力</span><b>128P</b></div>
-              <div><span>产业</span><b>486亿</b></div>
-              <div><span>告警</span><b>55</b></div>
+            <h2><i></i>网</h2>
+            <div class="ov-grid">
+              <div class="ov-cell" data-k="netJoin"><div class="k">政务外网接入单位，接入率</div><div class="v">1,816<em>79%</em></div></div>
+              <div class="ov-cell" data-k="netBand"><div class="k">上联带宽 / 下联带宽</div><div class="v">10G / 8G</div></div>
+              <div class="ov-cell" data-k="netExit"><div class="k">互联网出口带宽</div><div class="v">40Gbps</div></div>
+              <div class="ov-cell" data-k="netPriv"><div class="k">专网数，规模，资金</div><div class="v">6<em>4,600万</em></div></div>
             </div>
-            <div class="app-row" id="ovAlarmSum" style="margin-top:6px;margin-bottom:0"><div class="t">六域合计</div><div class="meta"><span>红 15 · 橙 16 · 黄 13 · 蓝 11</span></div></div>
+            <div class="ov-sub">
+              <div class="cap">实时监测</div>
+              <div class="ov-mini">
+                <div class="ov-cell" data-k="netOnline"><div class="k">设备在线率</div><div class="v">98.6%</div></div>
+                <div class="ov-cell" data-k="netWarn"><div class="k">网络质量告警</div><div class="v">3</div></div>
+                <div class="ov-cell" data-k="netAvail"><div class="k">可用性</div><div class="v">99.7%</div></div>
+              </div>
+            </div>
+            <div class="ov-grid" style="margin-top:6px">
+              <div class="ov-cell" data-k="netCityExit"><div class="k">全市互联网出口带宽</div><div class="v">128Gbps</div></div>
+              <div class="ov-cell focus" data-k="net5g"><div class="k">5G 覆盖率</div><div class="v">96%</div></div>
+            </div>
           </div>
-          <div class="card maturity">
-            <h2><i></i>区县指数</h2>
-            <div class="cloud-apps" id="ovDists"></div>
+          <div class="card ov-data">
+            <h2><i></i>数</h2>
+            <div class="ov-grid">
+              <div class="ov-cell" data-k="dataRes"><div class="k">政务数据资源数</div><div class="v">1,286</div></div>
+              <div class="ov-cell" data-k="dataApi"><div class="k">接口调用频次</div><div class="v">86万<em>/日</em></div></div>
+              <div class="ov-cell focus" data-k="dataAsset"><div class="k">资产登记入表数</div><div class="v">36</div></div>
+              <div class="ov-cell" data-k="dataOpen"><div class="k">公共数据开放，占比</div><div class="v">860<em>18.6%</em></div></div>
+              <div class="ov-cell" data-k="dataForest"><div class="k">数林指数</div><div class="v">78.6</div></div>
+              <div class="ov-cell" data-k="dataOps"><div class="k">数据流通，授权运营</div><div class="v">8项<em>产品 24</em></div></div>
+            </div>
+            <div class="ov-cell span2 ov-sankey" data-k="dataSankey">
+              <div class="k">用数关系图</div>
+              <svg id="ovSankey" viewBox="0 0 420 90" preserveAspectRatio="xMidYMid meet"></svg>
+            </div>
+          </div>
+          <div class="card ov-prod">
+            <h2><i></i>产</h2>
+            <div class="ov-grid">
+              <div class="ov-cell" data-k="indScale"><div class="k">体量规模</div><div class="v">486<em>亿元</em></div></div>
+              <div class="ov-cell" data-k="indFirm"><div class="k">规上企业数 · 点位上图</div><div class="v">326<em>家</em></div></div>
+              <div class="ov-cell" data-k="indRank"><div class="k">全省位次</div><div class="v">第8</div></div>
+              <div class="ov-cell" data-k="indFund"><div class="k">近三年奖补，市州排序</div><div class="v">3.46亿<em>第5</em></div></div>
+            </div>
+            <div class="ov-cell focus" data-k="indSvc" style="margin-top:6px"><div class="k">服务数字经济企业 · 亲清在线</div><div class="v">1,860<em>需求 · 项目流程</em></div></div>
           </div>
         </div>
       </section>
@@ -585,12 +646,6 @@
             <button type="button" id="zoomIn">+</button>
             <button type="button" id="zoomOut">−</button>
             <button type="button" id="zoomReset" title="复位">↺</button>
-          </div>
-          <div class="map-legend pane-an">
-            <div><span class="sw solid"></span>红色 · 实心圆 · 高危</div>
-            <div><span class="sw hollow"></span>橙色 · 空心圆 · 中危</div>
-            <div><span class="sw hollow dash"></span>黄色 · 空心圆 · 低危</div>
-            <div><span class="sw gray"></span>蓝色 · 灰点 · 可忽略</div>
           </div>
           <div class="map-foot pane-an">
             <!-- 暂屏蔽，后续可恢复：合规性（二级等保评比）、安全管控措施
@@ -622,6 +677,7 @@
             </div>
           </div>
           <div class="map-bar pane-cloud">
+            <div class="seg" id="cloudDateSeg"></div>
             <div class="kpi4" id="cloudLevelBar"></div>
           </div>
           <div class="map-legend pane-cloud">
@@ -648,6 +704,7 @@
             </div>
           </div>
           <div class="map-bar pane-net">
+            <div class="seg" id="netDateSeg"></div>
             <div class="kpi4" id="netLevelBar"></div>
           </div>
           <div class="map-legend pane-net">
@@ -680,6 +737,7 @@
             <div>武汉—粤港澳大湾区</div>
           </div>
           <div class="map-bar pane-calc">
+            <div class="seg" id="calcDateSeg"></div>
             <div class="kpi4" id="calcLevelBar"></div>
           </div>
           <div class="map-legend pane-calc">
@@ -691,10 +749,8 @@
           <div class="map-foot pane-calc">
             <div class="card">
               <h2><i></i>算力用量</h2>
-              <svg class="spark" viewBox="0 0 300 64" preserveAspectRatio="none">
-                <polyline fill="none" stroke="#111" stroke-width="1.4" points="0,50 20,48 40,44 60,46 80,38 100,36 120,32 140,34 160,28 180,24 200,26 220,18 240,20 260,14 280,16 300,10"/>
-              </svg>
-              <div class="spark-legend"><span>近时序 · 当前约 86P</span></div>
+              <svg class="spark" id="calcUseChart" viewBox="0 0 300 64" preserveAspectRatio="none"></svg>
+              <div class="spark-legend"><span id="calcUseNow">近时序 · 当前 86.0P</span></div>
             </div>
             <div class="card">
               <h2><i></i>能效</h2>
@@ -712,6 +768,7 @@
             <div>基层治理 · 网格事件</div>
           </div>
           <div class="map-bar pane-data">
+            <div class="seg" id="dataDateSeg"></div>
             <div class="kpi4" id="dataLevelBar"></div>
           </div>
           <div class="map-legend pane-data">
@@ -725,10 +782,8 @@
           <div class="map-foot pane-data">
             <div class="card">
               <h2><i></i>接口调用量</h2>
-              <svg class="spark" viewBox="0 0 300 64" preserveAspectRatio="none">
-                <polyline fill="none" stroke="#111" stroke-width="1.4" points="0,52 18,46 36,48 54,40 72,42 90,34 108,36 126,28 144,30 162,22 180,26 198,18 216,20 234,14 252,16 270,10 300,8"/>
-              </svg>
-              <div class="spark-legend"><span>累计 2.8亿 · 日均 86万</span></div>
+              <svg class="spark" id="apiCallChart" viewBox="0 0 300 64" preserveAspectRatio="none"></svg>
+              <div class="spark-legend"><span id="apiCallNow">累计 2.8000亿 · 当前 86.0万</span></div>
             </div>
             <div class="card">
               <h2><i></i>质量与获得感</h2>
@@ -743,6 +798,7 @@
             <div>三年行动</div>
           </div>
           <div class="map-bar pane-ind">
+            <div class="seg" id="indDateSeg"></div>
             <div class="kpi4" id="indLevelBar"></div>
           </div>
           <div class="map-legend pane-ind">
@@ -766,6 +822,7 @@
             </div>
           </div>
           <div class="map-bar pane-ov">
+            <div class="seg" id="ovDateSeg"></div>
             <div class="kpi4" id="ovLevelBar"></div>
           </div>
           <div class="map-legend pane-ov">
@@ -775,20 +832,21 @@
             <div><span class="sw solid sq"></span>算 · 芯片</div>
             <div><span class="sw solid"></span>安 · 三角</div>
             <div><span class="sw hollow"></span>产 · 楼</div>
+            <div><span class="sw gray"></span>灰点 · 规上企业</div>
           </div>
           <div class="map-foot pane-ov">
             <div class="card">
-              <h2><i></i>服务请求</h2>
-              <svg class="spark" viewBox="0 0 300 64" preserveAspectRatio="none">
-                <polyline fill="none" stroke="#111" stroke-width="1.4" points="0,46 20,40 40,44 60,28 80,36 100,22 120,30 140,18 160,26 180,14 200,22 220,12 240,18 260,10 280,16 300,8"/>
-              </svg>
-              <div class="spark-legend"><span>今日访问 186.4 万</span></div>
+              <h2><i></i>风险趋势 · 市直 / 县市区</h2>
+              <div class="res-row"><div class="top"><span>市直</span><span class="res-meta" id="ovTrendCity">0</span></div><div class="track"><div class="fill" id="ovTrendCityBar" style="width:0%"></div></div></div>
+              <div class="res-row"><div class="top"><span>县市区</span><span class="res-meta" id="ovTrendDist">0</span></div><div class="track"><div class="fill" id="ovTrendDistBar" style="width:0%"></div></div></div>
+              <div class="spark-legend"><span>随右上角日期筛选联动</span></div>
             </div>
-            <div class="card">
-              <h2><i></i>六域告警</h2>
-              <div class="plan"><span>云 / 网</span><span>12 · 10</span></div>
-              <div class="plan"><span>数 / 算</span><span>8 · 7</span></div>
-              <div class="plan"><span>安 / 产</span><span>11 · 7</span></div>
+            <div class="card ov-cell" data-k="indPie">
+              <h2><i></i>县市区数字经济占比</h2>
+              <div class="ov-pie">
+                <svg id="ovPie" viewBox="0 0 160 160"></svg>
+                <div class="lg" id="ovPieLegend"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -862,13 +920,52 @@
           </div>
         </div>
         <div class="pane-ov stack">
-          <div class="card grow" style="flex:1.15">
-            <h2><i></i>综合告警</h2>
-            <div class="cloud-list" id="ovAlarms"></div>
+          <div class="card">
+            <h2><i></i>算</h2>
+            <div class="ov-grid">
+              <div class="ov-cell" data-k="calcScale"><div class="k">总算力规模</div><div class="v">128P</div></div>
+              <div class="ov-cell" data-k="calcCenter"><div class="k">智算中心，算力占比</div><div class="v">5<em>82%</em></div></div>
+            </div>
+            <div class="ov-sub">
+              <div class="cap">PUE · WUE · CUE</div>
+              <div class="ov-mini">
+                <div class="ov-cell" data-k="calcPue"><div class="k">PUE</div><div class="v">1.28</div></div>
+                <div class="ov-cell" data-k="calcWue"><div class="k">WUE</div><div class="v">1.42</div></div>
+                <div class="ov-cell" data-k="calcCue"><div class="k">CUE</div><div class="v">0.36</div></div>
+              </div>
+            </div>
+            <div class="ov-grid" style="margin-top:6px">
+              <div class="ov-cell" data-k="calcUse"><div class="k">算力消纳占比</div><div class="v">74%</div></div>
+              <div class="ov-cell" data-k="calcUser"><div class="k">主要用户占比</div><div class="v">公安 28%</div></div>
+            </div>
+            <div class="ov-grid" style="margin-top:6px">
+              <div class="ov-cell" data-k="ch1"><div class="k">算力通道</div><div class="v">西安—京津冀</div></div>
+              <div class="ov-cell" data-k="ch2"><div class="k">算力通道</div><div class="v">西安—庆阳</div></div>
+              <div class="ov-cell" data-k="ch3"><div class="k">算力通道</div><div class="v">武汉—长三角</div></div>
+              <div class="ov-cell" data-k="ch4"><div class="k">算力通道</div><div class="v">武汉—粤港澳</div></div>
+            </div>
+            <div class="ov-cell" data-k="calcGreen" style="margin-top:6px"><div class="k">绿色算力产业项目</div><div class="v">6<em>在库</em></div></div>
           </div>
-          <div class="card grow">
-            <h2><i></i>协同关注</h2>
-            <div class="cloud-list" id="ovOrders"></div>
+          <div class="card ov-sec">
+            <h2><i></i>安</h2>
+            <div class="ov-grid">
+              <div class="ov-cell" data-k="secScore"><div class="k">总体安全系数</div><div class="v">80</div></div>
+              <div class="ov-cell" data-k="secGrade"><div class="k">等保 / 密评比例</div><div class="v">66.7% · 33.3%</div></div>
+            </div>
+            <div class="ov-sub">
+              <div class="cap">实时监测 · 风险等级</div>
+              <div class="ov-risk">
+                <div class="ov-cell" data-k="secHi"><div class="k">高危</div><div class="v" id="ovRiskHi">0</div></div>
+                <div class="ov-cell" data-k="secMid"><div class="k">中危</div><div class="v" id="ovRiskMid">0</div></div>
+                <div class="ov-cell" data-k="secLow"><div class="k">低危</div><div class="v" id="ovRiskLow">0</div></div>
+              </div>
+            </div>
+            <div class="ov-grid" style="margin-top:6px">
+              <div class="ov-cell" data-k="secType"><div class="k">风险类型占比</div><div class="v">等保 27%</div></div>
+              <div class="ov-cell" data-k="secTarget"><div class="k">目标单位、系统、攻击源</div><div class="v">公安 · 雪亮</div></div>
+              <div class="ov-cell span2" data-k="secDrill"><div class="k">攻防演练、渗透测试通报及整改</div><div class="v">通报 14<em>整改 79%</em></div></div>
+            </div>
+            <div class="cloud-list" id="ovAlarms"></div>
           </div>
         </div>
       </section>
@@ -994,17 +1091,17 @@ const bureaus = [
 ].map(b => ({ ...b, count: b.items.reduce((s, it) => s + it[2], 0) }))
   .sort((a, b) => b.count - a.count);
 const events = [
-  { id: "e1", title: "等保到期 雪亮工程", level: "高危", find: "自动发现", type: "等保到期", source: "等保到期", target: "市公安局", system: "市公安局", same: 31, status: "待处置", time: "2026-09-18 16:00", org: "市公安局（待处理）", src: "warn-job", impact: "高", lng: 110.78, lat: 32.63, layer: "event", district: "张湾区" },
-  { id: "e2", title: "竹溪暴露面", level: "高危", find: "被动发现", type: "暴露面", source: "竹溪县政府", target: "竹溪县政府", system: "政务外网", same: 6, status: "处置中", time: "2026-09-18 07:30", org: "网安（待处置）", src: "竹溪县政府", impact: "高", lng: 109.78, lat: 32.35, layer: "event", district: "竹溪县" },
-  { id: "e3", title: "房县弱口令专项", level: "中危", find: "智能发现", type: "弱口令", source: "房县政府", target: "房县政府", system: "门户网站", same: 12, status: "处置中", time: "2026-09-15 07:30", org: "网安（待处理）", src: "房县政府", impact: "中", lng: 110.72, lat: 32.08, layer: "event", district: "房县" },
-  { id: "e4", title: "张湾节点内存触顶", level: "中危", find: "自动发现", type: "资源告警", source: "市数据局", target: "市数据局", system: "政务云计算节点A", same: 4, status: "待处置", time: "2026-09-13 07:30", org: "市数据局（待处置）", src: "市数据局", impact: "中", lng: 110.74, lat: 32.66, layer: "event", district: "张湾区" },
-  { id: "e5", title: "保养预警 89d 市核心路由器", level: "低危", find: "自动发现", type: "保养预警", source: "warn-job", target: "市数据局", system: "市核心路由器", same: 2, status: "待处置", time: "2026-09-22 16:00", org: "市数据局（待处置）", src: "warn-job", impact: "低", lng: 110.80, lat: 32.59, layer: "event", district: "茅箭区" },
-  { id: "e6", title: "保养预警 89d 市级防火墙", level: "可忽略", find: "自动发现", type: "保养预警", source: "warn-job", target: "市公安局", system: "市级防火墙", same: 3, status: "待处置", time: "2026-09-22 16:00", org: "市公安局（待处置）", src: "warn-job", impact: "低", lng: 110.69, lat: 32.70, layer: "event", district: "郧阳区" },
-  { id: "e7", title: "保养预警 89d 竹溪县政务网", level: "低危", find: "自动发现", type: "保养预警", source: "warn-job", target: "市政务服务局", system: "竹溪县政务网", same: 1, status: "待处置", time: "2026-09-22 16:00", org: "市政务服务局（待处置）", src: "warn-job", impact: "低", lng: 109.90, lat: 32.22, layer: "event", district: "竹溪县" },
-  { id: "e8", title: "关基设施巡检异常", level: "高危", find: "智能发现", type: "关基告警", source: "市公安局", target: "市公安局", system: "丹江口取水口", same: 2, status: "待处置", time: "2026-09-20 09:10", org: "市公安局（待处理）", src: "市公安局", impact: "高", lng: 111.48, lat: 32.55, layer: "event", district: "丹江口市" },
-  { id: "e9", title: "武当山入口相机离线", level: "中危", find: "自动发现", type: "设备离线", source: "市文旅局", target: "市文旅局", system: "入口相机", same: 5, status: "待处置", time: "2026-09-21 11:20", org: "市文旅局（待处置）", src: "warn-job", impact: "中", lng: 111.02, lat: 32.42, layer: "event", district: "丹江口市" },
-  { id: "e10", title: "竹山入境路线预警", level: "中危", find: "被动发现", type: "线路预警", source: "市应急管理局", target: "市应急管理局", system: "入境监测", same: 3, status: "待处置", time: "2026-09-19 15:00", org: "市应急管理局", src: "市应急管理局", impact: "中", lng: 110.18, lat: 32.28, layer: "event", district: "竹山县" },
-  { id: "e11", title: "郧西边界探针心跳丢失", level: "可忽略", find: "自动发现", type: "探针离线", source: "市网信办", target: "市网信办", system: "边界探针", same: 1, status: "已闭环", time: "2026-09-10 08:00", org: "市网信办", src: "warn-job", impact: "低", lng: 110.40, lat: 33.02, layer: "event", district: "郧西县" }
+  { id: "e1", title: "等保到期 雪亮工程", level: "红", find: "自动发现", type: "等保到期", source: "等保到期", target: "市公安局", system: "市公安局", same: 31, status: "待处置", time: "2026-09-18 16:00", org: "市公安局（待处理）", src: "warn-job", impact: "高", lng: 110.78, lat: 32.63, layer: "event", district: "张湾区" },
+  { id: "e2", title: "竹溪暴露面", level: "红", find: "被动发现", type: "暴露面", source: "竹溪县政府", target: "竹溪县政府", system: "政务外网", same: 6, status: "处置中", time: "2026-09-18 07:30", org: "网安（待处置）", src: "竹溪县政府", impact: "高", lng: 109.78, lat: 32.35, layer: "event", district: "竹溪县" },
+  { id: "e3", title: "房县弱口令专项", level: "橙", find: "智能发现", type: "弱口令", source: "房县政府", target: "房县政府", system: "门户网站", same: 12, status: "处置中", time: "2026-09-15 07:30", org: "网安（待处理）", src: "房县政府", impact: "中", lng: 110.72, lat: 32.08, layer: "event", district: "房县" },
+  { id: "e4", title: "张湾节点内存触顶", level: "橙", find: "自动发现", type: "资源告警", source: "市数据局", target: "市数据局", system: "政务云计算节点A", same: 4, status: "待处置", time: "2026-09-13 07:30", org: "市数据局（待处置）", src: "市数据局", impact: "中", lng: 110.74, lat: 32.66, layer: "event", district: "张湾区" },
+  { id: "e5", title: "保养预警 89d 市核心路由器", level: "黄", find: "自动发现", type: "保养预警", source: "warn-job", target: "市数据局", system: "市核心路由器", same: 2, status: "待处置", time: "2026-09-22 16:00", org: "市数据局（待处置）", src: "warn-job", impact: "低", lng: 110.80, lat: 32.59, layer: "event", district: "茅箭区" },
+  { id: "e6", title: "保养预警 89d 市级防火墙", level: "蓝", find: "自动发现", type: "保养预警", source: "warn-job", target: "市公安局", system: "市级防火墙", same: 3, status: "待处置", time: "2026-09-22 16:00", org: "市公安局（待处置）", src: "warn-job", impact: "低", lng: 110.69, lat: 32.70, layer: "event", district: "郧阳区" },
+  { id: "e7", title: "保养预警 89d 竹溪县政务网", level: "黄", find: "自动发现", type: "保养预警", source: "warn-job", target: "市政务服务局", system: "竹溪县政务网", same: 1, status: "待处置", time: "2026-09-22 16:00", org: "市政务服务局（待处置）", src: "warn-job", impact: "低", lng: 109.90, lat: 32.22, layer: "event", district: "竹溪县" },
+  { id: "e8", title: "关基设施巡检异常", level: "红", find: "智能发现", type: "关基告警", source: "市公安局", target: "市公安局", system: "丹江口取水口", same: 2, status: "待处置", time: "2026-09-20 09:10", org: "市公安局（待处理）", src: "市公安局", impact: "高", lng: 111.48, lat: 32.55, layer: "event", district: "丹江口市" },
+  { id: "e9", title: "武当山入口相机离线", level: "橙", find: "自动发现", type: "设备离线", source: "市文旅局", target: "市文旅局", system: "入口相机", same: 5, status: "待处置", time: "2026-09-21 11:20", org: "市文旅局（待处置）", src: "warn-job", impact: "中", lng: 111.02, lat: 32.42, layer: "event", district: "丹江口市" },
+  { id: "e10", title: "竹山入境路线预警", level: "橙", find: "被动发现", type: "线路预警", source: "市应急管理局", target: "市应急管理局", system: "入境监测", same: 3, status: "待处置", time: "2026-09-19 15:00", org: "市应急管理局", src: "市应急管理局", impact: "中", lng: 110.18, lat: 32.28, layer: "event", district: "竹山县" },
+  { id: "e11", title: "郧西边界探针心跳丢失", level: "蓝", find: "自动发现", type: "探针离线", source: "市网信办", target: "市网信办", system: "边界探针", same: 1, status: "已闭环", time: "2026-09-10 08:00", org: "市网信办", src: "warn-job", impact: "低", lng: 110.40, lat: 33.02, layer: "event", district: "郧西县" }
 ];
 const places = [
   { layer: "protect", name: "丹江口大坝", lng: 111.51, lat: 32.56, level: "低" },
@@ -1192,12 +1289,13 @@ function parseDay(str) {
   const m = String(str).match(/(\d{4})-(\d{2})-(\d{2})/);
   return new Date(+m[1], +m[2] - 1, +m[3]);
 }
-function inDateRange(str) {
+function inDateRange(str, range) {
+  const use = range || dateRange;
   const d = parseDay(str);
   const now = new Date();
   const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  if (dateRange === "今日") return d.getTime() === start.getTime();
-  if (dateRange === "本周") {
+  if (use === "今日") return d.getTime() === start.getTime();
+  if (use === "本周") {
     const weekday = start.getDay() || 7;
     const monday = new Date(start);
     monday.setDate(start.getDate() - weekday + 1);
@@ -1205,7 +1303,7 @@ function inDateRange(str) {
     next.setDate(monday.getDate() + 7);
     return d >= monday && d < next;
   }
-  if (dateRange === "本月") return d.getFullYear() === start.getFullYear() && d.getMonth() === start.getMonth();
+  if (use === "本月") return d.getFullYear() === start.getFullYear() && d.getMonth() === start.getMonth();
   return d.getFullYear() === start.getFullYear();
 }
 function matchLevel(e) {
@@ -1217,7 +1315,7 @@ function visibleEvents() {
 }
 function renderLevel() {
   const dated = events.filter(e => inDateRange(e.time));
-  const items = ["高危", "中危", "低危", "可忽略"].map(name => [name, dated.filter(e => e.level === name).length]);
+  const items = ["红", "橙", "黄", "蓝"].map(name => [name, dated.filter(e => e.level === name).length]);
   document.getElementById("levelBar").innerHTML = items.map(([name, count]) =>
     `<button type="button" class="k${levelFilter === name ? " on" : ""}" data-lv="${name}"><b>${count}</b><span>${name}</span></button>`
   ).join("");
@@ -1309,7 +1407,12 @@ function buildMap() {
   const gw = (maxLng - minLng) * cos, gh = (maxLat - minLat);
   const W = 1000, H = 700, pad = 36;
   const s = Math.min((W - pad * 2) / gw, (H - pad * 2) / gh);
-  const ox = (W - gw * s) / 2, oy = (H - gh * s) / 2;
+  let ox = (W - gw * s) / 2 + 60;
+  let oy = (H - gh * s) / 2 - 28;
+  if (ox < 8) ox = 8;
+  if (oy < 8) oy = 8;
+  if (ox + gw * s > W - 8) ox = W - 8 - gw * s;
+  if (oy + gh * s > H - 8) oy = H - 8 - gh * s;
   projectFn = (lng, lat) => [ox + (lng - minLng) * cos * s, oy + (maxLat - lat) * s];
   const gLabel = document.createElementNS(NS, "g");
   geo.features.forEach(f => {
@@ -1364,18 +1467,18 @@ const cloudApps = [
   { unit: "市财政局", system: "预算管理平台", func: "预算执行", online: "2018-11", cpu: "36核", store: "8TB", cost: "22万/年", eval: "合理" }
 ];
 const cloudAlarms = [
-  { level: "红色", tag: "拥塞", title: "政务云出口拥塞", time: "2026-09-22 16:10", rows: [["等级", "红色 · 高危"], ["类型", "网络拥塞"], ["位置", "政务云一节点出口"], ["利用率", "91%"], ["建议", "错峰并评估扩容"]] },
-  { level: "红色", tag: "阈值", title: "二节点内存超阈值", time: "2026-09-21 09:40", rows: [["等级", "红色 · 高危"], ["类型", "用量预警"], ["当前", "86%"], ["阈值", "80%"], ["建议", "内存扩容 2TB"]] },
-  { level: "红色", tag: "故障", title: "一节点存储控制器告警", time: "2026-09-22 11:05", rows: [["等级", "红色 · 高危"], ["类型", "设备故障"], ["位置", "政务云一节点"], ["现象", "控制器心跳丢失"], ["建议", "立即切换并更换"]] },
-  { level: "橙色", tag: "拥塞", title: "水利专线时延升高", time: "2026-09-18 07:30", rows: [["等级", "橙色 · 中危"], ["类型", "网络拥塞"], ["对象", "丹江口监测回传"], ["现象", "时延高于基线"], ["建议", "核查链路"]] },
-  { level: "橙色", tag: "阈值", title: "雪亮计算池用量偏高", time: "2026-09-19 14:20", rows: [["等级", "橙色 · 中危"], ["类型", "用量预警"], ["当前", "83%"], ["阈值", "80%"], ["建议", "错峰转码"]] },
-  { level: "橙色", tag: "拥塞", title: "医保专网晚高峰拥塞", time: "2026-09-17 18:40", rows: [["等级", "橙色 · 中危"], ["类型", "网络拥塞"], ["对象", "医保结算专网"], ["利用率", "88%"], ["建议", "限流非核心查询"]] },
-  { level: "黄色", tag: "扩容", title: "视频存储增长过快", time: "2026-09-20 11:20", rows: [["等级", "黄色 · 低危"], ["类型", "扩容建议"], ["增长率", "+8.6%"], ["对象", "雪亮工程存储"], ["建议", "下季度扩容 200TB"]] },
-  { level: "黄色", tag: "阈值", title: "一网通办内存接近阈值", time: "2026-09-15 10:12", rows: [["等级", "黄色 · 低危"], ["类型", "用量预警"], ["当前", "76%"], ["阈值", "80%"], ["建议", "观察一周"]] },
-  { level: "黄色", tag: "扩容", title: "卫健影像存储增长", time: "2026-09-14 09:00", rows: [["等级", "黄色 · 低危"], ["类型", "扩容建议"], ["对象", "全民健康影像"], ["增长率", "+6.2%"], ["建议", "按季评估"]] },
-  { level: "蓝色", tag: "阈值", title: "测试环境存储偏高", time: "2026-09-16 08:20", rows: [["等级", "蓝色 · 可忽略"], ["类型", "用量提示"], ["对象", "测试环境"], ["建议", "可随缩容回收"]] },
-  { level: "蓝色", tag: "提示", title: "巡检口令即将到期", time: "2026-09-13 08:30", rows: [["等级", "蓝色 · 可忽略"], ["类型", "账号提示"], ["对象", "运维堡垒机"], ["建议", "本月内更换"]] },
-  { level: "蓝色", tag: "提示", title: "备份窗口略有延迟", time: "2026-09-12 02:10", rows: [["等级", "蓝色 · 可忽略"], ["类型", "备份提示"], ["对象", "政务云二节点"], ["建议", "无需立即处置"]] }
+  { level: "红", tag: "拥塞", title: "政务云出口拥塞", time: "2026-09-22 16:10", rows: [["等级", "红"], ["类型", "网络拥塞"], ["位置", "政务云一节点出口"], ["利用率", "91%"], ["建议", "错峰并评估扩容"]] },
+  { level: "红", tag: "阈值", title: "二节点内存超阈值", time: "2026-09-21 09:40", rows: [["等级", "红"], ["类型", "用量预警"], ["当前", "86%"], ["阈值", "80%"], ["建议", "内存扩容 2TB"]] },
+  { level: "红", tag: "故障", title: "一节点存储控制器告警", time: "2026-09-22 11:05", rows: [["等级", "红"], ["类型", "设备故障"], ["位置", "政务云一节点"], ["现象", "控制器心跳丢失"], ["建议", "立即切换并更换"]] },
+  { level: "橙", tag: "拥塞", title: "水利专线时延升高", time: "2026-09-18 07:30", rows: [["等级", "橙"], ["类型", "网络拥塞"], ["对象", "丹江口监测回传"], ["现象", "时延高于基线"], ["建议", "核查链路"]] },
+  { level: "橙", tag: "阈值", title: "雪亮计算池用量偏高", time: "2026-09-19 14:20", rows: [["等级", "橙"], ["类型", "用量预警"], ["当前", "83%"], ["阈值", "80%"], ["建议", "错峰转码"]] },
+  { level: "橙", tag: "拥塞", title: "医保专网晚高峰拥塞", time: "2026-09-17 18:40", rows: [["等级", "橙"], ["类型", "网络拥塞"], ["对象", "医保结算专网"], ["利用率", "88%"], ["建议", "限流非核心查询"]] },
+  { level: "黄", tag: "扩容", title: "视频存储增长过快", time: "2026-09-20 11:20", rows: [["等级", "黄"], ["类型", "扩容建议"], ["增长率", "+8.6%"], ["对象", "雪亮工程存储"], ["建议", "下季度扩容 200TB"]] },
+  { level: "黄", tag: "阈值", title: "一网通办内存接近阈值", time: "2026-09-15 10:12", rows: [["等级", "黄"], ["类型", "用量预警"], ["当前", "76%"], ["阈值", "80%"], ["建议", "观察一周"]] },
+  { level: "黄", tag: "扩容", title: "卫健影像存储增长", time: "2026-09-14 09:00", rows: [["等级", "黄"], ["类型", "扩容建议"], ["对象", "全民健康影像"], ["增长率", "+6.2%"], ["建议", "按季评估"]] },
+  { level: "蓝", tag: "阈值", title: "测试环境存储偏高", time: "2026-09-16 08:20", rows: [["等级", "蓝"], ["类型", "用量提示"], ["对象", "测试环境"], ["建议", "可随缩容回收"]] },
+  { level: "蓝", tag: "提示", title: "巡检口令即将到期", time: "2026-09-13 08:30", rows: [["等级", "蓝"], ["类型", "账号提示"], ["对象", "运维堡垒机"], ["建议", "本月内更换"]] },
+  { level: "蓝", tag: "提示", title: "备份窗口略有延迟", time: "2026-09-12 02:10", rows: [["等级", "蓝"], ["类型", "备份提示"], ["对象", "政务云二节点"], ["建议", "无需立即处置"]] }
 ];
 const cloudOrders = [
   { title: "政务云九月巡检", type: "巡检记录", status: "已闭环", rows: [["类型", "巡检记录"], ["结果", "未发现故障"], ["时间", "2026-09-12"]] },
@@ -1418,16 +1521,16 @@ const netUnits = [
   { name: "市教育局", bw: "2Gbps", person: "装备 孙悦", rows: [["带宽", "2Gbps"], ["联系人", "装备 孙悦"], ["专网", "教育城域网"]] }
 ];
 const netAlarms = [
-  { level: "红色", tag: "拥塞", title: "市县出口拥塞", time: "2026-09-22 17:05", rows: [["等级", "红色 · 高危"], ["类型", "带宽拥塞"], ["利用率", "91%"], ["影响", "县区办事回传变慢"], ["建议", "限流非实时业务"]] },
-  { level: "红色", tag: "故障", title: "丹江口汇聚设备离线", time: "2026-09-22 09:18", rows: [["等级", "红色 · 高危"], ["类型", "设备故障"], ["影响范围", "丹江口市接入"], ["建议", "切换备用链路"]] },
-  { level: "红色", tag: "故障", title: "核心防火墙会话打满", time: "2026-09-21 15:40", rows: [["等级", "红色 · 高危"], ["类型", "设备过载"], ["位置", "市政务外网核心"], ["建议", "清理长连接"]] },
-  { level: "橙色", tag: "丢包", title: "水利专线丢包升高", time: "2026-09-20 08:12", rows: [["等级", "橙色 · 中危"], ["丢包率", "1.8%"], ["时延", "46ms"], ["影响", "监测回传延迟"], ["建议", "核查光缆"]] },
-  { level: "橙色", tag: "过保", title: "张湾汇聚交换机过保", time: "2026-09-19 10:00", rows: [["等级", "橙色 · 中危"], ["类型", "超期服役"], ["入网", "2017-04"], ["建议", "列入更换计划"]] },
-  { level: "橙色", tag: "拥塞", title: "医保专网晚高峰拥塞", time: "2026-09-18 18:30", rows: [["等级", "橙色 · 中危"], ["利用率", "88%"], ["影响", "结算查询变慢"], ["建议", "错峰对账"]] },
-  { level: "黄色", tag: "时延", title: "房县链路时延偏高", time: "2026-09-17 11:22", rows: [["等级", "黄色 · 低危"], ["时延", "28ms"], ["阈值", "20ms"], ["建议", "持续观察"]] },
-  { level: "黄色", tag: "过保", title: "教育城域网边界将过保", time: "2026-09-16 09:40", rows: [["等级", "黄色 · 低危"], ["到期", "2026-12"], ["建议", "续保或替换"]] },
-  { level: "蓝色", tag: "提示", title: "IPv6 双栈探测失败", time: "2026-09-15 14:10", rows: [["等级", "蓝色 · 可忽略"], ["对象", "3 个委办局网站"], ["建议", "纳入改造清单"]] },
-  { level: "蓝色", tag: "提示", title: "备份链路未按月拨测", time: "2026-09-14 08:00", rows: [["等级", "蓝色 · 可忽略"], ["对象", "郧西备用链路"], ["建议", "补做拨测"]] }
+  { level: "红", tag: "拥塞", title: "市县出口拥塞", time: "2026-09-22 17:05", rows: [["等级", "红"], ["类型", "带宽拥塞"], ["利用率", "91%"], ["影响", "县区办事回传变慢"], ["建议", "限流非实时业务"]] },
+  { level: "红", tag: "故障", title: "丹江口汇聚设备离线", time: "2026-09-22 09:18", rows: [["等级", "红"], ["类型", "设备故障"], ["影响范围", "丹江口市接入"], ["建议", "切换备用链路"]] },
+  { level: "红", tag: "故障", title: "核心防火墙会话打满", time: "2026-09-21 15:40", rows: [["等级", "红"], ["类型", "设备过载"], ["位置", "市政务外网核心"], ["建议", "清理长连接"]] },
+  { level: "橙", tag: "丢包", title: "水利专线丢包升高", time: "2026-09-20 08:12", rows: [["等级", "橙"], ["丢包率", "1.8%"], ["时延", "46ms"], ["影响", "监测回传延迟"], ["建议", "核查光缆"]] },
+  { level: "橙", tag: "过保", title: "张湾汇聚交换机过保", time: "2026-09-19 10:00", rows: [["等级", "橙"], ["类型", "超期服役"], ["入网", "2017-04"], ["建议", "列入更换计划"]] },
+  { level: "橙", tag: "拥塞", title: "医保专网晚高峰拥塞", time: "2026-09-18 18:30", rows: [["等级", "橙"], ["利用率", "88%"], ["影响", "结算查询变慢"], ["建议", "错峰对账"]] },
+  { level: "黄", tag: "时延", title: "房县链路时延偏高", time: "2026-09-17 11:22", rows: [["等级", "黄"], ["时延", "28ms"], ["阈值", "20ms"], ["建议", "持续观察"]] },
+  { level: "黄", tag: "过保", title: "教育城域网边界将过保", time: "2026-09-16 09:40", rows: [["等级", "黄"], ["到期", "2026-12"], ["建议", "续保或替换"]] },
+  { level: "蓝", tag: "提示", title: "IPv6 双栈探测失败", time: "2026-09-15 14:10", rows: [["等级", "蓝"], ["对象", "3 个委办局网站"], ["建议", "纳入改造清单"]] },
+  { level: "蓝", tag: "提示", title: "备份链路未按月拨测", time: "2026-09-14 08:00", rows: [["等级", "蓝"], ["对象", "郧西备用链路"], ["建议", "补做拨测"]] }
 ];
 const netOrders = [
   { title: "丹江口汇聚切换", type: "故障处置", status: "处置中", rows: [["类型", "故障处置"], ["影响范围", "丹江口市"], ["状态", "已切备用链路"]] },
@@ -1457,13 +1560,13 @@ const calcNodes = [
 ];
 const calcCenters = calcNodes.filter(n => n.kind === "center");
 const calcAlarms = [
-  { level: "红色", tag: "PUE", title: "武当山中心 PUE 超阈值", time: "2026-09-22 15:20", rows: [["等级", "红色 · 高危"], ["实时 PUE", "1.46"], ["阈值", "1.40"], ["建议", "检查制冷"]] },
-  { level: "红色", tag: "故障", title: "市级中心训练集群降级", time: "2026-09-22 10:05", rows: [["等级", "红色 · 高危"], ["现象", "部分算力卡离线"], ["影响", "训练任务排队"], ["建议", "隔离故障卡"]] },
-  { level: "橙色", tag: "上架", title: "郧阳节点上架率偏低", time: "2026-09-20 09:30", rows: [["等级", "橙色 · 中危"], ["上架率", "54%"], ["建议", "加快业务迁入"]] },
-  { level: "橙色", tag: "绿电", title: "丹江口节点绿电不足", time: "2026-09-19 11:10", rows: [["等级", "橙色 · 中危"], ["绿电占比", "18%"], ["目标", "30%"], ["建议", "增加绿电合同"]] },
-  { level: "黄色", tag: "时延", title: "武汉方向通道时延升高", time: "2026-09-18 16:40", rows: [["等级", "黄色 · 低危"], ["方向", "武汉—长三角"], ["时延", "18ms"], ["建议", "观察"]] },
-  { level: "黄色", tag: "能效", title: "张湾节点能效系数下滑", time: "2026-09-16 08:50", rows: [["等级", "黄色 · 低危"], ["能效系数", "0.62"], ["建议", "梳理闲置任务"]] },
-  { level: "蓝色", tag: "提示", title: "算法仓库索引延迟", time: "2026-09-15 13:20", rows: [["等级", "蓝色 · 可忽略"], ["对象", "算法仓库"], ["建议", "夜间重建索引"]] }
+  { level: "红", tag: "PUE", title: "武当山中心 PUE 超阈值", time: "2026-09-22 15:20", rows: [["等级", "红"], ["实时 PUE", "1.46"], ["阈值", "1.40"], ["建议", "检查制冷"]] },
+  { level: "红", tag: "故障", title: "市级中心训练集群降级", time: "2026-09-22 10:05", rows: [["等级", "红"], ["现象", "部分算力卡离线"], ["影响", "训练任务排队"], ["建议", "隔离故障卡"]] },
+  { level: "橙", tag: "上架", title: "郧阳节点上架率偏低", time: "2026-09-20 09:30", rows: [["等级", "橙"], ["上架率", "54%"], ["建议", "加快业务迁入"]] },
+  { level: "橙", tag: "绿电", title: "丹江口节点绿电不足", time: "2026-09-19 11:10", rows: [["等级", "橙"], ["绿电占比", "18%"], ["目标", "30%"], ["建议", "增加绿电合同"]] },
+  { level: "黄", tag: "时延", title: "武汉方向通道时延升高", time: "2026-09-18 16:40", rows: [["等级", "黄"], ["方向", "武汉—长三角"], ["时延", "18ms"], ["建议", "观察"]] },
+  { level: "黄", tag: "能效", title: "张湾节点能效系数下滑", time: "2026-09-16 08:50", rows: [["等级", "黄"], ["能效系数", "0.62"], ["建议", "梳理闲置任务"]] },
+  { level: "蓝", tag: "提示", title: "算法仓库索引延迟", time: "2026-09-15 13:20", rows: [["等级", "蓝"], ["对象", "算法仓库"], ["建议", "夜间重建索引"]] }
 ];
 const calcOrders = [
   { title: "市级中心二期在建", type: "在建项目", status: "处置中", rows: [["类型", "在建"], ["规模", "新增 32P"], ["进度", "主体完工"]] },
@@ -1499,14 +1602,14 @@ const dataUnits = [
   { name: "市教育局", meta: "贡献率 6%", rows: [["汇聚量", "0.4亿条"], ["质量", "94%"], ["共享", "中"], ["贡献率", "6%"], ["互通", "正常"]] }
 ];
 const dataAlarms = [
-  { level: "红色", tag: "访问", title: "公安库越权访问", time: "2026-09-22 16:10", rows: [["等级", "红色 · 高危"], ["对象", "公安数据仓"], ["现象", "非授权账号批量查询"], ["建议", "冻结并审计"]] },
-  { level: "红色", tag: "脱敏", title: "开放接口脱敏失败", time: "2026-09-22 11:20", rows: [["等级", "红色 · 高危"], ["对象", "人口开放接口"], ["现象", "敏感字段未脱敏"], ["建议", "立即下线"]] },
-  { level: "橙色", tag: "互通", title: "卫健横向互通短板", time: "2026-09-21 09:40", rows: [["等级", "橙色 · 中危"], ["部门", "市卫健委"], ["互通率", "62%"], ["建议", "补齐接口"]] },
-  { level: "橙色", tag: "质量", title: "人社一致性不合格", time: "2026-09-20 14:15", rows: [["等级", "橙色 · 中危"], ["指标", "一致率 88%"], ["建议", "核对主数据"]] },
-  { level: "黄色", tag: "整改", title: "自然资源脏数据滞后", time: "2026-09-18 10:00", rows: [["等级", "黄色 · 低危"], ["待整改", "2,460条"], ["建议", "本周清零"]] },
-  { level: "黄色", tag: "溯源", title: "跨域通办溯源断点", time: "2026-09-17 16:30", rows: [["等级", "黄色 · 低危"], ["链路", "跨市办件"], ["建议", "补打点"]] },
-  { level: "蓝色", tag: "提示", title: "沙箱索引延迟", time: "2026-09-16 08:20", rows: [["等级", "蓝色 · 可忽略"], ["对象", "数据沙箱"], ["建议", "夜间重建"]] },
-  { level: "蓝色", tag: "提示", title: "开放目录未按月更新", time: "2026-09-15 09:00", rows: [["等级", "蓝色 · 可忽略"], ["对象", "开放平台"], ["建议", "纳入月更"]] }
+  { level: "红", tag: "访问", title: "公安库越权访问", time: "2026-09-22 16:10", rows: [["等级", "红"], ["对象", "公安数据仓"], ["现象", "非授权账号批量查询"], ["建议", "冻结并审计"]] },
+  { level: "红", tag: "脱敏", title: "开放接口脱敏失败", time: "2026-09-22 11:20", rows: [["等级", "红"], ["对象", "人口开放接口"], ["现象", "敏感字段未脱敏"], ["建议", "立即下线"]] },
+  { level: "橙", tag: "互通", title: "卫健横向互通短板", time: "2026-09-21 09:40", rows: [["等级", "橙"], ["部门", "市卫健委"], ["互通率", "62%"], ["建议", "补齐接口"]] },
+  { level: "橙", tag: "质量", title: "人社一致性不合格", time: "2026-09-20 14:15", rows: [["等级", "橙"], ["指标", "一致率 88%"], ["建议", "核对主数据"]] },
+  { level: "黄", tag: "整改", title: "自然资源脏数据滞后", time: "2026-09-18 10:00", rows: [["等级", "黄"], ["待整改", "2,460条"], ["建议", "本周清零"]] },
+  { level: "黄", tag: "溯源", title: "跨域通办溯源断点", time: "2026-09-17 16:30", rows: [["等级", "黄"], ["链路", "跨市办件"], ["建议", "补打点"]] },
+  { level: "蓝", tag: "提示", title: "沙箱索引延迟", time: "2026-09-16 08:20", rows: [["等级", "蓝"], ["对象", "数据沙箱"], ["建议", "夜间重建"]] },
+  { level: "蓝", tag: "提示", title: "开放目录未按月更新", time: "2026-09-15 09:00", rows: [["等级", "蓝"], ["对象", "开放平台"], ["建议", "纳入月更"]] }
 ];
 const dataOrders = [
   { title: "应急监测", type: "应急防灾", status: "已落地", rows: [["监测点位", "186"], ["预警", "42次"], ["闭环率", "91%"]] },
@@ -1568,13 +1671,13 @@ const indFirms = [
   { name: "房县农品电商", meta: "房县 · 电商", rows: [["区域", "房县"], ["行业", "电子商务"], ["规模", "规上"]] }
 ];
 const indAlarms = [
-  { level: "红色", tag: "滞后", title: "冷链溯源严重滞后", time: "2026-09-22", rows: [["等级", "红色 · 严重滞后"], ["项目", "冷链溯源项目"], ["区域", "郧西县"], ["投资", "1.6 亿"], ["建议", "专项调度"]] },
-  { level: "红色", tag: "申报", title: "竹溪电商仓申报逾期", time: "2026-09-21", rows: [["等级", "红色 · 申报逾期"], ["项目", "竹溪电商仓"], ["状态", "逾期未报"], ["建议", "补报并说明"]] },
-  { level: "橙色", tag: "进度", title: "车联网路侧进度滞后", time: "2026-09-20", rows: [["等级", "橙色 · 进度滞后"], ["项目", "车联网路侧"], ["区域", "张湾区"], ["投资", "6.2 亿"]] },
-  { level: "橙色", tag: "兑付", title: "奖补兑付滞后", time: "2026-09-18", rows: [["等级", "橙色 · 兑付滞后"], ["方向", "数字化改造"], ["已兑付", "68%"], ["建议", "加快审核"]] },
-  { level: "黄色", tag: "节点", title: "武当文旅临近节点", time: "2026-09-16", rows: [["等级", "黄色 · 临近节点"], ["项目", "武当数字文旅"], ["节点", "2026-10 联调"]] },
-  { level: "黄色", tag: "申报", title: "研修班报名临期", time: "2026-09-15", rows: [["等级", "黄色 · 临近节点"], ["事项", "数字经济高级研修班"], ["截止", "2026-10-08"]] },
-  { level: "蓝色", tag: "提示", title: "人才沙龙场地待确认", time: "2026-09-12", rows: [["等级", "蓝色 · 提示"], ["活动", "武当人才沙龙"], ["建议", "确认场地"]] }
+  { level: "红", tag: "滞后", title: "冷链溯源严重滞后", time: "2026-09-22", rows: [["等级", "红"], ["项目", "冷链溯源项目"], ["区域", "郧西县"], ["投资", "1.6 亿"], ["建议", "专项调度"]] },
+  { level: "红", tag: "申报", title: "竹溪电商仓申报逾期", time: "2026-09-21", rows: [["等级", "红"], ["项目", "竹溪电商仓"], ["状态", "逾期未报"], ["建议", "补报并说明"]] },
+  { level: "橙", tag: "进度", title: "车联网路侧进度滞后", time: "2026-09-20", rows: [["等级", "橙"], ["项目", "车联网路侧"], ["区域", "张湾区"], ["投资", "6.2 亿"]] },
+  { level: "橙", tag: "兑付", title: "奖补兑付滞后", time: "2026-09-18", rows: [["等级", "橙"], ["方向", "数字化改造"], ["已兑付", "68%"], ["建议", "加快审核"]] },
+  { level: "黄", tag: "节点", title: "武当文旅临近节点", time: "2026-09-16", rows: [["等级", "黄"], ["项目", "武当数字文旅"], ["节点", "2026-10 联调"]] },
+  { level: "黄", tag: "申报", title: "研修班报名临期", time: "2026-09-15", rows: [["等级", "黄"], ["事项", "数字经济高级研修班"], ["截止", "2026-10-08"]] },
+  { level: "蓝", tag: "提示", title: "人才沙龙场地待确认", time: "2026-09-12", rows: [["等级", "蓝"], ["活动", "武当人才沙龙"], ["建议", "确认场地"]] }
 ];
 const indOrders = [
   { title: "亲清在线", type: "企业服务", status: "已开通", rows: [["平台", "亲清在线"], ["办件", "1,860"], ["政策兑现", "在办"], ["企业诉求", "可提交"]] },
@@ -1598,7 +1701,7 @@ const ovAxes = [
   { name: "网", score: 84, rows: [["政务外网", "1 张"], ["部门专网", "6 张"], ["互联网", "4 家"], ["县市覆盖", "100%"]] },
   { name: "数", score: 88, rows: [["目录", "1,286"], ["数据集", "4,620"], ["完整率", "96%"], ["说明", "个别部门互通偏弱"]] },
   { name: "算", score: 83, rows: [["智算中心", "5 个"], ["算力", "128P"], ["PUE", "1.28"], ["绿电", "36%"]] },
-  { name: "安", score: 80, rows: [["高危", "3"], ["拦截率", "99.2%"], ["今日访问", "186.4万"], ["说明", "高危仍有 3 条"]] },
+  { name: "安", score: 80, rows: [["红", "3"], ["拦截率", "99.2%"], ["今日访问", "186.4万"], ["说明", "红仍有 3 条"]] },
   { name: "产", score: 76, rows: [["体量", "486 亿"], ["规上企业", "326 家"], ["全省位次", "第 8"], ["说明", "有项目滞后"]] }
 ];
 const ovDistricts = [
@@ -1634,30 +1737,34 @@ const ovNodes = [
   { kind: "calc", name: "张湾推理节点", district: "张湾区", lng: 110.73, lat: 32.61, rows: [["域", "算"], ["算力", "16P"], ["上架率", "81%"]] },
   { kind: "calc", name: "郧阳边缘节点", district: "郧阳区", lng: 110.58, lat: 32.80, rows: [["域", "算"], ["算力", "8P"], ["上架率", "54%"]] },
   { kind: "calc", name: "丹江口存储节点", district: "丹江口市", lng: 111.62, lat: 32.56, rows: [["域", "算"], ["算力", "12P"], ["接入", "未接入"]] },
-  { kind: "sec", name: "等保到期 雪亮工程", district: "张湾区", lng: 110.78, lat: 32.63, rows: [["域", "安"], ["等级", "高危"], ["对象", "市公安局"]] },
-  { kind: "sec", name: "竹溪暴露面", district: "竹溪县", lng: 109.78, lat: 32.35, rows: [["域", "安"], ["等级", "高危"], ["对象", "竹溪县政府"]] },
-  { kind: "sec", name: "房县弱口令", district: "房县", lng: 110.64, lat: 32.04, rows: [["域", "安"], ["等级", "中危"], ["对象", "房县政府"]] },
-  { kind: "sec", name: "关基巡检异常", district: "丹江口市", lng: 111.44, lat: 32.64, rows: [["域", "安"], ["等级", "高危"], ["对象", "丹江口取水口"]] },
-  { kind: "sec", name: "竹山入境预警", district: "竹山县", lng: 110.12, lat: 32.32, rows: [["域", "安"], ["等级", "中危"], ["对象", "入境监测"]] },
-  { kind: "sec", name: "郧西边界探针", district: "郧西县", lng: 110.40, lat: 33.02, rows: [["域", "安"], ["等级", "可忽略"], ["对象", "边界探针"]] },
+  { kind: "sec", name: "等保到期 雪亮工程", district: "张湾区", lng: 110.78, lat: 32.63, rows: [["域", "安"], ["等级", "红"], ["对象", "市公安局"]] },
+  { kind: "sec", name: "竹溪暴露面", district: "竹溪县", lng: 109.78, lat: 32.35, rows: [["域", "安"], ["等级", "红"], ["对象", "竹溪县政府"]] },
+  { kind: "sec", name: "房县弱口令", district: "房县", lng: 110.64, lat: 32.04, rows: [["域", "安"], ["等级", "橙"], ["对象", "房县政府"]] },
+  { kind: "sec", name: "关基巡检异常", district: "丹江口市", lng: 111.44, lat: 32.64, rows: [["域", "安"], ["等级", "红"], ["对象", "丹江口取水口"]] },
+  { kind: "sec", name: "竹山入境预警", district: "竹山县", lng: 110.12, lat: 32.32, rows: [["域", "安"], ["等级", "橙"], ["对象", "入境监测"]] },
+  { kind: "sec", name: "郧西边界探针", district: "郧西县", lng: 110.40, lat: 33.02, rows: [["域", "安"], ["等级", "蓝"], ["对象", "边界探针"]] },
   { kind: "ind", name: "张湾数字经济产业园", district: "张湾区", lng: 110.73, lat: 32.78, rows: [["域", "产"], ["入驻", "32 家"], ["主导", "工业互联网"]] },
   { kind: "ind", name: "茅箭电子商务产业园", district: "茅箭区", lng: 110.96, lat: 32.54, rows: [["域", "产"], ["入驻", "58 家"], ["运营", "市商务局"]] },
   { kind: "ind", name: "竹山电子商务产业园", district: "竹山县", lng: 110.28, lat: 32.34, rows: [["域", "产"], ["入驻", "16 家"], ["区域", "竹山县"]] },
   { kind: "ind", name: "竹溪 OPC 社区", district: "竹溪县", lng: 109.72, lat: 32.32, rows: [["域", "产"], ["经营范围", "茶叶电商、设计"], ["区域", "竹溪县"]] },
   { kind: "ind", name: "冷链溯源项目", district: "郧西县", lng: 110.52, lat: 32.94, rows: [["域", "产"], ["投资", "1.6 亿"], ["进度", "严重滞后"]] },
-  { kind: "ind", name: "房县数字经济产业园", district: "房县", lng: 110.84, lat: 32.12, rows: [["域", "产"], ["入驻", "12 家"], ["主导", "农品数字化"]] }
+  { kind: "ind", name: "房县数字经济产业园", district: "房县", lng: 110.84, lat: 32.12, rows: [["域", "产"], ["入驻", "12 家"], ["主导", "农品数字化"]] },
+  { kind: "firm", name: "东风商用车", district: "张湾区", lng: 110.71, lat: 32.69, rows: [["域", "产"], ["区域", "张湾区"], ["行业", "汽车制造"], ["规模", "规上"]] },
+  { kind: "firm", name: "十堰数字科技", district: "茅箭区", lng: 110.88, lat: 32.64, rows: [["域", "产"], ["区域", "茅箭区"], ["行业", "软件和信息服务"], ["规模", "规上"]] },
+  { kind: "firm", name: "汉江水务信息", district: "丹江口市", lng: 111.38, lat: 32.50, rows: [["域", "产"], ["区域", "丹江口市"], ["行业", "水利信息化"], ["规模", "规上"]] },
+  { kind: "firm", name: "房县农品电商", district: "房县", lng: 110.66, lat: 32.05, rows: [["域", "产"], ["区域", "房县"], ["行业", "电子商务"], ["规模", "规上"]] }
 ];
 const ovAlarms = [
-  { level: "红色", domain: "安", title: "等保到期 雪亮工程", time: "2026-09-18", rows: [["域", "安"], ["等级", "红色 · 高危"], ["对象", "市公安局"], ["状态", "待处置"]] },
-  { level: "红色", domain: "云", title: "政务云出口拥塞", time: "2026-09-22", rows: [["域", "云"], ["等级", "红色 · 高危"], ["利用率", "91%"], ["建议", "错峰并评估扩容"]] },
-  { level: "红色", domain: "算", title: "武当山中心 PUE 超阈值", time: "2026-09-22", rows: [["域", "算"], ["等级", "红色 · 高危"], ["实时 PUE", "1.46"], ["阈值", "1.40"]] },
-  { level: "橙色", domain: "网", title: "市县出口拥塞", time: "2026-09-22", rows: [["域", "网"], ["等级", "橙色 · 中危"], ["利用率", "91%"], ["影响", "县区回传变慢"]] },
-  { level: "橙色", domain: "产", title: "冷链溯源严重滞后", time: "2026-09-22", rows: [["域", "产"], ["等级", "橙色 · 进度滞后"], ["区域", "郧西县"], ["投资", "1.6 亿"]] },
-  { level: "橙色", domain: "数", title: "卫健横向互通短板", time: "2026-09-21", rows: [["域", "数"], ["等级", "橙色 · 中危"], ["互通率", "62%"]] },
-  { level: "黄色", domain: "数", title: "自然资源脏数据滞后", time: "2026-09-18", rows: [["域", "数"], ["等级", "黄色 · 低危"], ["待整改", "2,460 条"]] },
-  { level: "黄色", domain: "产", title: "武当文旅临近节点", time: "2026-09-16", rows: [["域", "产"], ["等级", "黄色 · 临近节点"], ["节点", "2026-10 联调"]] },
-  { level: "蓝色", domain: "算", title: "算法仓库索引延迟", time: "2026-09-15", rows: [["域", "算"], ["等级", "蓝色 · 可忽略"], ["建议", "夜间重建"]] },
-  { level: "蓝色", domain: "安", title: "边界探针心跳丢失", time: "2026-09-10", rows: [["域", "安"], ["等级", "蓝色 · 可忽略"], ["对象", "郧西边界探针"]] }
+  { level: "红", domain: "安", scope: "市直", title: "等保到期 雪亮工程", time: "2026-09-18", rows: [["域", "安"], ["等级", "红"], ["范围", "市直"], ["对象", "市公安局"], ["状态", "待处置"]] },
+  { level: "红", domain: "云", scope: "市直", title: "政务云出口拥塞", time: "2026-09-22", rows: [["域", "云"], ["等级", "红"], ["范围", "市直"], ["利用率", "91%"], ["建议", "错峰并评估扩容"]] },
+  { level: "红", domain: "算", scope: "县市区", title: "武当山中心 PUE 超阈值", time: "2026-09-22", rows: [["域", "算"], ["等级", "红"], ["范围", "县市区"], ["实时 PUE", "1.46"], ["阈值", "1.40"]] },
+  { level: "橙", domain: "网", scope: "市直", title: "市县出口拥塞", time: "2026-09-22", rows: [["域", "网"], ["等级", "橙"], ["范围", "市直"], ["利用率", "91%"], ["影响", "县区回传变慢"]] },
+  { level: "橙", domain: "产", scope: "县市区", title: "冷链溯源严重滞后", time: "2026-09-22", rows: [["域", "产"], ["等级", "橙"], ["范围", "县市区"], ["区域", "郧西县"], ["投资", "1.6 亿"]] },
+  { level: "橙", domain: "数", scope: "市直", title: "卫健横向互通短板", time: "2026-09-21", rows: [["域", "数"], ["等级", "橙"], ["范围", "市直"], ["互通率", "62%"]] },
+  { level: "黄", domain: "数", scope: "市直", title: "自然资源脏数据滞后", time: "2026-09-18", rows: [["域", "数"], ["等级", "黄"], ["范围", "市直"], ["待整改", "2,460 条"]] },
+  { level: "黄", domain: "产", scope: "县市区", title: "武当文旅临近节点", time: "2026-09-16", rows: [["域", "产"], ["等级", "黄"], ["范围", "县市区"], ["节点", "2026-10 联调"]] },
+  { level: "蓝", domain: "算", scope: "市直", title: "算法仓库索引延迟", time: "2026-09-15", rows: [["域", "算"], ["等级", "蓝"], ["范围", "市直"], ["建议", "夜间重建"]] },
+  { level: "蓝", domain: "安", scope: "县市区", title: "边界探针心跳丢失", time: "2026-09-10", rows: [["域", "安"], ["等级", "蓝"], ["范围", "县市区"], ["对象", "郧西边界探针"]] }
 ];
 const ovOrders = [
   { title: "云告警处置", type: "云", status: "处置中", rows: [["域", "云"], ["事项", "出口拥塞与控制器"], ["状态", "处置中"]] },
@@ -1684,7 +1791,8 @@ function drawOvMarkers() {
     g.setAttribute("data-name", m.name);
     g.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
     let shape = "";
-    if (m.kind === "sec") shape = `<path d="M0 -8 L7 6 H-7 Z" fill="#111" stroke="#111" stroke-width="1.2"></path>`;
+    if (m.kind === "firm") shape = `<circle r="5" fill="#888"></circle>`;
+    else if (m.kind === "sec") shape = `<path d="M0 -8 L7 6 H-7 Z" fill="#111" stroke="#111" stroke-width="1.2"></path>`;
     else if (m.kind === "calc") shape = `<rect x="-7" y="-7" width="14" height="14" fill="#111"></rect>${ovGlyph(m.kind, "#fff")}`;
     else if (m.kind === "net" || m.kind === "ind") shape = `<circle r="7" fill="#fff"></circle>${ovGlyph(m.kind, "#111")}`;
     else shape = `<circle r="7" fill="#111"></circle>${ovGlyph(m.kind, "#fff")}`;
@@ -1931,7 +2039,7 @@ function drawNetMarkers() {
   });
 }
 function showCloudCard(title, rows, anchor, click) {
-  document.querySelectorAll(".app-row, .alarm-row, #cloudBooks .stat, #netBooks .stat, #calcArch, #dataGrade, #dataFlow, #ovAlarmSum").forEach(el => el.classList.remove("on"));
+  document.querySelectorAll(".app-row, .alarm-row, #cloudBooks .stat, #netBooks .stat, #calcArch, #dataGrade, #dataFlow, .ov-cell").forEach(el => el.classList.remove("on"));
   if (anchor && anchor.classList) anchor.classList.add("on");
   const pop = document.getElementById("unitPop");
   pop.dataset.pinned = click ? "1" : "";
@@ -2016,116 +2124,185 @@ function setMode(mode) {
   if (panel) panel.classList.remove("open");
   if (projectFn) drawMarkers();
 }
+let cloudDate = "本月";
 let cloudLevelFilter = "";
 function renderCloudLevel() {
-  const levels = ["红色", "橙色", "黄色", "蓝色"];
+  const levels = ["红", "橙", "黄", "蓝"];
+  const dated = cloudAlarms.filter(a => inDateRange(a.time, cloudDate));
   document.getElementById("cloudLevelBar").innerHTML = levels.map(name => {
-    const n = cloudAlarms.filter(a => a.level === name).length;
+    const n = dated.filter(a => a.level === name).length;
     return `<button type="button" class="k${cloudLevelFilter === name ? " on" : ""}" data-lv="${name}"><b>${n}</b><span>${name}</span></button>`;
   }).join("");
 }
 function renderCloudLists() {
+  seg(document.getElementById("cloudDateSeg"), ["今日","本周","本月","本年"], cloudDate, n => { cloudDate = n; renderCloudLists(); });
   renderCloudLevel();
   document.getElementById("cloudApps").innerHTML = cloudApps.map((a, i) =>
     `<div class="app-row" data-i="${i}"><div class="t">${a.unit} · ${a.system}</div><div class="meta"><span>上线 ${a.online}</span><span>${a.eval}</span></div></div>`).join("");
-  const alarms = cloudAlarms.map((a, i) => ({ a, i })).filter(x => !cloudLevelFilter || x.a.level === cloudLevelFilter);
+  const alarms = cloudAlarms.map((a, i) => ({ a, i })).filter(x => inDateRange(x.a.time, cloudDate) && (!cloudLevelFilter || x.a.level === cloudLevelFilter));
   document.getElementById("cloudAlarms").innerHTML = alarms.map(({ a, i }) =>
     `<div class="alarm-row" data-i="${i}"><div class="t"><span class="lv ${a.level}">${a.level}</span>${a.title}</div><div class="meta"><span>${a.tag}　${a.time}</span></div></div>`).join("")
-    || `<div style="color:#555;font-size:13px;padding:8px">当前等级无告警</div>`;
+    || `<div style="color:#555;font-size:13px;padding:8px">当前筛选无告警</div>`;
   document.getElementById("cloudOrders").innerHTML = cloudOrders.map((a, i) =>
     `<div class="alarm-row" data-i="${i}"><div class="t">${a.title}</div><div class="meta"><span>${a.type}</span><span class="pill ${a.status}">${a.status}</span></div></div>`).join("");
 }
+let netDate = "本月";
 let netLevelFilter = "";
 function renderNetLists() {
-  const levels = ["红色", "橙色", "黄色", "蓝色"];
+  seg(document.getElementById("netDateSeg"), ["今日","本周","本月","本年"], netDate, n => { netDate = n; renderNetLists(); });
+  const levels = ["红", "橙", "黄", "蓝"];
+  const dated = netAlarms.filter(a => inDateRange(a.time, netDate));
   document.getElementById("netLevelBar").innerHTML = levels.map(name => {
-    const n = netAlarms.filter(a => a.level === name).length;
+    const n = dated.filter(a => a.level === name).length;
     return `<button type="button" class="k${netLevelFilter === name ? " on" : ""}" data-lv="${name}"><b>${n}</b><span>${name}</span></button>`;
   }).join("");
   document.getElementById("netUnits").innerHTML = netUnits.map((a, i) =>
     `<div class="app-row" data-i="${i}"><div class="t">${a.name}</div><div class="meta"><span>${a.bw}</span><span>${a.person}</span></div></div>`).join("");
-  const alarms = netAlarms.map((a, i) => ({ a, i })).filter(x => !netLevelFilter || x.a.level === netLevelFilter);
+  const alarms = netAlarms.map((a, i) => ({ a, i })).filter(x => inDateRange(x.a.time, netDate) && (!netLevelFilter || x.a.level === netLevelFilter));
   document.getElementById("netAlarms").innerHTML = alarms.map(({ a, i }) =>
     `<div class="alarm-row" data-i="${i}"><div class="t"><span class="lv ${a.level}">${a.level}</span>${a.title}</div><div class="meta"><span>${a.tag}　${a.time}</span></div></div>`).join("")
-    || `<div style="color:#555;font-size:13px;padding:8px">当前等级无告警</div>`;
+    || `<div style="color:#555;font-size:13px;padding:8px">当前筛选无告警</div>`;
   document.getElementById("netOrders").innerHTML = netOrders.map((a, i) =>
     `<div class="alarm-row" data-i="${i}"><div class="t">${a.title}</div><div class="meta"><span>${a.type}</span><span class="pill ${a.status}">${a.status}</span></div></div>`).join("");
 }
+let calcDate = "本月";
 let calcLevelFilter = "";
 function renderCalcLists() {
-  const levels = ["红色", "橙色", "黄色", "蓝色"];
+  seg(document.getElementById("calcDateSeg"), ["今日","本周","本月","本年"], calcDate, n => { calcDate = n; renderCalcLists(); });
+  const levels = ["红", "橙", "黄", "蓝"];
+  const dated = calcAlarms.filter(a => inDateRange(a.time, calcDate));
   document.getElementById("calcLevelBar").innerHTML = levels.map(name => {
-    const n = calcAlarms.filter(a => a.level === name).length;
+    const n = dated.filter(a => a.level === name).length;
     return `<button type="button" class="k${calcLevelFilter === name ? " on" : ""}" data-lv="${name}"><b>${n}</b><span>${name}</span></button>`;
   }).join("");
   document.getElementById("calcCenters").innerHTML = calcCenters.map((a, i) =>
     `<div class="app-row" data-i="${i}"><div class="t">${a.name}</div><div class="meta"><span>${a.district}</span><span>${a.rows.find(r => r[0] === "算力")[1]}</span></div></div>`).join("");
-  const alarms = calcAlarms.map((a, i) => ({ a, i })).filter(x => !calcLevelFilter || x.a.level === calcLevelFilter);
+  const alarms = calcAlarms.map((a, i) => ({ a, i })).filter(x => inDateRange(x.a.time, calcDate) && (!calcLevelFilter || x.a.level === calcLevelFilter));
   document.getElementById("calcAlarms").innerHTML = alarms.map(({ a, i }) =>
     `<div class="alarm-row" data-i="${i}"><div class="t"><span class="lv ${a.level}">${a.level}</span>${a.title}</div><div class="meta"><span>${a.tag}　${a.time}</span></div></div>`).join("")
-    || `<div style="color:#555;font-size:13px;padding:8px">当前等级无告警</div>`;
+    || `<div style="color:#555;font-size:13px;padding:8px">当前筛选无告警</div>`;
   document.getElementById("calcOrders").innerHTML = calcOrders.map((a, i) =>
     `<div class="alarm-row" data-i="${i}"><div class="t">${a.title}</div><div class="meta"><span>${a.type}</span><span class="pill ${a.status}">${a.status}</span></div></div>`).join("");
 }
+let dataDate = "本月";
 let dataLevelFilter = "";
 function renderDataLists() {
-  const levels = ["红色", "橙色", "黄色", "蓝色"];
+  seg(document.getElementById("dataDateSeg"), ["今日","本周","本月","本年"], dataDate, n => { dataDate = n; renderDataLists(); });
+  const levels = ["红", "橙", "黄", "蓝"];
+  const dated = dataAlarms.filter(a => inDateRange(a.time, dataDate));
   document.getElementById("dataLevelBar").innerHTML = levels.map(name => {
-    const n = dataAlarms.filter(a => a.level === name).length;
+    const n = dated.filter(a => a.level === name).length;
     return `<button type="button" class="k${dataLevelFilter === name ? " on" : ""}" data-lv="${name}"><b>${n}</b><span>${name}</span></button>`;
   }).join("");
   document.getElementById("dataUnits").innerHTML = dataUnits.map((a, i) =>
     `<div class="app-row" data-i="${i}"><div class="t">${a.name}</div><div class="meta"><span>${a.meta}</span></div></div>`).join("");
-  const alarms = dataAlarms.map((a, i) => ({ a, i })).filter(x => !dataLevelFilter || x.a.level === dataLevelFilter);
+  const alarms = dataAlarms.map((a, i) => ({ a, i })).filter(x => inDateRange(x.a.time, dataDate) && (!dataLevelFilter || x.a.level === dataLevelFilter));
   document.getElementById("dataAlarms").innerHTML = alarms.map(({ a, i }) =>
     `<div class="alarm-row" data-i="${i}"><div class="t"><span class="lv ${a.level}">${a.level}</span>${a.title}</div><div class="meta"><span>${a.tag}　${a.time}</span></div></div>`).join("")
-    || `<div style="color:#555;font-size:13px;padding:8px">当前等级无告警</div>`;
+    || `<div style="color:#555;font-size:13px;padding:8px">当前筛选无告警</div>`;
   document.getElementById("dataOrders").innerHTML = dataOrders.map((a, i) =>
     `<div class="alarm-row" data-i="${i}"><div class="t">${a.title}</div><div class="meta"><span>${a.type}</span><span class="pill ${a.status}">${a.status}</span></div></div>`).join("");
 }
+let indDate = "本月";
 let indLevelFilter = "";
 function renderIndLists() {
-  const levels = ["红色", "橙色", "黄色", "蓝色"];
+  seg(document.getElementById("indDateSeg"), ["今日","本周","本月","本年"], indDate, n => { indDate = n; renderIndLists(); });
+  const levels = ["红", "橙", "黄", "蓝"];
+  const dated = indAlarms.filter(a => inDateRange(a.time, indDate));
   document.getElementById("indLevelBar").innerHTML = levels.map(name => {
-    const n = indAlarms.filter(a => a.level === name).length;
+    const n = dated.filter(a => a.level === name).length;
     return `<button type="button" class="k${indLevelFilter === name ? " on" : ""}" data-lv="${name}"><b>${n}</b><span>${name}</span></button>`;
   }).join("");
   document.getElementById("indParks").innerHTML = indParks.map((a, i) =>
     `<div class="app-row" data-i="${i}"><div class="t">${a.name}</div><div class="meta"><span>${a.meta}</span></div></div>`).join("");
   document.getElementById("indFirms").innerHTML = indFirms.map((a, i) =>
     `<div class="app-row" data-i="${i}"><div class="t">${a.name}</div><div class="meta"><span>${a.meta}</span></div></div>`).join("");
-  const alarms = indAlarms.map((a, i) => ({ a, i })).filter(x => !indLevelFilter || x.a.level === indLevelFilter);
+  const alarms = indAlarms.map((a, i) => ({ a, i })).filter(x => inDateRange(x.a.time, indDate) && (!indLevelFilter || x.a.level === indLevelFilter));
   document.getElementById("indAlarms").innerHTML = alarms.map(({ a, i }) =>
     `<div class="alarm-row" data-i="${i}"><div class="t"><span class="lv ${a.level}">${a.level}</span>${a.title}</div><div class="meta"><span>${a.tag}　${a.time}</span></div></div>`).join("")
-    || `<div style="color:#555;font-size:13px;padding:8px">当前等级无事项</div>`;
+    || `<div style="color:#555;font-size:13px;padding:8px">当前筛选无事项</div>`;
   document.getElementById("indOrders").innerHTML = indOrders.map((a, i) =>
     `<div class="alarm-row" data-i="${i}"><div class="t">${a.title}</div><div class="meta"><span>${a.type}</span><span class="pill ${a.status}">${a.status}</span></div></div>`).join("");
 }
+let ovDate = "本月";
 let ovLevelFilter = "";
+const ovCatalog = {
+  cloudSys: { title: "上云系统数，占比", rows: [["已上云系统", "186 个"], ["应上云系统", "258 个"], ["占比", "72%"], ["在图样例", "一网通办、雪亮、全民健康、应急指挥、预算管理"]] },
+  cloudOrg: { title: "上云单位数，占比", rows: [["已上云单位", "64 家"], ["应上云单位", "79 家"], ["占比", "81%"], ["市直", "48 家"], ["县市区", "16 家"]] },
+  cloudUse: { title: "用量数", rows: [["CPU", "总量 6,400 核 · 用量 62% · 空闲 2,432 核"], ["内存", "总量 24TB · 用量 71% · 空闲 7.0TB"], ["存储", "总量 4,800TB · 用量 54% · 空闲 2,208TB"]] },
+  cloudSave: { title: "节约指标", rows: [["统筹系数", "0.86"], ["集约化系数", "0.74"], ["口径", "已迁入统一政务云的资源 / 全部政务资源"], ["说明", "系数越高，部门自建越少"]] },
+  netJoin: { title: "政务外网接入", rows: [["市", "42 家 · 接入率 100%"], ["县", "8 个 · 接入率 100%"], ["乡", "126 个 · 接入率 92%"], ["村", "1,640 个 · 接入率 76%"], ["合计", "1,816 · 接入率 79%"]] },
+  netBand: { title: "政务外网带宽", rows: [["上联", "10Gbps · 对省干"], ["下联", "8Gbps · 八个县市区汇聚"], ["市核心", "40Gbps"], ["负载", "68%"]] },
+  netExit: { title: "互联网出口带宽", rows: [["政务互联网出口", "40Gbps"], ["用量", "68%"], ["空闲", "12.8Gbps"], ["说明", "政务侧出口，不含运营商公众出口"]] },
+  netPriv: { title: "专网", rows: [["专网数", "6 张"], ["接入规模", "1,280 个终端"], ["年资金", "4,600 万"], ["在迁", "视频专网迁移 40%"]] },
+  netOnline: { title: "设备在线率", rows: [["在线", "486"], ["故障", "3"], ["在线率", "98.6%"]] },
+  netWarn: { title: "网络质量告警数", rows: [["当前", "3"], ["内容", "市县出口拥塞、丹江口汇聚、房县时延"], ["等级", "随综合告警列表"]] },
+  netAvail: { title: "可用性", rows: [["政务外网可用性", "99.7%"], ["统计", "本月"], ["丢包", "0.2%"]] },
+  netCityExit: { title: "全市互联网出口带宽", rows: [["全市合计", "128Gbps"], ["构成", "电信、移动、联通、广电"], ["说明", "公众与行业出口合计，宽于政务互联网出口 40Gbps"]] },
+  net5g: { title: "5G 覆盖率", rows: [["覆盖率", "96%"], ["基站", "2,460"], ["双千兆", "已达标"]] },
+  dataRes: { title: "政务数据资源数", rows: [["目录", "1,286"], ["数据集", "4,620"], ["记录", "18.6 亿"], ["完整率", "96%"]] },
+  dataApi: { title: "接口调用频次", rows: [["当日", "86 万次"], ["累计", "2.8 亿次"], ["说明", "数模块曲线为实时示意，这里给综合口径"]] },
+  dataAsset: { title: "资产登记入表数", rows: [["已入表", "36"], ["在审", "8"], ["口径", "公共数据资产登记"]] },
+  dataOpen: { title: "公共数据开放", rows: [["开放数据集", "860"], ["数据集总量", "4,620"], ["开放占比", "18.6%"]] },
+  dataForest: { title: "数林指数", rows: [["指数", "78.6"], ["对比", "全省中上"], ["构成", "归集、治理、共享、应用"]] },
+  dataOps: { title: "数据流通，授权运营", rows: [["需求", "428"], ["供给", "516"], ["对接", "312"], ["授权运营项目", "8 项"], ["数据产品", "24 个"], ["总体收益", "1,260 万"]] },
+  dataSankey: { title: "用数关系", rows: [["政务数据", "流向办事、监管、运营"], ["部门数据", "以办事和监管为主"], ["社会数据", "以授权运营为主"], ["图", "左供给、右使用，带宽表示相对流量"]] },
+  calcScale: { title: "总算力规模", rows: [["总算力", "128P"], ["机架", "2,400"], ["算力卡", "6,800 张"], ["上架率", "72%"]] },
+  calcCenter: { title: "智算中心，算力占比", rows: [["智算中心", "5 个"], ["算力占比", "82%"], ["其余", "边缘与存储节点"], ["中心", "市级、武当山、张湾、郧阳、丹江口"]] },
+  calcPue: { title: "PUE", rows: [["全市", "1.28"], ["基准", "1.35"], ["武当山实时", "1.46 · 超阈值"]] },
+  calcWue: { title: "WUE", rows: [["WUE", "1.42 L/kWh"], ["口径", "冷却用水 / 耗电"], ["说明", "三个能效系数之一"]] },
+  calcCue: { title: "CUE", rows: [["CUE", "0.36"], ["口径", "碳排放 / 耗电"], ["绿电占比", "36%"]] },
+  calcUse: { title: "算力消纳占比", rows: [["本地消纳", "74%"], ["服务场景", "18 个"], ["算力外销", "6 家"], ["省数堰算", "在算 2 项"]] },
+  calcUser: { title: "主要用户占比", rows: [["公安", "28%"], ["政务", "22%"], ["文旅", "16%"], ["水利", "12%"], ["其他", "22%"]] },
+  ch1: { title: "算力通道 · 西安—京津冀", rows: [["方向", "东北"], ["通道", "西安—京津冀"], ["说明", "示意线，在算模块地图上画出"]] },
+  ch2: { title: "算力通道 · 西安—庆阳", rows: [["方向", "西北"], ["通道", "西安—庆阳"], ["说明", "示意线，在算模块地图上画出"]] },
+  ch3: { title: "算力通道 · 武汉—长三角", rows: [["方向", "东"], ["通道", "武汉—长三角"], ["说明", "示意线，在算模块地图上画出"]] },
+  ch4: { title: "算力通道 · 武汉—粤港澳", rows: [["方向", "南"], ["通道", "武汉—粤港澳大湾区"], ["说明", "示意线，在算模块地图上画出"]] },
+  calcGreen: { title: "绿色算力产业项目", rows: [["在库", "6 个"], ["武当绿电直供", "丹江口"], ["汉江水电配套", "丹江口"], ["房县屋顶光伏", "房县"], ["绿电占比", "36%"]] },
+  secScore: { title: "总体安全系数", rows: [["系数", "80"], ["构成", "拦截、等保、告警闭环"], ["拦截率", "99.2%"]] },
+  secGrade: { title: "等保、密评比例", rows: [["等保备案", "66.7%"], ["密码评测", "33.3%"], ["关基备案", "33.3%"]] },
+  secHi: { title: "高危", rows: [["对应等级", "红"], ["说明", "数量随右上角日期筛选变化"]] },
+  secMid: { title: "中危", rows: [["对应等级", "橙"], ["说明", "数量随右上角日期筛选变化"]] },
+  secLow: { title: "低危", rows: [["对应等级", "黄"], ["说明", "数量随右上角日期筛选变化。蓝在右上角单独计数"]] },
+  secType: { title: "风险类型占比", rows: [["等保到期", "27%"], ["暴露面", "18%"], ["弱口令", "15%"], ["资源与设备", "22%"], ["其他", "18%"]] },
+  secTarget: { title: "目标单位、系统，攻击源", rows: [["目标单位", "市公安局、竹溪县政府、房县政府"], ["目标系统", "雪亮工程、政务外网、门户网站"], ["攻击源", "互联网扫描、暴露面探测"]] },
+  secDrill: { title: "攻防演练、渗透测试通报及整改", rows: [["演练", "2026 年 2 次"], ["通报", "14"], ["已整改", "11"], ["整改率", "79%"], ["未整改", "3 · 纳入协同处置"]] },
+  indScale: { title: "体量规模", rows: [["数字经济体量", "486 亿元"], ["市场主体", "1.2 万"]] },
+  indFirm: { title: "规上企业", rows: [["规上企业", "326 家"], ["上图", "灰点，当前标出 4 家代表企业"], ["列表字段", "企业名称、所属区域、所属行业、规模"], ["代表", "东风商用车、十堰数字科技、汉江水务信息、房县农品电商"]] },
+  indRank: { title: "全省位次", rows: [["位次", "第 8"], ["口径", "数字经济体量"]] },
+  indFund: { title: "近三年资金奖补", rows: [["三年合计", "3.46 亿"], ["2023", "0.96 亿"], ["2024", "1.22 亿"], ["2025", "1.28 亿"], ["市州排序", "第 5"]] },
+  indPie: { title: "县市区数字经济占比", rows: [["茅箭", "22%"], ["张湾", "18%"], ["丹江口", "16%"], ["郧阳", "14%"], ["郧西", "8%"], ["竹山", "8%"], ["房县", "8%"], ["竹溪", "6%"]] },
+  indSvc: { title: "服务数字经济企业", rows: [["平台", "发改亲清在线"], ["办件", "1,860"], ["企业需求", "126"], ["项目流程", "在办 18"], ["细分主题 1", "导图占位，专题名称待补充"]] }
+};
 function renderOvLists() {
-  const levels = ["红色", "橙色", "黄色", "蓝色"];
+  seg(document.getElementById("ovDateSeg"), ["今日","本周","本月","本年"], ovDate, n => { ovDate = n; renderOvLists(); });
+  const levels = ["红", "橙", "黄", "蓝"];
+  const dated = ovAlarms.filter(a => inDateRange(a.time, ovDate));
   document.getElementById("ovLevelBar").innerHTML = levels.map(name => {
-    const n = ovAlarms.filter(a => a.level === name).length;
+    const n = dated.filter(a => a.level === name).length;
     return `<button type="button" class="k${ovLevelFilter === name ? " on" : ""}" data-lv="${name}"><b>${n}</b><span>${name}</span></button>`;
   }).join("");
-  document.getElementById("ovRadar").innerHTML = radarSvg(ovAxes.map(a => a.name), ovAxes.map(a => a.score), 260);
-  document.getElementById("ovAxes").innerHTML = ovAxes.map((a, i) =>
-    `<div class="stat" data-i="${i}"><div class="k">${a.name}</div><div class="v">${a.score}</div></div>`).join("");
-  document.getElementById("ovDists").innerHTML = ovDistricts.map((d, i) =>
-    `<div class="app-row" data-i="${i}"><div class="t">${d.name}</div><div class="meta"><span>${d.score}</span></div><div class="track"><div class="fill" style="width:${d.score}%"></div></div></div>`).join("");
-  const alarms = ovAlarms.map((a, i) => ({ a, i })).filter(x => !ovLevelFilter || x.a.level === ovLevelFilter);
+  document.getElementById("ovRiskHi").textContent = dated.filter(a => a.level === "红").length;
+  document.getElementById("ovRiskMid").textContent = dated.filter(a => a.level === "橙").length;
+  document.getElementById("ovRiskLow").textContent = dated.filter(a => a.level === "黄").length;
+  const cityN = dated.filter(a => a.scope === "市直").length;
+  const distN = dated.filter(a => a.scope === "县市区").length;
+  const trendMax = Math.max(cityN, distN, 1);
+  document.getElementById("ovTrendCity").textContent = String(cityN);
+  document.getElementById("ovTrendDist").textContent = String(distN);
+  document.getElementById("ovTrendCityBar").style.width = Math.round(cityN / trendMax * 100) + "%";
+  document.getElementById("ovTrendDistBar").style.width = Math.round(distN / trendMax * 100) + "%";
+  const alarms = ovAlarms.map((a, i) => ({ a, i })).filter(x => inDateRange(x.a.time, ovDate) && (!ovLevelFilter || x.a.level === ovLevelFilter));
   document.getElementById("ovAlarms").innerHTML = alarms.map(({ a, i }) =>
-    `<div class="alarm-row" data-i="${i}"><div class="t"><span class="lv ${a.level}">${a.level}</span><span class="lv">${a.domain}</span>${a.title}</div><div class="meta"><span>${a.time}</span></div></div>`).join("")
-    || `<div style="color:#555;font-size:13px;padding:8px">当前等级无告警</div>`;
-  document.getElementById("ovOrders").innerHTML = ovOrders.map((a, i) =>
-    `<div class="alarm-row" data-i="${i}"><div class="t">${a.title}</div><div class="meta"><span>${a.type}</span><span class="pill ${a.status}">${a.status}</span></div></div>`).join("");
+    `<div class="alarm-row" data-i="${i}"><div class="t"><span class="lv ${a.level}">${a.level}</span><span class="lv">${a.domain}</span>${a.title}</div><div class="meta"><span>${a.scope}　${a.time}</span></div></div>`).join("")
+    || `<div style="color:#555;font-size:13px;padding:8px">当前筛选无告警</div>`;
 }
 
 function markerVisible(layerId, level) {
   const layer = layers.find(l => l.id === layerId);
   if (!layer || !layer.on) return false;
   if (warnOnly && !layer.warn) return false;
-  if (warnOnly && (level === "低" || level === "低危" || level === "可忽略")) return false;
+  if (warnOnly && (level === "低" || level === "黄" || level === "蓝")) return false;
   return true;
 }
 
@@ -2149,9 +2326,9 @@ function drawMarkers() {
     }
     const [x, y] = projectFn(m.lng, m.lat);
     const dot = m.kind === "event"
-      ? (m.level === "高危" ? { fill: "#111", dash: "" }
-        : m.level === "中危" ? { fill: "#fff", dash: "" }
-        : m.level === "低危" ? { fill: "#fff", dash: "3 2" }
+      ? (m.level === "红" ? { fill: "#111", dash: "" }
+        : m.level === "橙" ? { fill: "#fff", dash: "" }
+        : m.level === "黄" ? { fill: "#fff", dash: "3 2" }
         : { fill: "#888", dash: "" })
       : (m.level === "高" ? { fill: "#111", dash: "" }
         : m.level === "中" ? { fill: "#fff", dash: "" }
@@ -2186,8 +2363,9 @@ function showDistrict(name, clientX, clientY) {
   pop.className = "float-card dist-card show";
   if (boardMode === "综合") {
     const d = ovDistricts.find(x => x.name === name);
+    const share = { "茅箭区": "22%", "张湾区": "18%", "丹江口市": "16%", "郧阳区": "14%", "郧西县": "8%", "竹山县": "8%", "房县": "8%", "竹溪县": "6%" };
     const axes = d ? ["云", "网", "数", "算", "安", "产"].map(k => `<p>${k}　<b>${d.axes[k]}</b></p>`).join("") : "";
-    pop.innerHTML = `<h3>${name}</h3><p>综合指数　<b>${d ? d.score : meta.score}</b></p>${axes}`;
+    pop.innerHTML = `<h3>${name}</h3><p>数字经济占比　<b>${share[name] || "—"}</b></p><p>综合指数　<b>${d ? d.score : meta.score}</b></p>${axes}`;
   } else {
     const n = events.filter(e => e.district === name).length;
     pop.innerHTML = `<h3>${name}</h3>
@@ -2228,9 +2406,9 @@ document.getElementById("donut").innerHTML = `<svg viewBox="0 0 120 90" width="1
   <circle cx="42" cy="45" r="26" fill="none" stroke="#111" stroke-width="10" stroke-dasharray="38 126" stroke-dashoffset="0"/>
   <circle cx="42" cy="45" r="26" fill="none" stroke="#777" stroke-width="10" stroke-dasharray="20 144" stroke-dashoffset="-38"/>
   <circle cx="42" cy="45" r="26" fill="none" stroke="#ccc" stroke-width="10" stroke-dasharray="106 58" stroke-dashoffset="-58"/>
-  <text x="78" y="36" font-size="11" fill="#333">高危</text>
-  <text x="78" y="52" font-size="11" fill="#333">中危</text>
-  <text x="78" y="68" font-size="11" fill="#333">低危</text>
+  <text x="78" y="36" font-size="11" fill="#333">红</text>
+  <text x="78" y="52" font-size="11" fill="#333">橙</text>
+  <text x="78" y="68" font-size="11" fill="#333">黄</text>
 </svg>`;
 
 function refreshLists() {
@@ -2431,27 +2609,21 @@ bindClick(document.getElementById("indOrders"), ".alarm-row", document.getElemen
   showCloudCard(a.title, a.rows, row, true);
 });
 renderOvLists();
-document.getElementById("ovAlarmSum").addEventListener("mouseenter", () => showCloudCard("六域告警合计", [["红色", "15"], ["橙色", "16"], ["黄色", "13"], ["蓝色", "11"], ["合计", "55"]], document.getElementById("ovAlarmSum")));
-document.getElementById("ovAlarmSum").addEventListener("mouseleave", ev => {
-  const pop = document.getElementById("unitPop");
-  if (ev.relatedTarget && pop.contains(ev.relatedTarget)) return;
-  scheduleHide(pop, "#ovAlarmSum");
+document.querySelectorAll(".pane-ov").forEach(root => {
+  bindClick(root, ".ov-cell", document.getElementById("unitPop"), row => {
+    const item = ovCatalog[row.dataset.k];
+    if (!item) return;
+    const live = { secHi: ["高危", "ovRiskHi", "红"], secMid: ["中危", "ovRiskMid", "橙"], secLow: ["低危", "ovRiskLow", "黄"] };
+    const hit = live[row.dataset.k];
+    const rows = hit
+      ? [["当前" + hit[0], document.getElementById(hit[1]).textContent], ["对应等级", hit[2]], ["筛选", ovDate + (ovLevelFilter ? " · " + ovLevelFilter : "")]]
+      : item.rows;
+    showCloudCard(item.title, rows, row, true);
+  });
 });
-bindHover(document.getElementById("ovAxes"), ".stat", document.getElementById("unitPop"), row => {
-  const a = ovAxes[+row.dataset.i];
-  showCloudCard(a.name + " " + a.score, a.rows, row);
-});
-bindHover(document.getElementById("ovDists"), ".app-row", document.getElementById("unitPop"), row => {
-  const d = ovDistricts[+row.dataset.i];
-  showCloudCard(d.name + " " + d.score, ["云", "网", "数", "算", "安", "产"].map(k => [k, String(d.axes[k])]), row);
-});
-bindHover(document.getElementById("ovAlarms"), ".alarm-row", document.getElementById("unitPop"), row => {
+bindClick(document.getElementById("ovAlarms"), ".alarm-row", document.getElementById("unitPop"), row => {
   const a = ovAlarms[+row.dataset.i];
-  showCloudCard(a.title, a.rows, row);
-});
-bindHover(document.getElementById("ovOrders"), ".alarm-row", document.getElementById("unitPop"), row => {
-  const a = ovOrders[+row.dataset.i];
-  showCloudCard(a.title, a.rows, row);
+  showCloudCard(a.title, a.rows, row, true);
 });
 bindClick(document.getElementById("unitSum"), ".kind-card", document.getElementById("unitPop"), row => showKind(row.dataset.kind, row));
 document.getElementById("unitPop").addEventListener("click", e => {
@@ -2459,7 +2631,7 @@ document.getElementById("unitPop").addEventListener("click", e => {
   if (!row) return;
   fillUnitAsset(+row.dataset.i);
 });
-bindPopClose(document.getElementById("unitPop"), "#unitBars .bar-row, #termBars .bar-row, #unitSum .kind-card, .app-row, .alarm-row, #cloudBooks .stat, #netBooks .stat, #calcArch, #dataGrade, #dataFlow, .marker, .flow, .net-link, .net-man, .net-wan, .calc-channel");
+bindPopClose(document.getElementById("unitPop"), "#unitBars .bar-row, #termBars .bar-row, #unitSum .kind-card, .app-row, .alarm-row, #cloudBooks .stat, #netBooks .stat, #calcArch, #dataGrade, #dataFlow, .ov-cell, .marker, .flow, .net-link, .net-man, .net-wan, .calc-channel");
 bindClick(document.getElementById("termBars"), ".bar-row", document.getElementById("unitPop"), row => showTerm(+row.dataset.i, row));
 bindClick(document.getElementById("evList"), ".ev", document.getElementById("evPop"), row => showEvent(row.dataset.id, row));
 bindPopClose(document.getElementById("evPop"), ".ev");
@@ -2732,6 +2904,71 @@ function drawIndOutput() {
   });
   document.getElementById("indOutputChart").innerHTML = html;
 }
+function drawIndPie() {
+  const parts = [["茅箭", 22], ["张湾", 18], ["丹江口", 16], ["郧阳", 14], ["郧西", 8], ["竹山", 8], ["房县", 8], ["竹溪", 6]];
+  const fills = ["#111", "#333", "#555", "#777", "#999", "#bbb", "#d5d5d5", "#f4f4f4"];
+  const cx = 80, cy = 80, r = 70;
+  const total = parts.reduce((s, p) => s + p[1], 0);
+  let ang = -Math.PI / 2;
+  let paths = "";
+  parts.forEach((p, i) => {
+    const a0 = ang;
+    const a1 = ang + (p[1] / total) * Math.PI * 2;
+    ang = a1;
+    const large = a1 - a0 > Math.PI ? 1 : 0;
+    const x0 = cx + r * Math.cos(a0), y0 = cy + r * Math.sin(a0);
+    const x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1);
+    paths += `<path d="M${cx} ${cy} L${x0.toFixed(2)} ${y0.toFixed(2)} A${r} ${r} 0 ${large} 1 ${x1.toFixed(2)} ${y1.toFixed(2)} Z" fill="${fills[i]}" stroke="#fff" stroke-width="1.4"><title>${p[0]} ${p[1]}%</title></path>`;
+  });
+  paths += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#111" stroke-width="1.2"></circle>`;
+  document.getElementById("indPie").innerHTML = paths;
+  document.getElementById("indPieLegend").innerHTML = parts.map((p, i) => `<span><i style="background:${fills[i]}"></i>${p[0]} ${p[1]}%</span>`).join("");
+}
+function drawOvPie() {
+  const parts = [["茅箭", 22], ["张湾", 18], ["丹江口", 16], ["郧阳", 14], ["郧西", 8], ["竹山", 8], ["房县", 8], ["竹溪", 6]];
+  const fills = ["#111", "#333", "#555", "#777", "#999", "#bbb", "#d5d5d5", "#f4f4f4"];
+  const cx = 80, cy = 80, r = 70;
+  const total = parts.reduce((s, p) => s + p[1], 0);
+  let ang = -Math.PI / 2;
+  let paths = "";
+  parts.forEach((p, i) => {
+    const a0 = ang;
+    const a1 = ang + (p[1] / total) * Math.PI * 2;
+    ang = a1;
+    const large = a1 - a0 > Math.PI ? 1 : 0;
+    const x0 = cx + r * Math.cos(a0), y0 = cy + r * Math.sin(a0);
+    const x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1);
+    paths += `<path d="M${cx} ${cy} L${x0.toFixed(2)} ${y0.toFixed(2)} A${r} ${r} 0 ${large} 1 ${x1.toFixed(2)} ${y1.toFixed(2)} Z" fill="${fills[i]}" stroke="#fff" stroke-width="1.4"></path>`;
+  });
+  paths += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#111" stroke-width="1.2"></circle>`;
+  document.getElementById("ovPie").innerHTML = paths;
+  document.getElementById("ovPieLegend").innerHTML = parts.map((p, i) => `<span><i style="background:${fills[i]}"></i>${p[0]} ${p[1]}%</span>`).join("");
+}
+function drawOvSankey() {
+  const left = [{ name: "政务", y: 8, h: 28 }, { name: "部门", y: 40, h: 20 }, { name: "社会", y: 66, h: 14 }];
+  const right = [{ name: "办事", y: 8, h: 26 }, { name: "监管", y: 38, h: 18 }, { name: "运营", y: 60, h: 18 }];
+  const links = [
+    [0, 0, 12, "#111"], [0, 1, 8, "#555"], [0, 2, 8, "#999"],
+    [1, 0, 8, "#333"], [1, 1, 6, "#777"], [1, 2, 6, "#aaa"],
+    [2, 0, 6, "#666"], [2, 1, 4, "#888"], [2, 2, 4, "#ccc"]
+  ];
+  const srcAt = left.map(b => b.y);
+  const dstAt = right.map(b => b.y);
+  document.getElementById("ovSankey").setAttribute("viewBox", "0 0 460 90");
+  const lx = 52, rx = 392;
+  let bands = "";
+  links.forEach(lk => {
+    const sy = srcAt[lk[0]];
+    const dy = dstAt[lk[1]];
+    srcAt[lk[0]] += lk[2];
+    dstAt[lk[1]] += lk[2];
+    const mid = (lx + rx) / 2;
+    bands += `<path d="M${lx} ${sy} C${mid} ${sy}, ${mid} ${dy}, ${rx} ${dy} L${rx} ${dy + lk[2]} C${mid} ${dy + lk[2]}, ${mid} ${sy + lk[2]}, ${lx} ${sy + lk[2]} Z" fill="${lk[3]}"></path>`;
+  });
+  const bars = left.map(b => `<rect x="40" y="${b.y}" width="12" height="${b.h}" fill="#111"></rect><text x="36" y="${b.y + b.h / 2 + 4}" text-anchor="end" font-size="12" fill="#111">${b.name}</text>`).join("")
+    + right.map(b => `<rect x="392" y="${b.y}" width="12" height="${b.h}" fill="#111"></rect><text x="410" y="${b.y + b.h / 2 + 4}" font-size="12" fill="#111">${b.name}</text>`).join("");
+  document.getElementById("ovSankey").innerHTML = bands + bars;
+}
 buildMap();
 renderLayers();
 drawMarkers();
@@ -2764,13 +3001,81 @@ function tickNetRate() {
   netRateVals.shift();
   drawNetRate();
 }
+const calcUseN = 36;
+function nextCalcUse(prev) {
+  const pull = (86 - prev) * 0.22;
+  let n = prev + pull + (Math.random() - 0.5) * 2.2;
+  if (n < 80) n = 80 + Math.random() * 0.8;
+  if (n > 92) n = 92 - Math.random() * 0.8;
+  return n;
+}
+let calcUseVals = [];
+{
+  let v = 86;
+  for (let i = 0; i < calcUseN; i++) { v = nextCalcUse(v); calcUseVals.push(v); }
+}
+function calcUseStamp(d) {
+  const p = n => String(n).padStart(2, "0");
+  return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()) + " " + p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds());
+}
+function drawCalcUse() {
+  const lo = Math.min(...calcUseVals);
+  const hi = Math.max(...calcUseVals);
+  const pad = Math.max(0.4, (hi - lo) * 0.12);
+  document.getElementById("calcUseChart").innerHTML =
+    `<polyline fill="none" stroke="#111" stroke-width="1.4" points="${sparkPointsSpan(calcUseVals, lo - pad, hi + pad)}" />`;
+  const now = calcUseVals[calcUseVals.length - 1];
+  document.getElementById("calcUseNow").textContent = "近时序 · " + calcUseStamp(new Date()) + " · " + now.toFixed(1) + "P";
+}
+function tickCalcUse() {
+  calcUseVals.push(nextCalcUse(calcUseVals[calcUseVals.length - 1]));
+  calcUseVals.shift();
+  drawCalcUse();
+}
+const apiCallN = 36;
+let apiTotal = 2.8;
+function nextApiCall(prev) {
+  const pull = (86 - prev) * 0.22;
+  let n = prev + pull + (Math.random() - 0.5) * 3.2;
+  if (n < 72) n = 72 + Math.random();
+  if (n > 100) n = 100 - Math.random();
+  return n;
+}
+let apiCallVals = [];
+{
+  let v = 86;
+  for (let i = 0; i < apiCallN; i++) { v = nextApiCall(v); apiCallVals.push(v); }
+}
+function drawApiCall() {
+  const lo = Math.min(...apiCallVals);
+  const hi = Math.max(...apiCallVals);
+  const pad = Math.max(0.8, (hi - lo) * 0.12);
+  document.getElementById("apiCallChart").innerHTML =
+    `<polyline fill="none" stroke="#111" stroke-width="1.4" points="${sparkPointsSpan(apiCallVals, lo - pad, hi + pad)}" />`;
+  const now = apiCallVals[apiCallVals.length - 1];
+  document.getElementById("apiCallNow").textContent = "累计 " + apiTotal.toFixed(4) + "亿 · 当前 " + now.toFixed(1) + "万 · " + calcUseStamp(new Date());
+}
+function tickApiCall() {
+  const next = nextApiCall(apiCallVals[apiCallVals.length - 1]);
+  apiCallVals.push(next);
+  apiCallVals.shift();
+  apiTotal += 0.00004 + Math.random() * 0.00008;
+  drawApiCall();
+}
 drawIndOutput();
+drawIndPie();
+drawOvPie();
+drawOvSankey();
 tickReq();
 setInterval(tickReq, 160);
 tickCharts();
 setInterval(tickCharts, 1200);
 tickNetRate();
 setInterval(tickNetRate, 400);
+tickCalcUse();
+setInterval(tickCalcUse, 800);
+tickApiCall();
+setInterval(tickApiCall, 800);
 </script>
 </body>
 </html>
