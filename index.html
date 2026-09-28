@@ -666,12 +666,12 @@
             -->
             <div class="card">
               <h2><i></i>服务请求数</h2>
-              <div class="spark-meta"><span>近时序</span><b id="reqNow">—</b></div>
+              <div class="spark-meta"><span>当前</span><b id="reqNow">—</b></div>
               <svg class="spark" id="reqChart" viewBox="0 0 300 64" preserveAspectRatio="none"></svg>
             </div>
             <div class="card">
               <h2><i></i>防御次数</h2>
-              <div class="spark-meta"><span>实时累计</span><b id="defNow">—</b></div>
+              <div class="spark-meta"><span>累计</span><b id="defNow">—</b></div>
               <svg class="spark" id="defChart" viewBox="0 0 300 64" preserveAspectRatio="none"></svg>
               <div class="spark-legend" id="defLegend"></div>
             </div>
@@ -720,7 +720,7 @@
             <div class="card">
               <h2><i></i>实时传输速率</h2>
               <svg class="spark" id="netRateChart" viewBox="0 0 300 64" preserveAspectRatio="none"></svg>
-              <div class="spark-legend"><span id="netRateNow">市县出口 · 当前 27.2Gbps</span></div>
+              <div class="spark-legend"><span id="netRateNow">市县出口 · 27.2Gbps</span></div>
             </div>
             <div class="card">
               <h2><i></i>地址改造</h2>
@@ -750,7 +750,7 @@
             <div class="card">
               <h2><i></i>算力用量</h2>
               <svg class="spark" id="calcUseChart" viewBox="0 0 300 64" preserveAspectRatio="none"></svg>
-              <div class="spark-legend"><span id="calcUseNow">近时序 · 当前 86.0P</span></div>
+              <div class="spark-legend"><span id="calcUseNow">86.0P</span></div>
             </div>
             <div class="card">
               <h2><i></i>能效</h2>
@@ -783,7 +783,7 @@
             <div class="card">
               <h2><i></i>接口调用量</h2>
               <svg class="spark" id="apiCallChart" viewBox="0 0 300 64" preserveAspectRatio="none"></svg>
-              <div class="spark-legend"><span id="apiCallNow">累计 2.8000亿 · 当前 86.0万</span></div>
+              <div class="spark-legend"><span id="apiCallNow">累计 2.80亿 · 86.0万</span></div>
             </div>
             <div class="card">
               <h2><i></i>质量与获得感</h2>
@@ -2815,20 +2815,15 @@ function nextReq(prev) {
   if (n > 136000) n = 136000 - Math.random() * 6000;
   return n;
 }
-let reqVals = [];
-{
-  let v = 72000;
-  for (let i = 0; i < reqN; i++) { v = nextReq(v); reqVals.push(v); }
-}
+const reqVals = [42000, 51000, 48000, 63000, 58000, 72000, 69000, 81000, 76000, 88000, 84000, 91000, 86000, 94000, 90000, 98000, 93000, 86000, 79000, 82000, 76000, 71000, 68000, 72480];
 const defenses = [
-  { name: "DDoS攻击", stroke: "#111", dash: "", base: 38, amp: 16 },
-  { name: "木马/恶意代码", stroke: "#111", dash: "5 3", base: 22, amp: 10 },
-  { name: "暴力破解", stroke: "#555", dash: "", base: 16, amp: 8 },
-  { name: "漏洞端口扫描", stroke: "#555", dash: "5 3", base: 28, amp: 12 },
-  { name: "越权", stroke: "#888", dash: "", base: 9, amp: 5 },
-  { name: "DNS劫持", stroke: "#888", dash: "2 2", base: 6, amp: 4 }
+  { name: "DDoS攻击", stroke: "#111", dash: "", base: 38, amp: 16, values: [32, 36, 34, 40, 38, 44, 41, 46, 42, 48, 45, 50, 47, 44, 42] },
+  { name: "木马/恶意代码", stroke: "#111", dash: "5 3", base: 22, amp: 10, values: [18, 20, 19, 22, 21, 24, 23, 26, 24, 22, 25, 23, 21, 24, 24] },
+  { name: "暴力破解", stroke: "#555", dash: "", base: 16, amp: 8, values: [12, 14, 13, 16, 15, 18, 16, 17, 15, 19, 18, 16, 17, 18, 18] },
+  { name: "漏洞端口扫描", stroke: "#555", dash: "5 3", base: 28, amp: 12, values: [22, 26, 24, 28, 30, 27, 32, 29, 31, 28, 33, 30, 29, 31, 30] },
+  { name: "越权", stroke: "#888", dash: "", base: 9, amp: 5, values: [6, 8, 7, 9, 8, 10, 9, 11, 8, 9, 10, 8, 9, 8, 8] },
+  { name: "DNS劫持", stroke: "#888", dash: "2 2", base: 6, amp: 4, values: [4, 5, 4, 6, 5, 7, 6, 5, 7, 6, 5, 6, 7, 6, 6] }
 ];
-defenses.forEach(d => { d.values = seedLine(d.base, d.amp, sparkN); });
 function sparkPoints(values, max) {
   return values.map((v, i) => {
     const x = (i / (values.length - 1)) * 300;
@@ -2862,15 +2857,18 @@ function drawSpark(svg, series, max) {
     `<polyline fill="none" stroke="${s.stroke}" stroke-width="1.6" stroke-dasharray="${s.dash}" points="${sparkPoints(s.values, max)}" />`
   ).join("");
 }
+function drawDef() {
+  const peak = Math.max(...defenses.flatMap(d => d.values));
+  drawSpark(document.getElementById("defChart"), defenses, peak * 1.2);
+  const sum = defenses.reduce((s, d) => s + d.values[d.values.length - 1], 0);
+  document.getElementById("defNow").textContent = Math.round(sum).toLocaleString() + " 次";
+}
 function tickCharts() {
   defenses.forEach(d => {
     d.values.push(walkValue(d.values[d.values.length - 1], d.base, d.amp));
     d.values.shift();
   });
-  const peak = Math.max(...defenses.flatMap(d => d.values));
-  drawSpark(document.getElementById("defChart"), defenses, peak * 1.2);
-  const sum = defenses.reduce((s, d) => s + d.values[d.values.length - 1], 0);
-  document.getElementById("defNow").textContent = Math.round(sum).toLocaleString() + " 次";
+  drawDef();
 }
 document.getElementById("defLegend").innerHTML = defenses.map(d =>
   `<span><i style="border-top-color:${d.stroke};border-top-style:${d.dash ? "dashed" : "solid"}"></i>${d.name}</span>`
@@ -2974,19 +2972,7 @@ renderLayers();
 drawMarkers();
 fitBoard();
 window.addEventListener("resize", fitBoard);
-const netRateN = 36;
-function nextNetRate(prev) {
-  const pull = (27.2 - prev) * 0.22;
-  let n = prev + pull + (Math.random() - 0.5) * 2.8;
-  if (n < 20) n = 20 + Math.random() * 1.2;
-  if (n > 34) n = 34 - Math.random() * 1.2;
-  return n;
-}
-let netRateVals = [];
-{
-  let v = 27.2;
-  for (let i = 0; i < netRateN; i++) { v = nextNetRate(v); netRateVals.push(v); }
-}
+const netRateVals = [24.6, 25.8, 26.4, 28.1, 27.4, 29.2, 28.6, 30.4, 29.1, 27.8, 26.9, 28.4, 27.6, 26.2, 25.4, 26.8, 27.9, 28.8, 27.5, 26.6, 27.2];
 function drawNetRate() {
   const lo = Math.min(...netRateVals);
   const hi = Math.max(...netRateVals);
@@ -2994,26 +2980,21 @@ function drawNetRate() {
   document.getElementById("netRateChart").innerHTML =
     `<polyline fill="none" stroke="#111" stroke-width="1.4" points="${sparkPointsSpan(netRateVals, lo - pad, hi + pad)}" />`;
   const now = netRateVals[netRateVals.length - 1];
-  document.getElementById("netRateNow").textContent = "市县出口 · 当前 " + now.toFixed(1) + "Gbps";
+  document.getElementById("netRateNow").textContent = "市县出口 · " + now.toFixed(1) + "Gbps";
+}
+function nextNetRate(prev) {
+  const pull = (27.2 - prev) * 0.22;
+  let n = prev + pull + (Math.random() - 0.5) * 2.8;
+  if (n < 20) n = 20 + Math.random() * 1.2;
+  if (n > 34) n = 34 - Math.random() * 1.2;
+  return n;
 }
 function tickNetRate() {
   netRateVals.push(nextNetRate(netRateVals[netRateVals.length - 1]));
   netRateVals.shift();
   drawNetRate();
 }
-const calcUseN = 36;
-function nextCalcUse(prev) {
-  const pull = (86 - prev) * 0.22;
-  let n = prev + pull + (Math.random() - 0.5) * 2.2;
-  if (n < 80) n = 80 + Math.random() * 0.8;
-  if (n > 92) n = 92 - Math.random() * 0.8;
-  return n;
-}
-let calcUseVals = [];
-{
-  let v = 86;
-  for (let i = 0; i < calcUseN; i++) { v = nextCalcUse(v); calcUseVals.push(v); }
-}
+const calcUseVals = [83.4, 84.6, 85.2, 86.8, 85.9, 87.4, 86.6, 88.2, 87.1, 85.4, 84.8, 86.2, 87.0, 85.6, 84.2, 85.8, 86.4, 87.6, 86.1, 85.2, 86.0];
 function calcUseStamp(d) {
   const p = n => String(n).padStart(2, "0");
   return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()) + " " + p(d.getHours()) + ":" + p(d.getMinutes()) + ":" + p(d.getSeconds());
@@ -3025,27 +3006,22 @@ function drawCalcUse() {
   document.getElementById("calcUseChart").innerHTML =
     `<polyline fill="none" stroke="#111" stroke-width="1.4" points="${sparkPointsSpan(calcUseVals, lo - pad, hi + pad)}" />`;
   const now = calcUseVals[calcUseVals.length - 1];
-  document.getElementById("calcUseNow").textContent = "近时序 · " + calcUseStamp(new Date()) + " · " + now.toFixed(1) + "P";
+  document.getElementById("calcUseNow").textContent = now.toFixed(1) + "P";
+}
+function nextCalcUse(prev) {
+  const pull = (86 - prev) * 0.22;
+  let n = prev + pull + (Math.random() - 0.5) * 2.2;
+  if (n < 80) n = 80 + Math.random() * 0.8;
+  if (n > 92) n = 92 - Math.random() * 0.8;
+  return n;
 }
 function tickCalcUse() {
   calcUseVals.push(nextCalcUse(calcUseVals[calcUseVals.length - 1]));
   calcUseVals.shift();
   drawCalcUse();
 }
-const apiCallN = 36;
 let apiTotal = 2.8;
-function nextApiCall(prev) {
-  const pull = (86 - prev) * 0.22;
-  let n = prev + pull + (Math.random() - 0.5) * 3.2;
-  if (n < 72) n = 72 + Math.random();
-  if (n > 100) n = 100 - Math.random();
-  return n;
-}
-let apiCallVals = [];
-{
-  let v = 86;
-  for (let i = 0; i < apiCallN; i++) { v = nextApiCall(v); apiCallVals.push(v); }
-}
+const apiCallVals = [82.4, 84.1, 85.6, 87.2, 86.4, 88.8, 87.1, 89.4, 86.8, 84.6, 83.9, 85.7, 87.5, 86.2, 84.8, 86.6, 88.1, 87.4, 85.9, 86.3, 86.0];
 function drawApiCall() {
   const lo = Math.min(...apiCallVals);
   const hi = Math.max(...apiCallVals);
@@ -3053,7 +3029,14 @@ function drawApiCall() {
   document.getElementById("apiCallChart").innerHTML =
     `<polyline fill="none" stroke="#111" stroke-width="1.4" points="${sparkPointsSpan(apiCallVals, lo - pad, hi + pad)}" />`;
   const now = apiCallVals[apiCallVals.length - 1];
-  document.getElementById("apiCallNow").textContent = "累计 " + apiTotal.toFixed(4) + "亿 · 当前 " + now.toFixed(1) + "万 · " + calcUseStamp(new Date());
+  document.getElementById("apiCallNow").textContent = "累计 " + apiTotal.toFixed(2) + "亿 · " + now.toFixed(1) + "万";
+}
+function nextApiCall(prev) {
+  const pull = (86 - prev) * 0.22;
+  let n = prev + pull + (Math.random() - 0.5) * 3.2;
+  if (n < 72) n = 72 + Math.random();
+  if (n > 100) n = 100 - Math.random();
+  return n;
 }
 function tickApiCall() {
   const next = nextApiCall(apiCallVals[apiCallVals.length - 1]);
@@ -3066,16 +3049,13 @@ drawIndOutput();
 drawIndPie();
 drawOvPie();
 drawOvSankey();
-tickReq();
-setInterval(tickReq, 160);
-tickCharts();
-setInterval(tickCharts, 1200);
-tickNetRate();
-setInterval(tickNetRate, 400);
-tickCalcUse();
-setInterval(tickCalcUse, 800);
-tickApiCall();
-setInterval(tickApiCall, 800);
+drawReq();
+drawDef();
+drawNetRate();
+drawCalcUse();
+drawApiCall();
+// 暂时改为死数据，恢复动态时改回对应的 tick 与 setInterval：
+// tickReq / tickCharts / tickNetRate(400) / tickCalcUse(800) / tickApiCall(800)
 </script>
 </body>
 </html>
