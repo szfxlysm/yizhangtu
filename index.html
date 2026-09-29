@@ -248,6 +248,12 @@
   .asset-pop.show { display: flex; flex-direction: column; }
   .asset-pop h3 { margin: 0 0 8px; font-size: 14px; color: #111; }
   .asset-pop .asset-scroll { overflow: auto; min-height: 0; }
+  #orgPop { z-index: 7; }
+  #orgPop.show { overflow: hidden; }
+  #orgPop .asset-scroll { flex: 1; }
+  .org-sec { margin: 10px 0 4px; font-size: 14px; font-weight: 650; color: #111; }
+  .org-sec:first-child { margin-top: 0; }
+  .org-empty { font-size: 13px; color: #555; padding: 0 4px 4px; }
   #mapSvg { width: 100%; height: 100%; display: block; cursor: grab; background: #fff; }
   #mapSvg:active { cursor: grabbing; }
   .dist { fill: #ffffff; stroke: #111; stroke-width: 3.4; stroke-linejoin: round; cursor: pointer; }
@@ -328,7 +334,7 @@
   }
   .map-foot.pane-an { align-items: stretch; }
   .map-foot.pane-an > .card {
-    height: 268px; overflow: hidden; display: flex; flex-direction: column;
+    height: 201px; overflow: hidden; display: flex; flex-direction: column;
   }
   .map-foot.pane-an .comp-gauges {
     flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: center;
@@ -341,7 +347,7 @@
   .map-foot.pane-an .comp-gauge-num span { font-size: 14px; font-weight: 400; margin-left: 2px; color: #555; }
   .map-foot.pane-an .comp-gauge-k { font-size: 13px; color: #555; }
   .map-foot.pane-an .water {
-    width: 108px; height: 108px; margin-top: 4px; border-radius: 50%; border: 1.5px solid #111;
+    width: 64px; height: 64px; margin-top: 2px; border-radius: 50%; border: 1.5px solid #111;
     position: relative; overflow: hidden; background: #fff;
   }
   .map-foot.pane-an .water i {
@@ -353,7 +359,7 @@
   }
   .map-foot.pane-an .water b {
     position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center;
-    font-size: 16px; font-weight: 700; color: #111;
+    font-size: 13px; font-weight: 700; color: #111;
   }
   .portrait-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
   .portrait-head h2 { margin: 0; }
@@ -453,7 +459,20 @@
     display: flex; flex-direction: column; align-items: flex-start;
     margin: 0; padding: 2px 12px 2px 0; border-right: 1px solid #111;
   }
-  .ev-side { min-width: 0; padding-left: 12px; }
+  .ev-side { min-width: 0; padding-left: 12px; display: flex; flex-direction: column; min-height: 0; }
+  .ev-log { display: flex; flex-direction: column; max-height: 280px; overflow: auto; }
+  .ev-log-item { padding: 6px 0; border-bottom: 1px solid #ddd; }
+  .ev-log-item .hd { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+  .ev-log-item .hd b { font-size: 14px; color: #111; font-weight: 650; }
+  .ev-log-item.now .hd b { font-weight: 700; }
+  .ev-log-item .hd span { font-size: 12px; color: #555; flex: none; }
+  .ev-log-item p { margin: 3px 0 0; font-size: 13px; color: #222; line-height: 1.4; }
+  .ev-report {
+    margin-top: 10px; align-self: flex-start; height: 28px; padding: 0 12px;
+    border: 1px solid #111; background: #fff; color: #111; border-radius: 4px;
+    cursor: pointer; font-family: inherit; font-size: 14px;
+  }
+  #reportPop { z-index: 6; width: 420px; }
   .ev-flow .node { position: relative; display: flex; flex-direction: row; align-items: center; gap: 8px; padding-bottom: 12px; }
   .ev-flow .node:last-child { padding-bottom: 0; }
   .ev-flow .dot {
@@ -490,7 +509,7 @@
   #board:not([class*="mode-"]) .pane-an.stack > .card > h2,
   #board:not([class*="mode-"]) .pane-an .posture-head { margin-bottom: 6px; }
   #board:not([class*="mode-"]) .pane-an .find-way {
-    flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden;
+    flex: none; min-height: 0; display: flex; flex-direction: column; overflow: hidden;
     padding-top: 4px; padding-bottom: 4px;
   }
   #board:not([class*="mode-"]) .pane-an .today div { min-height: 54px; }
@@ -504,30 +523,32 @@
   #board:not([class*="mode-"]) .pane-an .today b,
   #board:not([class*="mode-"]) .pane-an .find-grid b,
   #board:not([class*="mode-"]) .pane-an .kpi4 b { font-size: 22px; }
+  #board:not([class*="mode-"]) .pane-an #levelBar .k b { margin-top: 2px; }
   #board:not([class*="mode-"]) .pane-an.stack > .card.eqh {
     display: flex; flex-direction: column; overflow: hidden;
   }
   #board:not([class*="mode-"]) .pane-an .eqh .atk {
     flex: 1; min-height: 0; align-content: center;
   }
+  #board:not([class*="mode-"]) .pane-an .stats .stat,
   #board:not([class*="mode-"]) .pane-an #atkGrid div,
-  #board:not([class*="mode-"]) .pane-an .kpi4 .k {
-    display: flex; flex-direction: column; box-sizing: border-box;
-    height: var(--an-cell-h, 70px);
+  #board:not([class*="mode-"]) .pane-an .kpi4 .k,
+  #board:not([class*="mode-"]) .pane-an .find-grid div {
+    box-sizing: border-box;
+    height: var(--an-cell-h, 84px);
+  }
+  #board:not([class*="mode-"]) .pane-an #atkGrid div,
+  #board:not([class*="mode-"]) .pane-an .kpi4 .k,
+  #board:not([class*="mode-"]) .pane-an .find-grid div {
+    display: flex; flex-direction: column;
     text-align: center; align-items: center; justify-content: center;
   }
   #board:not([class*="mode-"]) .pane-an .find-scroll {
-    display: flex; flex-direction: column;
+    display: flex; flex-direction: column; flex: none; overflow: visible;
   }
   #board:not([class*="mode-"]) .pane-an .find-cap { flex: none; text-align: left; }
   #board:not([class*="mode-"]) .pane-an .find-grid {
-    flex: 1; min-height: var(--an-cell-h, 70px);
-    grid-template-rows: minmax(var(--an-cell-h, 70px), 1fr);
-  }
-  #board:not([class*="mode-"]) .pane-an .find-grid div {
-    display: flex; flex-direction: column; box-sizing: border-box;
-    height: 100%; min-height: var(--an-cell-h, 70px);
-    text-align: center; align-items: center; justify-content: center;
+    flex: none; min-height: 0; grid-template-rows: var(--an-cell-h, 84px);
   }
   .pane-an .find-scroll { flex: 1; min-height: 0; overflow: auto; }
   #board:not([class*="mode-"]) .pane-an .comp-cap,
@@ -870,8 +891,9 @@
       </section>
       <section class="col">
         <div class="map-wrap" id="mapWrap">
-          <svg id="mapSvg"></svg>
+          <svg id="mapSvg" preserveAspectRatio="xMidYMin meet"></svg>
           <div class="asset-pop" id="assetPop"></div>
+          <div class="asset-pop" id="orgPop"></div>
           <div class="map-tools pane-an">
             <button type="button" id="btnLayer" title="图层">☰</button>
           </div>
@@ -1236,6 +1258,7 @@
     </main>
     <div class="float-card" id="unitPop"></div>
     <div class="float-card detail" id="evPop"></div>
+    <div class="float-card detail" id="reportPop"></div>
     <div class="float-card dist-card" id="distPop"></div>
     <div class="toast" id="toast"></div>
   </div>
@@ -1622,7 +1645,7 @@ function renderLevel() {
   const dated = events.filter(e => inDateRange(e.time));
   const items = ["红", "橙", "黄", "蓝"].map(name => [name, dated.filter(e => e.level === name).length]);
   document.getElementById("levelBar").innerHTML = items.map(([name, count]) =>
-    `<button type="button" class="k${levelFilter === name ? " on" : ""}" data-lv="${name}"><b>${count}</b><span>${name}</span></button>`
+    `<button type="button" class="k${levelFilter === name ? " on" : ""}" data-lv="${name}"><span>${name}</span><b>${count}</b></button>`
   ).join("");
 }
 function renderEvents() {
@@ -1632,7 +1655,7 @@ function renderEvents() {
     <div class="ev${activeEvent === e.id ? " on" : ""}" data-id="${e.id}">
       <div class="t"><span class="lv ${e.level}">${e.level}</span>${e.title}</div>
       <div class="meta"><span>发现源 ${e.src}　${e.time}${e.overdue && e.status !== "已闭环" ? "　超期" : ""}</span><span class="pill ${e.status}">${e.status}</span></div>
-      <div class="meta"><span>处理机构 ${e.org}</span></div>
+      <div class="meta"><span>处理机构 ${String(e.org).replace(/（.*?）/g, "")}</span></div>
     </div>`).join("") || `<div style="color:#555;font-size:15px;padding:8px">当前筛选无事件</div>`;
   el.innerHTML = html;
 }
@@ -1653,29 +1676,66 @@ function eventFlowHtml(stage) {
   }).join("");
   return `<div class="ev-flow">${nodes}<div class="ev-stage">当前阶段：<b>${eventFlow[at][1]}</b></div></div>`;
 }
+function shiftTime(str, hours) {
+  const m = String(str).match(/(\d{4})-(\d{2})-(\d{2})(?:\s+(\d{2}):(\d{2}))?/);
+  const d = new Date(+m[1], +m[2] - 1, +m[3], +(m[4] || 0), +(m[5] || 0));
+  d.setHours(d.getHours() + hours);
+  const p = n => String(n).padStart(2, "0");
+  return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()) + " " + p(d.getHours()) + ":" + p(d.getMinutes());
+}
+function eventLogs(e) {
+  const stage = eventStage(e);
+  const at = Math.max(0, eventFlow.findIndex(s => s[1] === stage));
+  const org = String(e.org).replace(/（.*?）/g, "");
+  const texts = [
+    `${e.find}发现「${e.title}」，等级${e.level}，影响${e.impact}，涉及系统${e.system}。`,
+    `交办至${e.org}，来源${e.source}，目标${e.target}。`,
+    `${org}办理中，类型${e.type}，同类事件${e.same}起，位于${e.district}。`,
+    e.overdue ? `超期未闭环，已对${org}发起督办。` : `${org}按期反馈，持续跟踪办理进展。`,
+    `处置完成，状态${e.status}，形成办结记录。`
+  ];
+  return eventFlow.slice(0, at + 1).map((s, i) => ({
+    name: s[1], time: shiftTime(e.time, i * 5), text: texts[i], now: i === at
+  }));
+}
 function showEvent(id, anchor) {
   const hold = anchor.getBoundingClientRect();
   activeEvent = id;
   document.querySelectorAll(".ev").forEach(el => el.classList.toggle("on", el.dataset.id === id));
   const e = events.find(x => x.id === id);
+  const report = document.getElementById("reportPop");
+  if (report) { report.classList.remove("show"); report.dataset.pinned = ""; }
   const pop = document.getElementById("evPop");
+  const stage = eventStage(e);
+  const logs = eventLogs(e);
+  const done = stage === "办结";
   pop.className = "float-card detail show has-x";
-  pop.innerHTML = `<button type="button" class="pop-x" aria-label="关闭">×</button><div class="ev-split">${eventFlowHtml(eventStage(e))}<div class="ev-side"><h3>${e.title}</h3><div class="sub">${e.find}</div>
+  pop.innerHTML = `<button type="button" class="pop-x" aria-label="关闭">×</button><div class="ev-split">${eventFlowHtml(stage)}<div class="ev-side"><h3>事件操作记录</h3><div class="sub">${e.title}</div>
+    <div class="ev-log">${logs.map(row => `<div class="ev-log-item${row.now ? " now" : ""}"><div class="hd"><b>${row.name}</b><span>${row.time}</span></div><p>${row.text}</p></div>`).join("")}</div>
+    ${done ? `<button type="button" class="ev-report">显示报告</button>` : ""}
+    </div></div>`;
+  placePop(pop, hold, 540, true);
+  const maxTop = 1080 - pop.offsetHeight - 12;
+  if (parseFloat(pop.style.top) > maxTop) pop.style.top = Math.max(12, maxTop) + "px";
+}
+function showReport(id, anchor) {
+  const e = events.find(x => x.id === id);
+  if (!e) return;
+  const logs = eventLogs(e);
+  const pop = document.getElementById("reportPop");
+  pop.className = "float-card detail show has-x";
+  pop.dataset.pinned = "1";
+  pop.innerHTML = `<button type="button" class="pop-x" aria-label="关闭">×</button><h3>处置报告</h3><div class="sub">${e.title}</div>
     <div class="kv">
-      <span>发现方式</span><b>${e.find}</b>
       <span>等级</span><b>${e.level}</b>
-      <span>影响程度</span><b>${e.impact}</b>
-      <span>类型</span><b>${e.type}</b>
-      <span>来源</span><b>${e.source}</b>
-      <span>目标</span><b>${e.target}</b>
-      <span>被攻击系统</span><b>${e.system}</b>
-      <span>同类事件</span><b>${e.same}</b>
-      <span>状态</span><b>${e.status}</b>
-      <span>发现时间</span><b>${e.time}</b>
+      <span>系统</span><b>${e.system}</b>
       <span>处理机构</span><b>${e.org}</b>
       <span>所在区县</span><b>${e.district}</b>
-    </div></div></div>`;
-  placePop(pop, hold, 540, true);
+      <span>办结状态</span><b>${e.status}</b>
+    </div>
+    <div class="ev-log" style="margin-top:8px">${logs.map(row => `<div class="ev-log-item"><div class="hd"><b>${row.name}</b><span>${row.time}</span></div><p>${row.text}</p></div>`).join("")}</div>
+    <p style="margin:8px 0 0;font-size:13px;color:#222;line-height:1.45">结论：事件已办结，处置过程与当前流程一致，报告可归档。</p>`;
+  placePop(pop, anchor.getBoundingClientRect(), 420, false);
   const maxTop = 1080 - pop.offsetHeight - 12;
   if (parseFloat(pop.style.top) > maxTop) pop.style.top = Math.max(12, maxTop) + "px";
 }
@@ -1776,7 +1836,36 @@ function buildMap() {
   });
   gDist.appendChild(gLabel);
   svg.appendChild(gAtk);
-  base = { x: 0, y: 0, w: W, h: H };
+  frameShiyan();
+}
+
+function frameShiyan() {
+  const box = gDist.getBBox();
+  if (!box.width || !box.height) return;
+  const wrap = document.getElementById("mapWrap");
+  const foot = document.querySelector(".map-foot.pane-an");
+  const wrapW = wrap.clientWidth || 752;
+  const wrapH = wrap.clientHeight || 968;
+  const footH = foot ? foot.offsetHeight : 268;
+  const visibleH = Math.max(240, wrapH - footH - 28);
+  const target = wrapW / visibleH;
+  const padX = 28, padY = 16;
+  const contentW = box.width + padX * 2;
+  const contentH = box.height + padY * 2;
+  let vw, vh;
+  if (contentW / contentH > target) {
+    vw = contentW;
+    vh = vw / target;
+  } else {
+    vh = contentH;
+    vw = vh * target;
+  }
+  base = {
+    x: box.x + box.width / 2 - vw / 2 - 18,
+    y: box.y - padY - 14,
+    w: vw,
+    h: vh
+  };
   vb = { ...base };
   applyView();
 }
@@ -2456,7 +2545,12 @@ function setMode(mode) {
   document.getElementById("unitPop").dataset.pinned = "";
   document.getElementById("evPop").classList.remove("show");
   document.getElementById("evPop").dataset.pinned = "";
+  const reportPop = document.getElementById("reportPop");
+  if (reportPop) { reportPop.classList.remove("show"); reportPop.dataset.pinned = ""; }
   document.getElementById("assetPop").classList.remove("show");
+  const orgPop = document.getElementById("orgPop");
+  if (orgPop) { orgPop.classList.remove("show"); orgPop.dataset.pinned = ""; }
+  if (assetKey === "org") resetPortraitCity();
   const panel = document.getElementById("layerPanel");
   if (panel) panel.classList.remove("open");
   if (projectFn) drawMarkers();
@@ -2727,15 +2821,30 @@ function fitBoard() {
   const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
   scale = s;
   document.getElementById("board").style.transform = `scale(${s})`;
+  fitAnCells();
+}
+
+function fitAnCells() {
   const board = document.getElementById("board");
-  const cell = document.querySelector("main.layout > .col:first-child .pane-an .stats .stat");
-  if (cell) board.style.setProperty("--an-cell-h", cell.offsetHeight + "px");
-  const guard = document.querySelector("main.layout > .col:first-child .pane-an.stack > .card");
-  const posture = document.querySelector("main.layout > .col:first-child .pane-an.stack > .card.eqh");
-  if (guard && posture) {
-    posture.style.height = "";
-    posture.style.height = guard.offsetHeight + "px";
+  const stack = document.querySelector("main.layout > .col:first-child .pane-an.stack");
+  if (!stack || getComputedStyle(stack).display === "none") return;
+  const posture = stack.querySelector(":scope > .card.eqh");
+  if (posture) posture.style.height = "";
+  const room = stack.clientHeight;
+  if (room < 200) return;
+  const gap = parseFloat(getComputedStyle(stack).rowGap || getComputedStyle(stack).gap) || 0;
+  const used = () => {
+    const cards = [...stack.querySelectorAll(":scope > .card")];
+    return cards.reduce((sum, card) => sum + card.offsetHeight, 0) + gap * Math.max(0, cards.length - 1);
+  };
+  let lo = 56, hi = 120, best = 84;
+  for (let i = 0; i < 16; i++) {
+    const mid = (lo + hi) / 2;
+    board.style.setProperty("--an-cell-h", mid.toFixed(2) + "px");
+    if (room - used() < -0.5) hi = mid;
+    else { best = mid; lo = mid; }
   }
+  board.style.setProperty("--an-cell-h", best.toFixed(2) + "px");
 }
 let scale = 1;
 
@@ -2919,8 +3028,17 @@ function bindPopClose(pop, clearSel) {
     e.stopPropagation();
     pop.dataset.pinned = "";
     pop.classList.remove("show");
-    if (pop.id === "evPop") activeEvent = null;
+    if (pop.id === "evPop") {
+      activeEvent = null;
+      const report = document.getElementById("reportPop");
+      if (report) { report.classList.remove("show"); report.dataset.pinned = ""; }
+    }
     if (pop.id === "unitPop") { activeUnit = null; activeTerm = null; }
+    if (pop.id === "assetPop") {
+      const org = document.getElementById("orgPop");
+      if (org) { org.classList.remove("show"); org.dataset.pinned = ""; }
+      if (assetKey === "org") resetPortraitCity();
+    }
     if (clearSel) document.querySelectorAll(clearSel).forEach(el => el.classList.remove("on"));
   });
 }
@@ -3026,6 +3144,13 @@ bindClick(document.getElementById("ovAlarms"), ".alarm-row", document.getElement
 bindPopClose(document.getElementById("unitPop"), ".app-row, .alarm-row, #cloudBooks .stat, #netBooks .stat, #calcArch, #dataGrade, #dataFlow, .ov-cell, .pane-an .stats .stat, .marker, .flow, .net-link, .net-man, .net-wan, .calc-channel");
 bindClick(document.getElementById("evList"), ".ev", document.getElementById("evPop"), row => showEvent(row.dataset.id, row));
 bindPopClose(document.getElementById("evPop"), ".ev");
+document.getElementById("evPop").addEventListener("click", e => {
+  const btn = e.target.closest(".ev-report");
+  if (!btn) return;
+  e.stopPropagation();
+  showReport(activeEvent, btn);
+});
+bindPopClose(document.getElementById("reportPop"), "");
 document.getElementById("evPop").addEventListener("mouseenter", () => clearTimeout(hideTimers.get(document.getElementById("evPop"))));
 document.getElementById("evPop").addEventListener("mouseleave", () => scheduleHide(document.getElementById("evPop"), ".ev"));
 const assetBooks = {
@@ -3081,9 +3206,45 @@ const assetBooks = {
     ["水利监测员", "市水利和湖泊局", "丹江口市", "低"], ["文旅票务员", "市文旅局", "丹江口市", "低"]
   ]}
 };
+function hideOrgPop() {
+  const org = document.getElementById("orgPop");
+  if (!org) return;
+  org.classList.remove("show");
+  org.dataset.pinned = "";
+}
+function showOrgDetail(name) {
+  const pop = document.getElementById("orgPop");
+  const base = document.getElementById("assetPop");
+  const kinds = [
+    ["room", "机房", "个"],
+    ["server", "服务器", "个"],
+    ["app", "应用系统", "个"],
+    ["terminal", "终端", "个"],
+    ["user", "用户", "类"]
+  ];
+  const body = kinds.map(([key, title, unit]) => {
+    const rows = assetBooks[key].rows.filter(a => a[1] === name);
+    const n = key === "terminal" ? rows.reduce((sum, a) => sum + (parseInt(a[3], 10) || 0), 0) : rows.length;
+    const head = key === "terminal" ? "<th>名称</th><th>位置</th><th>数量</th>" : "<th>名称</th><th>位置</th><th>等级</th>";
+    const list = rows.length
+      ? `<table class="asset"><thead><tr>${head}</tr></thead><tbody>${rows.map(a => `<tr><td>${a[0]}</td><td>${a[2]}</td><td><span class="risk-low">${a[3]}</span></td></tr>`).join("")}</tbody></table>`
+      : `<div class="org-empty">暂无</div>`;
+    return `<div class="org-sec">${title} · ${n}${unit}</div>${list}`;
+  }).join("");
+  pop.className = "asset-pop show has-x";
+  pop.dataset.pinned = "1";
+  pop.innerHTML = `<button type="button" class="pop-x" aria-label="关闭">×</button><h3>${name}</h3><div class="asset-scroll">${body}</div>`;
+  pop.style.left = base.style.left;
+  pop.style.top = base.style.top;
+  pop.style.width = base.offsetWidth + "px";
+  pop.style.minHeight = base.offsetHeight + "px";
+}
 function showAsset(key) {
+  if (assetKey === "org" && key !== "org") resetPortraitCity();
+  assetKey = key;
   const book = assetBooks[key];
   const pop = document.getElementById("assetPop");
+  hideOrgPop();
   const n = book.total != null ? book.total : book.rows.length;
   const head = book.total != null
     ? "<th>名称</th><th>所属单位</th><th>位置</th><th>数量</th>"
@@ -3102,12 +3263,14 @@ function showAsset(key) {
         portraitWord = "";
         pop.querySelectorAll("tbody tr").forEach(r => r.classList.toggle("on", r === tr));
         drawPortrait();
+        showOrgDetail(portraitOrg);
       };
     });
   }
 }
 bindClick(document.querySelector(".pane-an .stats"), ".stat", document.getElementById("assetPop"), row => showAsset(row.dataset.book));
 bindPopClose(document.getElementById("assetPop"), ".pane-an .stats .stat");
+bindPopClose(document.getElementById("orgPop"), "");
 
 const cityMenu = document.getElementById("cityMenu");
 ["全市", ...Object.keys(districtsMeta)].forEach(n => {
@@ -3348,8 +3511,15 @@ const portraitGroups = (() => {
   }));
 })();
 const cityPortrait = avgRadar(units);
+let assetKey = "";
 let portraitOrg = "全市";
 let portraitWord = "";
+function resetPortraitCity() {
+  assetKey = "";
+  portraitOrg = "全市";
+  portraitWord = "";
+  drawPortrait();
+}
 const portraitWords = [
   { t: "雪亮工程", w: 26, orgs: ["市公安局"] },
   { t: "视频专网", w: 16, orgs: ["市公安局"] },
@@ -3416,20 +3586,20 @@ function drawPortrait() {
       el.type = "button";
       el.className = "cloud-word" + (word.t === portraitWord ? " on" : "");
       el.textContent = word.t;
-      const size = Math.max(12, Math.min(28, Math.round(word.w * scale)));
+      const size = Math.max(10, Math.min(28, Math.round(word.w * scale)));
       el.style.fontSize = size + "px";
       el.style.fontWeight = size >= 18 ? "700" : "500";
       el.style.color = size >= 20 ? "#111" : size >= 15 ? "#222" : "#555";
       box.appendChild(el);
       const tw = el.offsetWidth, th = el.offsetHeight;
       let x = 0, y = 0, found = false;
-      for (let i = 0; i < 700; i++) {
+      for (let i = 0; i < 1100; i++) {
         const ang = i * 0.45;
         const rad = i * 0.95;
         x = cx + Math.cos(ang) * rad - tw / 2;
         y = cy + Math.sin(ang) * rad * 0.62 - th / 2;
         if (x < 1 || y < 1 || x + tw > width - 1 || y + th > height - 1) continue;
-        const hit = placed.some(p => x < p.x + p.w + 3 && x + tw + 3 > p.x && y < p.y + p.h + 1 && y + th + 1 > p.y);
+        const hit = placed.some(p => x < p.x + p.w + 1 && x + tw + 1 > p.x && y < p.y + p.h && y + th > p.y);
         if (!hit) { found = true; break; }
       }
       if (!found) { el.remove(); dropped++; return; }
@@ -3441,7 +3611,7 @@ function drawPortrait() {
   };
   let scale = list.length < 12 ? 1.15 : 1;
   let dropped = placeAt(scale);
-  while (dropped > 0 && scale > 0.62) {
+  while (dropped > 0 && scale > 0.38) {
     scale = Math.round((scale - 0.06) * 100) / 100;
     dropped = placeAt(scale);
   }
