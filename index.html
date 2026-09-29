@@ -454,7 +454,7 @@
         <button type="button" id="cityBtn">全市 ▾</button>
         <div class="city-menu" id="cityMenu"></div>
       </div>
-      <button class="tab" data-tab="综合">综合</button>
+      <button class="tab" data-tab="总览">总览</button>
       <button class="tab" data-tab="云">云</button>
       <button class="tab" data-tab="网">网</button>
       <button class="tab" data-tab="数">数</button>
@@ -978,15 +978,15 @@
       <section class="col">
         <div class="pane-an stack">
         <div class="card grow">
-          <h2><i></i>风险事件</h2>
+          <h2><i></i>协同处置</h2>
           <div class="seg" id="evSeg"></div>
           <div class="list" id="evList"></div>
         </div>
         <div class="card comp">
           <h2><i></i>安全管理措施</h2>
-          <div class="comp-cap">管理办法、预计预案</div>
-          <div class="comp-line"><span>数据安全管理办法</span><b>已印发</b></div>
-          <div class="comp-line"><span>数据安全事件应急预案</span><b>有效 · 2025-11-17</b></div>
+          <div class="comp-line"><span>管理办法</span><b>已印发</b></div>
+          <div class="comp-line"><span>预案</span><b>有效 · 2025-11-17</b></div>
+          <div class="comp-line"><span>应急措施</span><b>已落实</b></div>
           <div class="comp-cap">组织建设</div>
           <div class="comp-line"><span>网络安全领导小组</span><b>已组建</b></div>
           <div class="comp-line"><span>专班</span><b>8人 · 市数据局</b></div>
@@ -2309,7 +2309,7 @@ function setMode(mode) {
   board.classList.toggle("mode-calc", mode === "算");
   board.classList.toggle("mode-data", mode === "数");
   board.classList.toggle("mode-ind", mode === "产");
-  board.classList.toggle("mode-ov", mode === "综合");
+  board.classList.toggle("mode-ov", mode === "总览");
   document.getElementById("unitPop").classList.remove("show");
   document.getElementById("unitPop").dataset.pinned = "";
   document.getElementById("evPop").classList.remove("show");
@@ -2508,7 +2508,7 @@ function drawMarkers() {
   if (boardMode === "算") { drawCalcMarkers(); return; }
   if (boardMode === "数") { drawDataMarkers(); return; }
   if (boardMode === "产") { drawIndMarkers(); return; }
-  if (boardMode === "综合") { drawOvMarkers(); return; }
+  if (boardMode === "总览") { drawOvMarkers(); return; }
   const items = [
     ...places.map(p => ({ ...p, kind: "place" })),
     ...(levelFilter ? visibleEvents() : []).map(e => ({ layer: "event", name: e.title, lng: e.lng, lat: e.lat, level: e.level, id: e.id, kind: "event" }))
@@ -2556,7 +2556,7 @@ function showDistrict(name, clientX, clientY) {
   const meta = districtsMeta[name];
   const pop = document.getElementById("distPop");
   pop.className = "float-card dist-card show";
-  if (boardMode === "综合") {
+  if (boardMode === "总览") {
     const d = ovDistricts.find(x => x.name === name);
     const share = { "茅箭区": "22%", "张湾区": "18%", "丹江口市": "16%", "郧阳区": "14%", "郧西县": "8%", "竹山县": "8%", "房县": "8%", "竹溪县": "6%" };
     const axes = d ? ["云", "网", "数", "算", "安", "产"].map(k => `<p>${k}　<b>${d.axes[k]}</b></p>`).join("") : "";
@@ -2967,7 +2967,7 @@ document.querySelectorAll(".tab").forEach(btn => btn.onclick = () => {
   else if (btn.dataset.tab === "算") setMode("算");
   else if (btn.dataset.tab === "数") setMode("数");
   else if (btn.dataset.tab === "产") setMode("产");
-  else if (btn.dataset.tab === "综合") setMode("综合");
+  else if (btn.dataset.tab === "总览") setMode("总览");
   else {
     setMode("安");
     if (btn.dataset.tab !== "安") toast(btn.dataset.tab + " 为同屏入口，当前展示安");
