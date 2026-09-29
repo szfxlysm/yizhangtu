@@ -44,8 +44,8 @@
     padding: 6px 8px; cursor: pointer; border-radius: 4px; font-size: 13px; color: #111;
   }
   .city-menu button:hover, .city-menu button.on { background: #eee; color: #111; }
-  main.layout { flex: 1; display: grid; grid-template-columns: 360px 1fr 400px; gap: 10px; padding: 10px; min-height: 0; }
-  .col { display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+  main.layout { flex: 1; display: grid; grid-template-columns: 3fr 4fr 3fr; gap: 10px; padding: 10px; min-height: 0; }
+  .col { display: flex; flex-direction: column; gap: 10px; min-height: 0; min-width: 0; }
   .stack { display: flex; flex-direction: column; gap: 10px; min-height: 0; flex: 1; }
   .pane-cloud { display: none; }
   .board.mode-cloud .pane-an { display: none !important; }
@@ -98,7 +98,7 @@
   .ov-radar svg { display: block; height: 196px; }
   #ovAxes { margin-top: 6px; }
   .pane-ov .today { grid-template-columns: repeat(3, 1fr); }
-  .pane-an.stack { gap: 4px; }
+  .pane-an.stack { gap: 3px; }
   .pane-an .atk { grid-template-columns: repeat(3, 1fr); }
   .pane-an .today div { min-height: 62px; padding: 6px; }
   .pane-an .comp { flex-shrink: 0; padding: 8px 10px; }
@@ -109,6 +109,19 @@
   .pane-an .comp-metrics span { display: block; font-size: 11px; color: #555; line-height: 1.2; }
   .pane-an .comp-metrics b { display: block; margin-top: 1px; font-size: 14px; color: #111; font-weight: 650; }
   .pane-an .comp-sub { margin-top: 3px; font-size: 11px; color: #444; line-height: 1.35; }
+  .pane-an.stack > .card.comp { flex: none; display: flex; flex-direction: column; }
+  .pane-an .comp-tabs { display: flex; gap: 6px; margin-bottom: 6px; flex: none; }
+  .pane-an .comp-tabs button {
+    height: 26px; padding: 0 12px; border: 1px solid transparent; border-radius: 4px;
+    background: transparent; color: #111; cursor: pointer; font-size: 14px; font-family: inherit;
+  }
+  .pane-an .comp-tabs button.on { background: #fff; color: #111; border-color: #111; }
+  .pane-an .comp-pane { display: none; flex: none; flex-direction: column; justify-content: flex-start; }
+  .pane-an .comp-pane.on { display: flex; }
+  .pane-an .comp-pane .comp-line {
+    flex: none; margin: 0; align-items: center; padding: 2px 0; line-height: 20px;
+    border: none; border-bottom: 1px solid #ddd; border-radius: 0; background: transparent;
+  }
   .pane-an .comp-line { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: #111; margin-top: 4px; }
   .pane-an .comp-line span { color: #555; flex: none; }
   .pane-an .posture-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 8px; }
@@ -118,7 +131,7 @@
   .pane-an .find-way { flex-shrink: 0; padding: 4px 10px; }
   .pane-an .find-way h2 { margin-bottom: 6px; }
   .pane-an .find-cap { font-size: 12px; color: #111; font-weight: 650; margin: 6px 0 4px; }
-  .pane-an .find-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .pane-an .find-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
   .pane-an .find-grid div { border: 1px solid #bbb; border-radius: 6px; padding: 4px 6px; min-width: 0; background: #fff; }
   .pane-an .find-grid span { display: block; font-size: 11px; color: #555; line-height: 1.2; }
   .pane-an .find-grid b { display: block; margin-top: 2px; font-size: 14px; color: #111; font-weight: 650; }
@@ -172,7 +185,10 @@
   .pane-cloud .stat:hover, .pane-cloud .stat.on, .pane-net .stat:hover, .pane-net .stat.on,
   #calcArch:hover, #calcArch.on, #dataGrade:hover, #dataGrade.on, #dataFlow:hover, #dataFlow.on { border-color: #111; background: #f5f5f5; }
   .flow .hit, .net-link .hit, .calc-channel .hit { cursor: pointer; }
-  .pane-an .stats .stat { cursor: pointer; }
+  .pane-an .stats .stat { cursor: pointer; flex-direction: row; align-items: center; justify-content: flex-start; text-align: left; gap: 10px; padding: 8px 10px; }
+  .pane-an .stat-txt { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; gap: 2px; }
+  .pane-an .stat-ico { width: 36px; height: 36px; flex: none; display: block; }
+  .pane-an .stat-ico * { fill: none; stroke: #111; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
   .pane-an .stats .stat:hover, .pane-an .stats .stat.on { border-color: #111; background: #f5f5f5; }
   .kind-card { cursor: pointer; }
   .pop-x {
@@ -314,11 +330,31 @@
   .map-foot.pane-an > .card {
     height: 268px; overflow: hidden; display: flex; flex-direction: column;
   }
-  .map-foot.pane-an .comp-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; min-height: 0; overflow: auto;
+  .map-foot.pane-an .comp-gauges {
+    flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: center;
   }
-  .map-foot.pane-an .comp-cap { margin: 0 0 2px; }
-  .map-foot.pane-an .comp-sub { margin-top: 2px; }
+  .map-foot.pane-an .comp-gauge {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-width: 0;
+  }
+  .map-foot.pane-an .comp-gauge-name { font-size: 16px; font-weight: 650; color: #111; }
+  .map-foot.pane-an .comp-gauge-num { font-size: 28px; line-height: 1; font-weight: 700; color: #111; }
+  .map-foot.pane-an .comp-gauge-num span { font-size: 14px; font-weight: 400; margin-left: 2px; color: #555; }
+  .map-foot.pane-an .comp-gauge-k { font-size: 13px; color: #555; }
+  .map-foot.pane-an .water {
+    width: 108px; height: 108px; margin-top: 4px; border-radius: 50%; border: 1.5px solid #111;
+    position: relative; overflow: hidden; background: #fff;
+  }
+  .map-foot.pane-an .water i {
+    position: absolute; left: -8%; width: 116%; bottom: 0; height: calc(var(--p) * 1%); background: #d5d5d5;
+  }
+  .map-foot.pane-an .water i::before {
+    content: ""; position: absolute; left: -12%; right: -12%; top: -8px; height: 16px;
+    background: #c2c2c2; border-radius: 50%;
+  }
+  .map-foot.pane-an .water b {
+    position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700; color: #111;
+  }
   .portrait-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
   .portrait-head h2 { margin: 0; }
   .portrait-head .spark-meta { flex: none; }
@@ -335,7 +371,16 @@
     flex: none; height: 22px; padding: 0 8px; border-radius: 11px; border: 1px solid #111;
     background: #fff; color: #111; cursor: pointer; font-size: 12px; text-align: left;
   }
-  .portrait-units button.on { background: #f5f5f5; color: #111; }
+  .word-cloud { position: relative; flex: 1; min-height: 0; overflow: hidden; }
+  .word-cloud .cloud-word {
+    position: absolute; border: none; background: transparent; padding: 0; margin: 0;
+    cursor: pointer; line-height: 1.15; white-space: nowrap; font-family: inherit;
+  }
+  .word-cloud .cloud-word.on { text-decoration: underline; }
+  .portrait-head .cloud-reset {
+    border: none; background: transparent; color: #111; cursor: pointer;
+    font-family: inherit; font-size: 14px; padding: 0;
+  }
   .spark-legend { display: flex; flex-wrap: wrap; gap: 2px 10px; margin-top: 4px; font-size: 11px; color: #333; }
   .spark-meta { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; color: #333; }
   .spark-meta b { font-size: 16px; color: #111; }
@@ -439,6 +484,99 @@
     position: absolute; top: 108px; left: 50%; transform: translateX(-50%); background: #111;
     color: #fff; padding: 8px 14px; border-radius: 6px; font-size: 13px; display: none; z-index: 9;
   }
+  #board:not([class*="mode-"]) .pane-an .card h2 { font-size: 16px; }
+  #board:not([class*="mode-"]) .pane-an .card h2 i { height: 16px; }
+  #board:not([class*="mode-"]) .pane-an.stack > .card { padding-top: 8px; padding-bottom: 8px; }
+  #board:not([class*="mode-"]) .pane-an.stack > .card > h2,
+  #board:not([class*="mode-"]) .pane-an .posture-head { margin-bottom: 6px; }
+  #board:not([class*="mode-"]) .pane-an .find-way {
+    flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden;
+    padding-top: 4px; padding-bottom: 4px;
+  }
+  #board:not([class*="mode-"]) .pane-an .today div { min-height: 54px; }
+  #board:not([class*="mode-"]) .pane-an .stat .k,
+  #board:not([class*="mode-"]) .pane-an .stat .v span { font-size: 16px; }
+  #board:not([class*="mode-"]) .pane-an .stat .v { font-size: 22px; }
+  #board:not([class*="mode-"]) .pane-an .today span,
+  #board:not([class*="mode-"]) .pane-an .find-grid span,
+  #board:not([class*="mode-"]) .pane-an .kpi4 span,
+  #board:not([class*="mode-"]) .pane-an .find-cap { font-size: 16px; }
+  #board:not([class*="mode-"]) .pane-an .today b,
+  #board:not([class*="mode-"]) .pane-an .find-grid b,
+  #board:not([class*="mode-"]) .pane-an .kpi4 b { font-size: 22px; }
+  #board:not([class*="mode-"]) .pane-an.stack > .card.eqh {
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  #board:not([class*="mode-"]) .pane-an .eqh .atk {
+    flex: 1; min-height: 0; align-content: center;
+  }
+  #board:not([class*="mode-"]) .pane-an #atkGrid div,
+  #board:not([class*="mode-"]) .pane-an .kpi4 .k {
+    display: flex; flex-direction: column; box-sizing: border-box;
+    height: var(--an-cell-h, 70px);
+    text-align: center; align-items: center; justify-content: center;
+  }
+  #board:not([class*="mode-"]) .pane-an .find-scroll {
+    display: flex; flex-direction: column;
+  }
+  #board:not([class*="mode-"]) .pane-an .find-cap { flex: none; text-align: left; }
+  #board:not([class*="mode-"]) .pane-an .find-grid {
+    flex: 1; min-height: var(--an-cell-h, 70px);
+    grid-template-rows: minmax(var(--an-cell-h, 70px), 1fr);
+  }
+  #board:not([class*="mode-"]) .pane-an .find-grid div {
+    display: flex; flex-direction: column; box-sizing: border-box;
+    height: 100%; min-height: var(--an-cell-h, 70px);
+    text-align: center; align-items: center; justify-content: center;
+  }
+  .pane-an .find-scroll { flex: 1; min-height: 0; overflow: auto; }
+  #board:not([class*="mode-"]) .pane-an .comp-cap,
+  #board:not([class*="mode-"]) .pane-an .comp-line,
+  #board:not([class*="mode-"]) .pane-an .seg button,
+  #board:not([class*="mode-"]) .pane-an .posture-head .seg button,
+  #board:not([class*="mode-"]) .pane-an .spark-meta,
+  #board:not([class*="mode-"]) .pane-an .ev .meta,
+  #board:not([class*="mode-"]) .pane-an .lv,
+  #board:not([class*="mode-"]) .pane-an .pill,
+  #board:not([class*="mode-"]) .pane-an .portrait-units button { font-size: 14px; }
+  #board:not([class*="mode-"]) .pane-an .comp-metrics span,
+  #board:not([class*="mode-"]) .pane-an .comp-sub,
+  #board:not([class*="mode-"]) .pane-an .spark-legend { font-size: 13px; }
+  #board:not([class*="mode-"]) .pane-an .comp-metrics b { font-size: 16px; }
+  #board:not([class*="mode-"]) .pane-an .spark-meta b { font-size: 18px; }
+  #board:not([class*="mode-"]) .pane-an .ev .t { font-size: 15px; }
+  #board:not([class*="mode-"]) .pane-an.stack > .card.grow .ev .t,
+  #board:not([class*="mode-"]) .pane-an.stack > .card.grow .ev .meta,
+  #board:not([class*="mode-"]) .pane-an.stack > .card.grow .lv,
+  #board:not([class*="mode-"]) .pane-an.stack > .card.grow .pill,
+  #board:not([class*="mode-"]) .pane-an.stack > .card.grow .seg button,
+  #board:not([class*="mode-"]) .pane-an.stack > .card.comp .comp-line,
+  #board:not([class*="mode-"]) .pane-an.stack > .card.comp .comp-tabs button { font-size: 16px; }
+  #board:not([class*="mode-"]) .pane-an.stack > .card.grow .lv { line-height: 20px; }
+  #board:not([class*="mode-"]) .pane-an.stack > .card.grow .pill { line-height: 22px; }
+  #board:not([class*="mode-"]) .pane-an.stack > .card.comp .comp-line { line-height: 22px; }
+  #board:not([class*="mode-"]) .pane-an .lv { line-height: 18px; }
+  #board:not([class*="mode-"]) .pane-an .pill { line-height: 20px; }
+  #board:not([class*="mode-"]) .pane-an .portrait-units button { height: 26px; }
+  #board:not([class*="mode-"]) .pane-an .posture-head .seg button { height: 26px; }
+  #board:not([class*="mode-"]) .layer-panel h3,
+  #board:not([class*="mode-"]) .layer-row { font-size: 15px; }
+  #board:not([class*="mode-"]) .layer-actions button { font-size: 14px; }
+  #board:not([class*="mode-"]) .dist-label { font-size: 15px; }
+  #board:not([class*="mode-"]) .atk-num { font-size: 16px; }
+  #board:not([class*="mode-"]) #gRaid text { font-size: 14px; }
+  #board:not([class*="mode-"]) .float-card h3,
+  #board:not([class*="mode-"]) .asset-pop h3 { font-size: 16px; }
+  #board:not([class*="mode-"]) .detail h3,
+  #board:not([class*="mode-"]) .dist-card h3 { font-size: 17px; }
+  #board:not([class*="mode-"]) .ev-flow .dot { font-size: 15px; }
+  #board:not([class*="mode-"]) .ev-flow .lb,
+  #board:not([class*="mode-"]) .ev-stage,
+  #board:not([class*="mode-"]) .detail .sub { font-size: 14px; }
+  #board:not([class*="mode-"]) .kv,
+  #board:not([class*="mode-"]) .dist-card p { font-size: 15px; }
+  #board:not([class*="mode-"]) .asset,
+  #board:not([class*="mode-"]) .asset-pop [style*="font-size"] { font-size: 14px; }
 </style>
 </head>
 <body>
@@ -468,35 +606,19 @@
         <div class="card">
           <h2><i></i>防护对象</h2>
           <div class="stats">
-            <div class="stat" data-book="app"><div class="k">应用系统</div><div class="v">18<span>个</span></div></div>
-            <div class="stat" data-book="server"><div class="k">服务器</div><div class="v">6<span>个</span></div></div>
-            <div class="stat" data-book="database"><div class="k">数据库</div><div class="v">5<span>个</span></div></div>
-            <div class="stat" data-book="org"><div class="k">接入单位</div><div class="v">10<span>个</span></div></div>
-            <div class="stat" data-book="terminal"><div class="k">终端</div><div class="v">676<span>个</span></div></div>
-            <div class="stat" data-book="user"><div class="k">用户</div><div class="v">8<span>类</span></div></div>
+            <div class="stat" data-book="room"><svg class="stat-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V8l8-4 8 4v12"/><path d="M9 20v-6h6v6"/></svg><div class="stat-txt"><div class="k">机房</div><div class="v">6<span>个</span></div></div></div>
+            <div class="stat" data-book="server"><svg class="stat-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M8 7h8M8 12h8M8 17h5"/></svg><div class="stat-txt"><div class="k">服务器</div><div class="v">6<span>个</span></div></div></div>
+            <div class="stat" data-book="app"><svg class="stat-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 8h18"/></svg><div class="stat-txt"><div class="k">应用系统</div><div class="v">18<span>个</span></div></div></div>
+            <div class="stat" data-book="org"><svg class="stat-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="6" r="2.2"/><circle cx="6" cy="17" r="2.2"/><circle cx="18" cy="17" r="2.2"/><path d="M12 8.2V12H6.2V14.8M12 12h5.8v2.8"/></svg><div class="stat-txt"><div class="k">接入单位</div><div class="v">10<span>个</span></div></div></div>
+            <div class="stat" data-book="terminal"><svg class="stat-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1"/><path d="M8 20h8M12 16v4"/></svg><div class="stat-txt"><div class="k">终端</div><div class="v">676<span>个</span></div></div></div>
+            <div class="stat" data-book="user"><svg class="stat-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3"/><path d="M5 19c1.2-3 3.4-4.5 7-4.5S17.8 16 19 19"/></svg><div class="stat-txt"><div class="k">用户</div><div class="v">8<span>类</span></div></div></div>
           </div>
         </div>
-        <div class="card" style="flex-shrink:0">
+        <div class="card eqh" style="flex-shrink:0">
           <div class="posture-head">
             <h2><i></i>安全态势</h2>
             <div class="seg" id="dateSeg"></div>
           </div>
-          <div class="today">
-            <div><span>今日访问总量</span><b>186.4万</b></div>
-            <div><span>服务人群</span><b>42.8万</b></div>
-            <div><span>API调用量</span><b>96.3万</b></div>
-            <div><span>今日攻击次数</span><b>1,286</b></div>
-            <div><span>峰值次数</span><b>4,820/分</b></div>
-            <div><span>拦截率</span><b>99.2%</b></div>
-            <div><span>高危事件</span><b>6</b></div>
-            <div><span>较昨日</span><b>+12.5%</b></div>
-          </div>
-          <div class="spark-meta posture-trend"><span>拦截率</span><b id="reqNow">—</b></div>
-          <svg class="spark req-trend" id="reqChart" viewBox="0 0 320 108" preserveAspectRatio="none"></svg>
-          <div class="spark-legend" id="reqLegend"></div>
-        </div>
-        <div class="card" style="flex-shrink:0">
-          <h2><i></i>攻击类型</h2>
           <div class="today atk" id="atkGrid"></div>
         </div>
         <div class="card" style="flex-shrink:0">
@@ -505,17 +627,27 @@
         </div>
         <div class="card find-way">
           <h2><i></i>发现途径</h2>
+          <div class="find-scroll">
+          <div class="find-cap">自动发现</div>
+          <div class="find-grid">
+            <div><span>态势感知</span><b>42</b></div>
+            <div><span>弱信检测</span><b>19</b></div>
+            <div><span>防火墙</span><b>33</b></div>
+            <div><span>僵木蠕</span><b>16</b></div>
+          </div>
           <div class="find-cap">主动发现</div>
           <div class="find-grid">
-            <div><span>漏洞扫描</span><b>36</b></div>
-            <div><span>流量监测</span><b>28</b></div>
-            <div><span>日志审计</span><b>21</b></div>
+            <div><span>日常漏洞扫描</span><b>36</b></div>
+            <div><span>应用上线前体检</span><b>12</b></div>
+            <div><span>攻防演练</span><b>8</b></div>
+            <div><span>渗透测试结果</span><b>15</b></div>
           </div>
           <div class="find-cap">被动发现</div>
           <div class="find-grid">
-            <div><span>单位上报</span><b>15</b></div>
-            <div><span>外部通报</span><b>8</b></div>
-            <div><span>人工巡检</span><b>11</b></div>
+            <div><span>上级通报</span><b>15</b></div>
+            <div><span>网信通报</span><b>8</b></div>
+            <div><span>网安通报</span><b>11</b></div>
+          </div>
           </div>
         </div>
         <!-- 暂屏蔽，后续可恢复：安全运行态势
@@ -759,45 +891,29 @@
           <div class="map-foot pane-an">
             <div class="card comp">
               <h2><i></i>合规性（三同步一评估）</h2>
-              <div class="comp-grid">
-                <div>
-                  <div class="comp-cap">等保情况</div>
-                  <div class="comp-metrics">
-                    <div><span>总量</span><b>18个</b></div>
-                    <div><span>覆盖率</span><b>66.7%</b></div>
-                  </div>
-                  <div class="comp-sub">三级 · 2024-06-18 · DJ-2024-0186 · 至 2027-06-17</div>
+              <div class="comp-gauges">
+                <div class="comp-gauge">
+                  <div class="comp-gauge-name">等保</div>
+                  <div class="comp-gauge-num">12<span>个</span></div>
+                  <div class="comp-gauge-k">通过数量</div>
+                  <div class="water" style="--p:66.7"><i></i><b>66.7%</b></div>
+                  <div class="comp-gauge-k">覆盖率</div>
                 </div>
-                <div>
-                  <div class="comp-cap">密评情况</div>
-                  <div class="comp-metrics">
-                    <div><span>总量</span><b>18个</b></div>
-                    <div><span>覆盖率</span><b>33.3%</b></div>
-                  </div>
-                  <div class="comp-sub">二级 · 2025-03-12 · MP-2025-0042 · 至 2028-03-11</div>
-                </div>
-                <div>
-                  <div class="comp-cap">关键基础设施评估情况</div>
-                  <div class="comp-sub">已评估 6 处 · 覆盖率 33.3%</div>
-                </div>
-                <div>
-                  <div class="comp-cap">定期风险评估</div>
-                  <div class="comp-sub">2026-08-20 · 年度评估 · 中 · 销号 11/14</div>
+                <div class="comp-gauge">
+                  <div class="comp-gauge-name">密评</div>
+                  <div class="comp-gauge-num">6<span>个</span></div>
+                  <div class="comp-gauge-k">通过数量</div>
+                  <div class="water" style="--p:33.3"><i></i><b>33.3%</b></div>
+                  <div class="comp-gauge-k">覆盖率</div>
                 </div>
               </div>
             </div>
             <div class="card portrait">
               <div class="portrait-head">
                 <h2><i></i>系统安全画像</h2>
-                <div class="spark-meta"><span id="portraitCap">全市 · 系统聚合</span><b id="portraitScore">—</b></div>
+                <button type="button" class="cloud-reset" id="portraitCap">全市</button>
               </div>
-              <div class="portrait-body">
-                <div class="portrait-side">
-                  <div class="portrait-units" id="portraitUnits"></div>
-                  <div class="spark-legend" id="portraitLegend"></div>
-                </div>
-                <div class="portrait-radar" id="portraitRadar"></div>
-              </div>
+              <div class="word-cloud" id="wordCloud"></div>
             </div>
           </div>
           <div class="map-bar pane-cloud">
@@ -982,14 +1098,34 @@
           <div class="seg" id="evSeg"></div>
           <div class="list" id="evList"></div>
         </div>
+        <div class="card" style="flex-shrink:0">
+          <div class="posture-head">
+            <h2><i></i>拦截率</h2>
+            <div class="spark-meta"><b id="reqNow">—</b></div>
+          </div>
+          <svg class="spark req-trend" id="reqChart" viewBox="0 0 320 108" preserveAspectRatio="none"></svg>
+          <div class="spark-legend" id="reqLegend"></div>
+        </div>
         <div class="card comp">
           <h2><i></i>安全管理措施</h2>
-          <div class="comp-line"><span>管理办法</span><b>已印发</b></div>
-          <div class="comp-line"><span>预案</span><b>有效 · 2025-11-17</b></div>
-          <div class="comp-line"><span>应急措施</span><b>已落实</b></div>
-          <div class="comp-cap">组织建设</div>
-          <div class="comp-line"><span>网络安全领导小组</span><b>已组建</b></div>
-          <div class="comp-line"><span>专班</span><b>8人 · 市数据局</b></div>
+          <div class="comp-tabs" id="compTabs">
+            <button type="button" class="on" data-pane="rule">管理办法</button>
+            <button type="button" data-pane="plan">预案</button>
+          </div>
+          <div class="comp-pane on" data-pane="rule">
+            <div class="comp-line"><span>网络安全管理办法</span><b>已印发 · 2025-03-12</b></div>
+            <div class="comp-line"><span>数据安全管理办法</span><b>已印发 · 2025-06-08</b></div>
+            <div class="comp-line"><span>密码应用管理办法</span><b>已印发 · 2024-11-20</b></div>
+            <div class="comp-line"><span>终端安全管理办法</span><b>已印发 · 2025-01-15</b></div>
+            <div class="comp-line"><span>账号权限管理办法</span><b>已印发 · 2024-09-18</b></div>
+          </div>
+          <div class="comp-pane" data-pane="plan">
+            <div class="comp-line"><span>网络安全事件应急预案</span><b>有效 · 2025-11-17</b></div>
+            <div class="comp-line"><span>数据泄露应急预案</span><b>有效 · 2025-09-02</b></div>
+            <div class="comp-line"><span>勒索病毒应急预案</span><b>有效 · 2025-07-21</b></div>
+            <div class="comp-line"><span>重要时期保障预案</span><b>有效 · 2026-01-08</b></div>
+            <div class="comp-line"><span>机房断电应急预案</span><b>有效 · 2025-05-30</b></div>
+          </div>
         </div>
         </div>
         <div class="pane-cloud stack">
@@ -1497,7 +1633,7 @@ function renderEvents() {
       <div class="t"><span class="lv ${e.level}">${e.level}</span>${e.title}</div>
       <div class="meta"><span>发现源 ${e.src}　${e.time}${e.overdue && e.status !== "已闭环" ? "　超期" : ""}</span><span class="pill ${e.status}">${e.status}</span></div>
       <div class="meta"><span>处理机构 ${e.org}</span></div>
-    </div>`).join("") || `<div style="color:#555;font-size:13px;padding:8px">当前筛选无事件</div>`;
+    </div>`).join("") || `<div style="color:#555;font-size:15px;padding:8px">当前筛选无事件</div>`;
   el.innerHTML = html;
 }
 
@@ -1558,6 +1694,12 @@ function renderTasks() {
     </div>`).join("") || `<div style="color:#555;font-size:13px;padding:8px">当前筛选无任务</div>`;
 }
 
+document.getElementById("compTabs").addEventListener("click", e => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+  document.querySelectorAll("#compTabs button").forEach(b => b.classList.toggle("on", b === btn));
+  document.querySelectorAll(".pane-an.stack > .card.comp .comp-pane").forEach(p => p.classList.toggle("on", p.dataset.pane === btn.dataset.pane));
+});
 function seg(el, items, current, onChange) {
   el.innerHTML = items.map(n => `<button type="button" class="${n === current ? "on" : ""}" data-n="${n}">${n}</button>`).join("");
   el.onclick = (e) => {
@@ -2585,6 +2727,15 @@ function fitBoard() {
   const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
   scale = s;
   document.getElementById("board").style.transform = `scale(${s})`;
+  const board = document.getElementById("board");
+  const cell = document.querySelector("main.layout > .col:first-child .pane-an .stats .stat");
+  if (cell) board.style.setProperty("--an-cell-h", cell.offsetHeight + "px");
+  const guard = document.querySelector("main.layout > .col:first-child .pane-an.stack > .card");
+  const posture = document.querySelector("main.layout > .col:first-child .pane-an.stack > .card.eqh");
+  if (guard && posture) {
+    posture.style.height = "";
+    posture.style.height = guard.offsetHeight + "px";
+  }
 }
 let scale = 1;
 
@@ -2878,6 +3029,11 @@ bindPopClose(document.getElementById("evPop"), ".ev");
 document.getElementById("evPop").addEventListener("mouseenter", () => clearTimeout(hideTimers.get(document.getElementById("evPop"))));
 document.getElementById("evPop").addEventListener("mouseleave", () => scheduleHide(document.getElementById("evPop"), ".ev"));
 const assetBooks = {
+  room: { title: "机房", unit: "个", rows: [
+    ["市公安局机房", "市公安局", "张湾区", "中"], ["市卫健委机房", "市卫健委", "茅箭区", "低"],
+    ["市应急管理局机房", "市应急管理局", "茅箭区", "中"], ["市水利和湖泊局机房", "市水利和湖泊局", "丹江口市", "低"],
+    ["市文旅局机房", "市文旅局", "丹江口市", "低"], ["市医保局机房", "市医保局", "茅箭区", "低"]
+  ]},
   app: { title: "应用系统", unit: "个", rows: [
     ["数据共享交换系统", "市数据局", "茅箭区", "低"], ["雪亮工程平台", "市公安局", "张湾区", "高"],
     ["网络安全通报系统", "市网信办", "茅箭区", "低"], ["一网通办系统", "市政务服务局", "茅箭区", "低"],
@@ -2936,8 +3092,19 @@ function showAsset(key) {
   pop.className = "asset-pop show has-x";
   pop.innerHTML = `<button type="button" class="pop-x" aria-label="关闭">×</button><h3>${book.title} · ${n}${book.unit}</h3>
     <div class="asset-scroll"><table class="asset"><thead><tr>${head}</tr></thead><tbody>
-    ${book.rows.map(a => `<tr><td>${a[0]}</td><td>${a[1]}</td><td>${a[2]}</td><td><span class="risk-low">${a[3]}</span></td></tr>`).join("")}
+    ${book.rows.map(a => `<tr class="${key === "org" ? "sys-pick" : ""}"><td>${a[0]}</td><td>${a[1]}</td><td>${a[2]}</td><td><span class="risk-low">${a[3]}</span></td></tr>`).join("")}
     </tbody></table></div>`;
+  if (key === "org") {
+    pop.querySelectorAll("tbody tr").forEach(tr => {
+      tr.classList.toggle("on", tr.children[0].textContent === portraitOrg);
+      tr.onclick = () => {
+        portraitOrg = tr.children[0].textContent;
+        portraitWord = "";
+        pop.querySelectorAll("tbody tr").forEach(r => r.classList.toggle("on", r === tr));
+        drawPortrait();
+      };
+    });
+  }
 }
 bindClick(document.querySelector(".pane-an .stats"), ".stat", document.getElementById("assetPop"), row => showAsset(row.dataset.book));
 bindPopClose(document.getElementById("assetPop"), ".pane-an .stats .stat");
@@ -3112,10 +3279,10 @@ function drawReq() {
   const y = v => t + (1 - (v - min) / (max - min)) * (axis - t);
   const line = values => values.map((v, i) => x(i).toFixed(1) + "," + y(v).toFixed(1)).join(" ");
   const labels = Array.from({ length: 12 }, (_, i) =>
-    `<text x="${x(i).toFixed(1)}" y="96" font-size="9" fill="#555" text-anchor="middle">${i + 1}</text>`
+    `<text x="${x(i).toFixed(1)}" y="96" font-size="11" fill="#555" text-anchor="middle">${i + 1}</text>`
   ).join("");
   const ticks = [97, 98, 99, 100].map(v =>
-    `<text x="1" y="${(y(v) + 3).toFixed(1)}" font-size="9" fill="#777">${v}</text>`
+    `<text x="1" y="${(y(v) + 3).toFixed(1)}" font-size="11" fill="#777">${v}</text>`
   ).join("");
   document.getElementById("reqChart").innerHTML =
     `<line x1="${l}" y1="${axis}" x2="${W - r}" y2="${axis}" stroke="#ccc" stroke-width="1"/>` +
@@ -3182,63 +3349,112 @@ const portraitGroups = (() => {
 })();
 const cityPortrait = avgRadar(units);
 let portraitOrg = "全市";
-function portraitSvg(labels, series) {
-  const size = 220;
-  const pad = 16;
-  const cx = size / 2, cy = size / 2, r = size * 0.42, n = labels.length;
-  const pt = (i, t) => {
-    const a = -Math.PI / 2 + i * 2 * Math.PI / n;
-    return [cx + Math.cos(a) * r * t, cy + Math.sin(a) * r * t];
-  };
-  let rings = "";
-  for (let k = 1; k <= 4; k++) {
-    const d = labels.map((_, i) => {
-      const p = pt(i, k / 4);
-      return (i ? "L" : "M") + p[0].toFixed(1) + "," + p[1].toFixed(1);
-    }).join("") + "Z";
-    rings += `<path d="${d}" fill="none" stroke="#ccc" stroke-width="1"/>`;
-  }
-  let axes = "", texts = "";
-  labels.forEach((lb, i) => {
-    const p = pt(i, 1), t = pt(i, 1.18);
-    axes += `<line x1="${cx}" y1="${cy}" x2="${p[0].toFixed(1)}" y2="${p[1].toFixed(1)}" stroke="#bbb"/>`;
-    texts += `<text x="${t[0].toFixed(1)}" y="${(t[1] + 4).toFixed(1)}" text-anchor="middle" font-size="13" fill="#333">${lb}</text>`;
-  });
-  const polys = series.map(s => {
-    const points = s.values.map((v, i) => {
-      const p = pt(i, v / 100);
-      return p[0].toFixed(1) + "," + p[1].toFixed(1);
-    }).join(" ");
-    return `<polygon points="${points}" fill="${s.fill}" stroke="${s.stroke}" stroke-width="1.6" stroke-dasharray="${s.dash || ""}"/>`;
-  }).join("");
-  return `<svg viewBox="${-pad} ${-pad} ${size + pad * 2} ${size + pad * 2}" preserveAspectRatio="xMidYMid meet">${rings}${axes}${polys}${texts}</svg>`;
-}
+let portraitWord = "";
+const portraitWords = [
+  { t: "雪亮工程", w: 26, orgs: ["市公安局"] },
+  { t: "视频专网", w: 16, orgs: ["市公安局"] },
+  { t: "关基巡检", w: 15, orgs: ["市公安局"] },
+  { t: "弱口令", w: 16, orgs: ["市公安局", "市网信办"] },
+  { t: "数据共享", w: 26, orgs: ["市数据局"] },
+  { t: "政务云", w: 22, orgs: ["市数据局"] },
+  { t: "日志审计", w: 15, orgs: ["市数据局"] },
+  { t: "权限管控", w: 16, orgs: ["市数据局", "市政务服务局"] },
+  { t: "路网监测", w: 20, orgs: ["市交通运输局"] },
+  { t: "交通卡口", w: 15, orgs: ["市交通运输局"] },
+  { t: "应急指挥", w: 22, orgs: ["市应急管理局"] },
+  { t: "值班联动", w: 14, orgs: ["市应急管理局"] },
+  { t: "文旅票务", w: 20, orgs: ["市文旅局"] },
+  { t: "景区监测", w: 14, orgs: ["市文旅局"] },
+  { t: "水利监测", w: 20, orgs: ["市水利和湖泊局"] },
+  { t: "水位闸门", w: 14, orgs: ["市水利和湖泊局"] },
+  { t: "污染源", w: 18, orgs: ["市生态环境局"] },
+  { t: "空气质量", w: 14, orgs: ["市生态环境局"] },
+  { t: "医保结算", w: 20, orgs: ["市医保局"] },
+  { t: "两定机构", w: 14, orgs: ["市医保局"] },
+  { t: "态势感知", w: 24, orgs: ["市网信办"] },
+  { t: "通报处置", w: 18, orgs: ["市网信办"] },
+  { t: "边界探针", w: 14, orgs: ["市网信办"] },
+  { t: "僵木蠕", w: 15, orgs: ["市网信办", "市公安局"] },
+  { t: "一网通办", w: 24, orgs: ["市政务服务局"] },
+  { t: "身份认证", w: 16, orgs: ["市政务服务局"] },
+  { t: "办事窗口", w: 14, orgs: ["市政务服务局"] },
+  { t: "等保测评", w: 22, orgs: ["市公安局", "市数据局", "市政务服务局"] },
+  { t: "暴露面", w: 20, orgs: ["市公安局", "市网信办", "市数据局"] },
+  { t: "漏洞扫描", w: 18, orgs: ["市数据局", "市网信办"] },
+  { t: "数据安全", w: 20, orgs: ["市数据局", "市医保局", "市政务服务局"] },
+  { t: "边界防护", w: 18, orgs: ["市公安局", "市网信办"] },
+  { t: "勒索防护", w: 16, orgs: ["市公安局", "市数据局"] },
+  { t: "防火墙", w: 16, orgs: ["市网信办", "市公安局"] }
+];
+let portraitWait = false;
 function drawPortrait() {
-  const box = document.getElementById("portraitRadar");
-  if (!box) return;
-  const org = portraitGroups.find(g => g.name === portraitOrg);
-  const series = org
-    ? [
-        { values: cityPortrait, stroke: "#888", dash: "4 3", fill: "none" },
-        { values: org.values, stroke: "#111", dash: "", fill: "rgba(0,0,0,.06)" }
-      ]
-    : [{ values: cityPortrait, stroke: "#111", dash: "", fill: "rgba(0,0,0,.06)" }];
-  box.innerHTML = portraitSvg(portraitAxes, series);
-  const shown = org ? org.values : cityPortrait;
-  const count = org ? org.systems.length : units.length;
-  document.getElementById("portraitCap").textContent = (org ? org.name : "全市") + " · " + count + "套系统";
-  document.getElementById("portraitScore").textContent = radarMean(shown).toFixed(1);
-  document.getElementById("portraitLegend").innerHTML = org
-    ? `<span><i style="border-top-style:dashed;border-top-color:#888"></i>全市</span><span><i></i>${org.name}</span>`
-    : `<span><i></i>全市聚合</span>`;
-  document.getElementById("portraitUnits").innerHTML = ["全市", ...portraitGroups.map(g => g.name)].map(name =>
-    `<button type="button" class="${name === portraitOrg ? "on" : ""}" data-org="${name}">${name}</button>`
-  ).join("");
+  const box = document.getElementById("wordCloud");
+  const cap = document.getElementById("portraitCap");
+  if (!box || !cap) return;
+  const list = portraitWords.filter(w => portraitOrg === "全市" || w.orgs.includes(portraitOrg));
+  if (portraitWord && !list.some(w => w.t === portraitWord)) portraitWord = "";
+  const picked = list.find(w => w.t === portraitWord);
+  cap.textContent = picked ? picked.t + " · " + picked.orgs.join("、") : (portraitOrg === "全市" ? "全市" : portraitOrg);
+  box.innerHTML = "";
+  const width = box.clientWidth;
+  const height = box.clientHeight;
+  if (width < 20 || height < 20) {
+    if (!portraitWait) {
+      portraitWait = true;
+      requestAnimationFrame(() => { portraitWait = false; drawPortrait(); });
+    }
+    return;
+  }
+  const placed = [];
+  const cx = width / 2, cy = height / 2;
+  const placeAt = (scale) => {
+    box.innerHTML = "";
+    placed.length = 0;
+    let dropped = 0;
+    [...list].sort((a, b) => b.w - a.w).forEach(word => {
+      const el = document.createElement("button");
+      el.type = "button";
+      el.className = "cloud-word" + (word.t === portraitWord ? " on" : "");
+      el.textContent = word.t;
+      const size = Math.max(12, Math.min(28, Math.round(word.w * scale)));
+      el.style.fontSize = size + "px";
+      el.style.fontWeight = size >= 18 ? "700" : "500";
+      el.style.color = size >= 20 ? "#111" : size >= 15 ? "#222" : "#555";
+      box.appendChild(el);
+      const tw = el.offsetWidth, th = el.offsetHeight;
+      let x = 0, y = 0, found = false;
+      for (let i = 0; i < 700; i++) {
+        const ang = i * 0.45;
+        const rad = i * 0.95;
+        x = cx + Math.cos(ang) * rad - tw / 2;
+        y = cy + Math.sin(ang) * rad * 0.62 - th / 2;
+        if (x < 1 || y < 1 || x + tw > width - 1 || y + th > height - 1) continue;
+        const hit = placed.some(p => x < p.x + p.w + 3 && x + tw + 3 > p.x && y < p.y + p.h + 1 && y + th + 1 > p.y);
+        if (!hit) { found = true; break; }
+      }
+      if (!found) { el.remove(); dropped++; return; }
+      el.style.left = Math.round(x) + "px";
+      el.style.top = Math.round(y) + "px";
+      placed.push({ x, y, w: tw, h: th });
+    });
+    return dropped;
+  };
+  let scale = list.length < 12 ? 1.15 : 1;
+  let dropped = placeAt(scale);
+  while (dropped > 0 && scale > 0.62) {
+    scale = Math.round((scale - 0.06) * 100) / 100;
+    dropped = placeAt(scale);
+  }
 }
-document.getElementById("portraitUnits").addEventListener("click", e => {
-  const btn = e.target.closest("button");
+document.getElementById("wordCloud").addEventListener("click", e => {
+  const btn = e.target.closest(".cloud-word");
   if (!btn) return;
-  portraitOrg = btn.dataset.org;
+  portraitWord = portraitWord === btn.textContent ? "" : btn.textContent;
+  drawPortrait();
+});
+document.getElementById("portraitCap").addEventListener("click", () => {
+  portraitOrg = "全市";
+  portraitWord = "";
   drawPortrait();
 });
 function tickCharts() {
