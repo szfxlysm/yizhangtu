@@ -511,6 +511,7 @@
   .calc-channel text { font-size: 12px; fill: #111; font-weight: 700; text-anchor: middle; paint-order: stroke; stroke: #fff; stroke-width: 4px; pointer-events: none; }
   .map-foot.pane-calc { grid-template-columns: 1fr; }
   .base-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); gap: 4px; }
+  .base-grid.arch { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   .base-cell { border: 1px solid #bbb; border-radius: 6px; padding: 4px 6px; cursor: pointer; background: #fff; min-width: 0; }
   .base-cell:hover, .base-cell.on { border-color: #111; background: #f5f5f5; }
   .base-cell .k { display: block; font-size: 12px; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -846,28 +847,7 @@
           <div class="kpi4" id="levelBar"></div>
         </div>
         <div class="card find-way">
-          <div class="find-scroll">
-          <div class="find-cap">自动发现</div>
-          <div class="find-grid">
-            <div><span>态势感知</span><b>42</b></div>
-            <div><span>弱信检测</span><b>19</b></div>
-            <div><span>防火墙</span><b>33</b></div>
-            <div><span>僵木蠕</span><b>16</b></div>
-          </div>
-          <div class="find-cap">主动发现</div>
-          <div class="find-grid">
-            <div><span>日常漏洞扫描</span><b>36</b></div>
-            <div><span>应用上线前体检</span><b>12</b></div>
-            <div><span>攻防演练</span><b>8</b></div>
-            <div><span>渗透测试结果</span><b>15</b></div>
-          </div>
-          <div class="find-cap">被动发现</div>
-          <div class="find-grid">
-            <div><span>上级通报</span><b>15</b></div>
-            <div><span>网信通报</span><b>8</b></div>
-            <div><span>网安通报</span><b>11</b></div>
-          </div>
-          </div>
+          <div class="find-scroll" id="findWay"></div>
         </div>
         <!-- 暂屏蔽，后续可恢复：安全运行态势
         <div class="card" style="flex-shrink:0">
@@ -1114,22 +1094,22 @@
                 <div class="comp-gauge">
                   <div class="comp-gauge-main">
                     <div class="comp-gauge-name">等保</div>
-                    <div class="comp-gauge-num">12<span>个</span></div>
+                    <div class="comp-gauge-num" id="compGradeNum">12<span>个</span></div>
                     <div class="comp-gauge-k">通过数量</div>
                   </div>
                   <div class="comp-gauge-rate">
-                    <div class="water" style="--p:66.7"><i></i><b>66.7%</b></div>
+                    <div class="water" id="compGradeWater" style="--p:66.7"><i></i><b id="compGradeRate">66.7%</b></div>
                     <div class="comp-gauge-k">覆盖率</div>
                   </div>
                 </div>
                 <div class="comp-gauge">
                   <div class="comp-gauge-main">
                     <div class="comp-gauge-name">密评</div>
-                    <div class="comp-gauge-num">6<span>个</span></div>
+                    <div class="comp-gauge-num" id="compCryptoNum">6<span>个</span></div>
                     <div class="comp-gauge-k">通过数量</div>
                   </div>
                   <div class="comp-gauge-rate">
-                    <div class="water" style="--p:33.3"><i></i><b>33.3%</b></div>
+                    <div class="water" id="compCryptoWater" style="--p:33.3"><i></i><b id="compCryptoRate">33.3%</b></div>
                     <div class="comp-gauge-k">覆盖率</div>
                   </div>
                 </div>
@@ -2402,11 +2382,11 @@ const calcInd = [
 ];
 const calcBaseBook = {
   十堰: [
-    { name: "市级智算中心", v: "64P", s: "茅箭区", rows: [["算力", "64P"], ["所在", "茅箭区"], ["机架", "800"], ["算力卡", "3,200张"], ["类型", "训练+推理"]] },
-    { name: "武当山算力中心", v: "28P", s: "丹江口市", rows: [["算力", "28P"], ["所在", "丹江口市"], ["机架", "480"], ["算力卡", "1,400张"], ["类型", "推理"]] },
-    { name: "张湾推理节点", v: "16P", s: "张湾区", rows: [["算力", "16P"], ["所在", "张湾区"], ["机架", "360"], ["算力卡", "960张"], ["类型", "推理"]] },
-    { name: "丹江口存储节点", v: "12P", s: "丹江口市", rows: [["算力", "12P"], ["所在", "丹江口市"], ["机架", "520"], ["算力卡", "760张"], ["类型", "存储+轻推理"]] },
-    { name: "郧阳边缘节点", v: "8P", s: "郧阳区", rows: [["算力", "8P"], ["所在", "郧阳区"], ["机架", "240"], ["算力卡", "480张"], ["类型", "边缘推理"]] }
+    { name: "算力调度管理", v: "128P", s: "五节点统一调度", rows: [["平台", "算力调度管理"], ["在册算力", "128P"], ["接入节点", "市级智算、武当山、张湾、丹江口、郧阳"], ["省级调度", "省数堰算 32P"], ["状态", "已接入"]] },
+    { name: "算法仓库", v: "86个", s: "上架 64", rows: [["平台", "算法仓库"], ["在册算法", "86个"], ["已上架", "64个"], ["调用", "推理任务可取用"], ["状态", "索引延迟，夜间重建"]] },
+    { name: "智能体开发平台", v: "对接中", s: "意向 2 家", rows: [["平台", "智能体开发平台"], ["状态", "待对接"], ["意向企业", "2家算法企业"], ["方向", "政务与行业智能体"], ["说明", "纳入招商跟进"]] },
+    { name: "模型服务", v: "在线", s: "本地推理 58P", rows: [["平台", "模型服务"], ["服务", "推理在线"], ["主要场景", "政务、公安视频、医疗影像"], ["本地用量", "58P"]] },
+    { name: "市域算力网", v: "5节点", s: "已贯通", rows: [["网络", "市域算力网"], ["节点", "5个算力中心"], ["互联", "已贯通"], ["调度入口", "算力调度管理"]] }
   ],
   湖北: [
     ["武汉", "620P", "全省枢纽"],
@@ -3143,7 +3123,11 @@ function renderChannelList() {
 function renderCalcBase() {
   const el = document.getElementById("calcBase");
   if (!el) return;
-  el.innerHTML = calcBaseBook[calcBaseKey()].map((a, i) =>
+  const key = calcBaseKey();
+  const h2 = el.closest(".card").querySelector("h2");
+  if (h2) h2.innerHTML = `<i></i>${key === "十堰" ? "算力网架构" : "算力基础"}`;
+  el.classList.toggle("arch", key === "十堰");
+  el.innerHTML = calcBaseBook[key].map((a, i) =>
     `<div class="base-cell" data-i="${i}"><span class="k">${a.name}</span><b>${a.v}</b><span class="s">${a.s}</span></div>`
   ).join("");
 }
@@ -3406,7 +3390,49 @@ function refreshLists() {
   renderLevel();
   renderEvents();
   renderAttack();
+  renderFindWay();
+  renderCompliance();
   if (projectFn) drawMarkers();
+}
+const findMonth = {
+  "自动发现": [["态势感知", 42], ["弱信检测", 19], ["防火墙", 33], ["僵木蠕", 16]],
+  "主动发现": [["日常漏洞扫描", 36], ["应用上线前体检", 12], ["攻防演练", 8], ["渗透测试结果", 15]],
+  "被动发现": [["上级通报", 15], ["网信通报", 8], ["网安通报", 11]]
+};
+const findFactor = { "今日": 0.07, "本周": 0.25, "本月": 1, "本年": 8.7 };
+function renderFindWay() {
+  const box = document.getElementById("findWay");
+  if (!box) return;
+  const factor = findFactor[dateRange] == null ? 1 : findFactor[dateRange];
+  box.innerHTML = ["自动发现", "主动发现", "被动发现"].map(name => {
+    const cells = findMonth[name].map(([k, v]) => {
+      const n = dateRange === "本月" ? v : Math.max(0, Math.round(v * factor));
+      return `<div><span>${k}</span><b>${n}</b></div>`;
+    }).join("");
+    return `<div class="find-cap">${name}</div><div class="find-grid">${cells}</div>`;
+  }).join("");
+}
+const compBase = 18;
+const compByRange = {
+  "今日": { grade: 1, crypto: 1 },
+  "本周": { grade: 4, crypto: 2 },
+  "本月": { grade: 12, crypto: 6 },
+  "本年": { grade: 16, crypto: 11 }
+};
+function renderCompliance() {
+  const n = compByRange[dateRange] || compByRange["本月"];
+  const paint = (numId, waterId, rateId, count) => {
+    const num = document.getElementById(numId);
+    const water = document.getElementById(waterId);
+    const label = document.getElementById(rateId);
+    if (!num || !water || !label) return;
+    const p = (count / compBase * 100).toFixed(1);
+    num.innerHTML = `${count}<span>个</span>`;
+    water.style.setProperty("--p", p);
+    label.textContent = p + "%";
+  };
+  paint("compGradeNum", "compGradeWater", "compGradeRate", n.grade);
+  paint("compCryptoNum", "compCryptoWater", "compCryptoRate", n.crypto);
 }
 const attackByRange = {
   "今日": [3, 0, 1, 0, 1],
@@ -3640,8 +3666,9 @@ document.querySelector(".calc-use").addEventListener("click", e => {
 document.getElementById("calcBase").addEventListener("click", e => {
   const hit = e.target.closest(".base-cell");
   if (!hit) return;
-  const a = calcBaseBook[calcBaseKey()][+hit.dataset.i];
-  if (a) showCloudCard(a.name + " · 算力基础", a.rows, hit, true);
+  const key = calcBaseKey();
+  const a = calcBaseBook[key][+hit.dataset.i];
+  if (a) showCloudCard(a.name + " · " + (key === "十堰" ? "算力网架构" : "算力基础"), a.rows, hit, true);
 });
 bindClick(document.getElementById("calcOrders"), ".alarm-row", document.getElementById("unitPop"), row => {
   const a = calcInd[+row.dataset.i];
