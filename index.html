@@ -243,12 +243,18 @@
     flex-direction: column;
   }
   .board.mode-calc .pane-calc.stack.calc-side > .calc-ch {
-    flex: 0 0 calc((100% - 20px) / 2);
+    flex: 1 1 auto;
     min-height: 0;
   }
   .board.mode-calc .pane-calc.stack.calc-side > .calc-use {
-    flex: 1 1 auto;
-    min-height: 0;
+    flex: 0 0 auto;
+    height: auto;
+    overflow: visible;
+  }
+  .board.mode-calc .pane-calc.stack.calc-side > .calc-use .use-body {
+    flex: none;
+    height: auto;
+    overflow: visible;
   }
   .board.mode-calc .pane-calc.stack.calc-side > .calc-ind {
     flex: 0 0 auto;
@@ -325,6 +331,8 @@
   .board.mode-calc .geo-label { font-size: 15px; }
   .board.mode-calc .geo-label.sm { font-size: 13px; }
   .board.mode-calc .calc-channel text { font-size: 14px; }
+  .board.mode-calc #calcAlarms .meta { flex-wrap: wrap; row-gap: 2px; }
+  .board.mode-calc #calcAlarms .ch-qos { white-space: nowrap; }
   .calc-use .use-sum { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; color: #555; margin: -2px 0 8px; }
   .calc-use .use-sum b { color: #111; font-size: 14px; }
   .calc-use .branch { border: 1px solid #bbb; border-radius: 6px; padding: 8px; margin-bottom: 6px; }
@@ -342,6 +350,20 @@
   .calc-use .quad span, .calc-use .line span { display: block; font-size: 11px; color: #555; }
   .calc-use .quad b, .calc-use .line b { display: block; margin-top: 2px; font-size: 12px; color: #111; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .calc-use .line { margin-top: 6px; }
+  .calc-use .use-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+  .calc-use .use-head h2 { margin: 0; }
+  .calc-use .use-tabs { display: flex; gap: 6px; flex: none; }
+  .calc-use .use-tabs button {
+    height: 28px; padding: 0 10px; box-sizing: border-box; border: 1px solid transparent; border-radius: 4px;
+    background: #fff; color: #111;
+    font: inherit; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px;
+  }
+  .calc-use .use-tabs button.on { background: #fff; color: #111; border-color: #111; }
+  .calc-use .use-tabs b { font-weight: 650; }
+  .calc-use .use-pane { display: none; }
+  .calc-use .use-pane.on { display: block; }
+  .calc-use .use-pane .quad { margin-top: 0; }
+  .board.mode-calc .calc-use .use-tabs button { font-size: 16px; height: 32px; }
   .today div { border: 1px solid #bbb; border-radius: 6px; padding: 8px 6px; min-height: 70px; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
   .today span { display: block; font-size: 11px; color: #555; line-height: 1.3; }
   .today b { display: block; margin-top: 4px; font-size: 14px; color: #111; font-weight: 650; }
@@ -929,15 +951,15 @@
               <div><span>机架</span><b>2,400</b></div>
               <div><span>算力卡</span><b>6,800张</b></div>
             </div>
+            <div class="ind-pie calc-green">
+              <svg id="calcGreenPie" viewBox="0 0 160 160"></svg>
+              <div class="lg" id="calcGreenLegend"></div>
+            </div>
             <h2 class="ee-title"><i></i>能效系数</h2>
             <div class="today">
               <div><span>PUE</span><b>1.28</b></div>
               <div><span>WUE</span><b>1.15</b></div>
               <div><span>CUE</span><b>0.38</b></div>
-            </div>
-            <div class="ind-pie calc-green">
-              <svg id="calcGreenPie" viewBox="0 0 160 160"></svg>
-              <div class="lg" id="calcGreenLegend"></div>
             </div>
           </div>
           <div class="card maturity">
@@ -1066,8 +1088,8 @@
           <svg id="mapSvg" preserveAspectRatio="xMidYMin meet"></svg>
           <div class="calc-scope pane-calc" id="calcScope">
             <button type="button" class="on" data-scope="十堰">十堰</button>
-            <button type="button" data-scope="湖北">湖北省</button>
-            <button type="button" data-scope="中国">中国</button>
+            <button type="button" data-scope="湖北">全省</button>
+            <button type="button" data-scope="中国">全国</button>
           </div>
           <div class="asset-pop" id="assetPop"></div>
           <div class="asset-pop" id="orgPop"></div>
@@ -1354,23 +1376,27 @@
             <div class="cloud-list" id="calcAlarms"></div>
           </div>
           <div class="card calc-use">
-            <h2><i></i>算力消耗</h2>
-            <div class="use-body">
-            <div class="use-sum"><span>消纳合计</span><b>95P · 74%</b></div>
-            <div class="branch">
-              <div class="bh"><span class="mark solid"></span>服务本地情况<b>58P</b></div>
-              <div class="quad">
-                <div class="use-hit wide" data-k="scene"><span>应用场景</span><b>政务服务 · 公安视频 · 医疗影像</b></div>
-                <div class="use-hit" data-k="unit"><span>单位</span><b>12家</b></div>
-                <div class="use-hit" data-k="sys"><span>系统</span><b>28个</b></div>
-                <div class="use-hit" data-k="local"><span>用量</span><b>58P</b></div>
+            <div class="use-head">
+              <h2><i></i>算力消耗</h2>
+              <div class="use-tabs" id="useTabs">
+                <button type="button" class="on" data-use="local">本地<b>58P</b></button>
+                <button type="button" data-use="sale">外销<b>37P</b></button>
               </div>
             </div>
-            <div class="branch">
-              <div class="bh"><span class="mark"></span>算力外销情况<b>37P</b></div>
-              <div class="line use-hit" data-k="sale"><span>供需对接、签约客户</span><b>在谈 6 · 签约 4家</b></div>
-              <div class="line use-hit" data-k="prov"><span>省数堰算情况</span><b>省级调度 32P</b></div>
-            </div>
+            <div class="use-body">
+              <div class="use-sum"><span>消纳合计</span><b>95P · 74%</b></div>
+              <div class="use-pane on" data-use="local">
+                <div class="quad">
+                  <div class="use-hit wide" data-k="scene"><span>应用场景</span><b>政务服务 · 公安视频 · 医疗影像</b></div>
+                  <div class="use-hit" data-k="unit"><span>单位</span><b>12家</b></div>
+                  <div class="use-hit" data-k="sys"><span>系统</span><b>28个</b></div>
+                  <div class="use-hit" data-k="local"><span>用量</span><b>58P</b></div>
+                </div>
+              </div>
+              <div class="use-pane" data-use="sale">
+                <div class="line use-hit" data-k="sale"><span>供需对接、签约客户</span><b>在谈 6 · 签约 4家</b></div>
+                <div class="line use-hit" data-k="prov"><span>省数堰算情况</span><b>省级调度 32P</b></div>
+              </div>
             </div>
           </div>
           <div class="card grow calc-ind">
@@ -2768,30 +2794,30 @@ function shiyanRay(deg) {
   return [[hx, hy], [hx + dx * t, hy + dy * t]];
 }
 const calcChannelsShiyan = [
-  { name: "西安—京津冀方向", map: "西安—京津冀", meta: "出省通道", deg: 42 },
-  { name: "西安—庆阳方向", map: "西安—庆阳", meta: "出省通道", deg: 322 },
-  { name: "武汉—长三角方向", map: "武汉—长三角", meta: "出省通道", deg: 86 },
-  { name: "武汉—粤港澳大湾区方向", map: "武汉—粤港澳", meta: "出省通道", deg: 168 }
+  { name: "西安—京津冀方向", map: "西安—京津冀", meta: "出省通道", bw: "200G", delay: "16ms", deg: 42 },
+  { name: "西安—庆阳方向", map: "西安—庆阳", meta: "出省通道", bw: "200G", delay: "12ms", deg: 322 },
+  { name: "武汉—长三角方向", map: "武汉—长三角", meta: "出省通道", bw: "200G", delay: "13ms", deg: 86 },
+  { name: "武汉—粤港澳大湾区方向", map: "武汉—粤港澳", meta: "出省通道", bw: "200G", delay: "15ms", deg: 168 }
 ];
 const calcChannelsHubei = [
-  { name: "武汉—宜昌", map: "武汉—宜昌", meta: "400G算力大通道", pts: [[114.305, 30.593], [111.286, 30.692]] },
-  { name: "武汉—襄阳—十堰", map: "武汉—襄阳—十堰", meta: "400G算力大通道", pts: [[114.305, 30.593], [112.122, 32.009], [110.798, 32.629]] },
-  { name: "宜昌—荆州—荆门", map: "宜荆荆", meta: "宜荆荆算力圈", pts: [[111.286, 30.692], [112.239, 30.335], [112.199, 31.035]] },
-  { name: "武汉—黄石—鄂州", map: "武汉—黄石—鄂州", meta: "武汉都市圈", pts: [[114.305, 30.593], [114.895, 30.391], [115.038, 30.200]] },
-  { name: "武汉—孝感", map: "武汉—孝感", meta: "武汉都市圈", pts: [[114.305, 30.593], [113.917, 30.924]] },
-  { name: "武汉—咸宁", map: "武汉—咸宁", meta: "武汉都市圈", pts: [[114.305, 30.593], [114.322, 29.841]] },
-  { name: "武汉—黄冈", map: "武汉—黄冈", meta: "武汉都市圈", pts: [[114.305, 30.593], [114.872, 30.453]] },
-  { name: "宜昌—恩施", map: "宜昌—恩施", meta: "西部算力延伸", pts: [[111.286, 30.692], [109.479, 30.272]] }
+  { name: "武汉—宜昌", map: "武汉—宜昌", meta: "400G算力大通道", bw: "400G", delay: "2.7ms", pts: [[114.305, 30.593], [111.286, 30.692]] },
+  { name: "武汉—襄阳—十堰", map: "武汉—襄阳—十堰", meta: "400G算力大通道", bw: "400G", delay: "5ms", pts: [[114.305, 30.593], [112.122, 32.009], [110.798, 32.629]] },
+  { name: "宜昌—荆州—荆门", map: "宜荆荆", meta: "宜荆荆算力圈", bw: "400G", delay: "3ms", pts: [[111.286, 30.692], [112.239, 30.335], [112.199, 31.035]] },
+  { name: "武汉—黄石—鄂州", map: "武汉—黄石—鄂州", meta: "武汉都市圈", bw: "400G", delay: "3ms", pts: [[114.305, 30.593], [114.895, 30.391], [115.038, 30.200]] },
+  { name: "武汉—孝感", map: "武汉—孝感", meta: "武汉都市圈", bw: "400G", delay: "3ms", pts: [[114.305, 30.593], [113.917, 30.924]] },
+  { name: "武汉—咸宁", map: "武汉—咸宁", meta: "武汉都市圈", bw: "400G", delay: "3ms", pts: [[114.305, 30.593], [114.322, 29.841]] },
+  { name: "武汉—黄冈", map: "武汉—黄冈", meta: "武汉都市圈", bw: "400G", delay: "3ms", pts: [[114.305, 30.593], [114.872, 30.453]] },
+  { name: "宜昌—恩施", map: "宜昌—恩施", meta: "西部算力延伸", bw: "400G", delay: "5ms", pts: [[111.286, 30.692], [109.479, 30.272]] }
 ];
 const calcChannelsChina = [
-  { name: "京津冀—内蒙古", map: "京津冀—内蒙古", meta: "张家口—和林格尔", pts: [[114.884, 40.824], [111.821, 40.380]] },
-  { name: "长三角—甘肃", map: "长三角—甘肃", meta: "上海—庆阳", pts: [[121.473, 31.230], [107.638, 35.734]] },
-  { name: "长三角—宁夏", map: "长三角—宁夏", meta: "上海—中卫", pts: [[121.473, 31.230], [105.196, 37.500]] },
-  { name: "粤港澳—贵州", map: "粤港澳—贵州", meta: "韶关—贵安", pts: [[113.597, 24.811], [106.470, 26.440]] },
-  { name: "成渝—贵州", map: "成渝—贵州", meta: "天府—贵安", pts: [[104.066, 30.572], [106.470, 26.440]] },
-  { name: "成渝—甘肃", map: "成渝—甘肃", meta: "重庆—庆阳", pts: [[106.551, 29.563], [107.638, 35.734]] },
-  { name: "京津冀—宁夏", map: "京津冀—宁夏", meta: "北京—中卫", pts: [[116.407, 39.904], [105.196, 37.500]] },
-  { name: "粤港澳—成渝", map: "粤港澳—成渝", meta: "广州—重庆", pts: [[113.264, 23.129], [106.551, 29.563]] }
+  { name: "京津冀—内蒙古", map: "京津冀—内蒙古", meta: "张家口—和林格尔", bw: "400G", delay: "5ms", pts: [[114.884, 40.824], [111.821, 40.380]] },
+  { name: "长三角—甘肃", map: "长三角—甘肃", meta: "上海—庆阳", bw: "400G", delay: "15ms", pts: [[121.473, 31.230], [107.638, 35.734]] },
+  { name: "长三角—宁夏", map: "长三角—宁夏", meta: "上海—中卫", bw: "400G", delay: "17ms", pts: [[121.473, 31.230], [105.196, 37.500]] },
+  { name: "粤港澳—贵州", map: "粤港澳—贵州", meta: "韶关—贵安", bw: "400G", delay: "15ms", pts: [[113.597, 24.811], [106.470, 26.440]] },
+  { name: "成渝—贵州", map: "成渝—贵州", meta: "天府—贵安", bw: "400G", delay: "5ms", pts: [[104.066, 30.572], [106.470, 26.440]] },
+  { name: "成渝—甘肃", map: "成渝—甘肃", meta: "重庆—庆阳", bw: "400G", delay: "12ms", pts: [[106.551, 29.563], [107.638, 35.734]] },
+  { name: "京津冀—宁夏", map: "京津冀—宁夏", meta: "北京—中卫", bw: "400G", delay: "16ms", pts: [[116.407, 39.904], [105.196, 37.500]] },
+  { name: "粤港澳—成渝", map: "粤港澳—成渝", meta: "广州—重庆", bw: "400G", delay: "13ms", pts: [[113.264, 23.129], [106.551, 29.563]] }
 ];
 function channelBook() {
   if (calcMapScope === "湖北") return calcChannelsHubei;
@@ -3117,7 +3143,7 @@ function renderChannelList() {
   const el = document.getElementById("calcAlarms");
   if (!el) return;
   el.innerHTML = channelBook().map(a =>
-    `<div class="alarm-row${a.name === calcChannelPick ? " on" : ""}" data-name="${a.name}"><div class="t">${a.name}</div><div class="meta"><span>${a.meta}</span></div></div>`
+    `<div class="alarm-row${a.name === calcChannelPick ? " on" : ""}" data-name="${a.name}"><div class="t">${a.name}</div><div class="meta"><span>${a.meta}</span><span class="ch-qos">带宽 ${a.bw} 时延 ${a.delay}</span></div></div>`
   ).join("");
 }
 function renderCalcBase() {
@@ -3655,6 +3681,18 @@ const calcUseCards = {
   sale: { title: "算力外销 · 供需对接、签约客户", rows: [["分支", "算力外销情况"], ["供需对接", "在谈 6 项"], ["签约客户", "4家"], ["外销用量", "37P"], ["其中省数堰算", "32P"]] },
   prov: { title: "算力外销 · 省数堰算情况", rows: [["分支", "算力外销情况"], ["省数堰算", "已纳入省级调度"], ["调度规模", "32P"], ["典型任务", "省水利厅水利模型"], ["状态", "已开通"]] }
 };
+document.getElementById("useTabs").addEventListener("click", e => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+  e.stopPropagation();
+  const name = btn.dataset.use;
+  document.querySelectorAll("#useTabs button").forEach(b => b.classList.toggle("on", b === btn));
+  document.querySelectorAll(".calc-use .use-pane").forEach(p => p.classList.toggle("on", p.dataset.use === name));
+  document.querySelectorAll(".calc-use .use-hit").forEach(el => el.classList.remove("on"));
+  const pop = document.getElementById("unitPop");
+  pop.classList.remove("show");
+  pop.dataset.pinned = "";
+});
 document.querySelector(".calc-use").addEventListener("click", e => {
   const hit = e.target.closest(".use-hit");
   if (!hit) return;
