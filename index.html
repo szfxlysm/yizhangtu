@@ -228,11 +228,12 @@
   .stat .v span { font-size: 12px; font-weight: 400; margin-left: 2px; color: #555; }
   .today { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
   .pane-calc .today { grid-template-columns: repeat(3, 1fr); }
-  .pane-calc h2.ee-title { margin-top: 10px; }
+  .pane-calc .today div { min-height: 58px; padding: 6px; text-align: center; align-items: center; }
+  .pane-calc h2.ee-title { margin-top: 6px; }
   .pane-calc .calc-green {
-    margin-top: 10px; flex-direction: row-reverse; align-items: center; justify-content: center; gap: 18px;
+    margin-top: 6px; flex-direction: row-reverse; align-items: center; justify-content: center; gap: 18px;
   }
-  .pane-calc .calc-green svg { width: 168px; height: 168px; }
+  .pane-calc .calc-green svg { width: 144px; height: 144px; }
   .pane-calc .calc-green .lg {
     flex: none; width: auto; margin-top: 0;
     grid-template-columns: auto; justify-content: center; gap: 8px;
@@ -292,15 +293,21 @@
   .board.mode-calc .map-foot.pane-calc .card h2 { font-size: 16px; }
   .board.mode-calc .pane-calc .card h2 i,
   .board.mode-calc .map-foot.pane-calc .card h2 i { height: 16px; }
+  .board.mode-calc .pane-calc .card:has(#calcCenters) h2 { font-size: 14px; }
+  .board.mode-calc .pane-calc .card:has(#calcCenters) h2 i { height: 14px; }
   .board.mode-calc .pane-calc .today span { font-size: 16px; }
   .board.mode-calc .pane-calc .today b { font-size: 22px; }
   .board.mode-calc .pane-calc .alarm-row .t,
   .board.mode-calc .pane-calc .app-row .t,
   .board.mode-calc .pane-calc .alarm-row .meta,
   .board.mode-calc .pane-calc .app-row .meta { font-size: 16px; }
-  .board.mode-calc #calcCenters .name { font-size: 20px; }
-  .board.mode-calc #calcCenters .scale,
-  .board.mode-calc #calcCenters .energy { font-size: 16px; }
+  .board.mode-calc #calcCenters .name { font-size: 16px; }
+  .board.mode-calc #calcCenters .scale { font-size: 16px; }
+  .board.mode-calc #calcCenters .energy { display: none; }
+  .board.mode-calc #calcCenters {
+    display: flex; flex-direction: column; justify-content: space-between; gap: 8px;
+  }
+  .board.mode-calc #calcCenters .center-card { flex: 1 1 auto; margin-bottom: 0; }
   .board.mode-calc .calc-use .use-sum,
   .board.mode-calc .calc-use .bh,
   .board.mode-calc .calc-use .bh b,
@@ -368,6 +375,7 @@
   .app-row .meta, .alarm-row .meta { margin-top: 3px; font-size: 12px; color: #444; display: flex; justify-content: space-between; gap: 8px; }
   .cloud-apps, .cloud-list { overflow: auto; min-height: 0; flex: 1; }
   #calcCenters .center-card { display: flex; align-items: center; gap: 10px; padding: 8px; }
+  #calcCenters .center-card:last-child { margin-bottom: 0; }
   #calcCenters .shot { width: 76px; height: 76px; flex: none; }
   #calcCenters .body { flex: 1; min-width: 0; }
   #calcCenters .name {
@@ -400,6 +408,19 @@
   }
   .asset-pop.show { display: flex; flex-direction: column; }
   .asset-pop h3 { margin: 0 0 8px; font-size: 14px; color: #111; }
+  .asset-pop .asset-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    margin: 0 0 8px; padding-right: 32px; flex: none;
+  }
+  .asset-pop .asset-head h3 { margin: 0; padding-right: 0; min-width: 0; }
+  .asset-pop .asset-search {
+    width: 132px; height: 26px; box-sizing: border-box; padding: 0 8px; flex: none;
+    border: 1px solid #111; border-radius: 4px; background: #fff; color: #111;
+    font-size: 14px; font-family: inherit;
+  }
+  .asset-pop .asset-search::placeholder { color: #888; }
+  .asset-pop .asset-search:focus { outline: 1px solid #111; outline-offset: 0; }
+  .asset-pop .asset-empty { color: #555; text-align: center; }
   .asset-pop .asset-scroll { overflow: auto; min-height: 0; }
   #orgPop { z-index: 7; }
   #orgPop.show { overflow: hidden; }
@@ -422,6 +443,9 @@
   .pane-an .atk div { cursor: pointer; }
   .pane-an .atk div.on { border-color: #111; background: #f5f5f5; }
   .pane-an .atk div.rate { cursor: default; }
+  .calc-center-dot circle { fill: #fff; }
+  .calc-center-dot.on circle { fill: #111; stroke-width: 2.4; }
+  .dist-label .sub { font-size: 11px; font-weight: 650; }
   .marker { cursor: pointer; }
   .marker circle, .marker rect { stroke: #111; stroke-width: 1.5; }
   .map-tools {
@@ -621,7 +645,7 @@
   .float-card.show { display: block; }
   .float-card h3 { margin: 0 0 8px; font-size: 14px; color: #111; }
   .asset { width: 100%; border-collapse: collapse; font-size: 12px; }
-  .asset th { text-align: left; color: #333; font-weight: 500; padding: 4px; border-bottom: 1px solid #111; }
+  .asset th { text-align: left; color: #333; font-weight: 500; padding: 4px; border-bottom: 1px solid #111; white-space: nowrap; }
   .asset tr.sys-pick { cursor: pointer; }
   .asset tr.sys-pick.on td, .asset tr.sys-pick:hover td { background: #f2f2f2; }
   .asset td { padding: 5px 4px; border-bottom: 1px solid #ccc; }
@@ -788,7 +812,7 @@
         <button type="button" id="cityBtn">全市 ▾</button>
         <div class="city-menu" id="cityMenu"></div>
       </div>
-      <button class="tab dim" data-tab="总览" disabled>总览</button>
+      <button class="tab" data-tab="总览">总览</button>
       <button class="tab dim" data-tab="云" disabled>云</button>
       <button class="tab dim" data-tab="网" disabled>网</button>
       <button class="tab dim" data-tab="数" disabled>数</button>
@@ -1731,6 +1755,32 @@ function showTerm(i, anchor) {
   placePop(pop, anchor.getBoundingClientRect(), 420, false);
 }
 
+function placeOnMap(pop, anchor) {
+  const map = document.getElementById("mapWrap");
+  const board = document.getElementById("board");
+  const s = scale || 1;
+  const br = board.getBoundingClientRect();
+  const mr = map.getBoundingClientRect();
+  const left0 = (mr.left - br.left) / s;
+  const top0 = (mr.top - br.top) / s;
+  const mapW = mr.width / s;
+  const mapH = mr.height / s;
+  const foot = map.querySelector(".map-foot.pane-calc");
+  const footH = foot && getComputedStyle(foot).display !== "none" ? foot.offsetHeight + 10 : 0;
+  const popW = pop.offsetWidth || 420;
+  const popH = pop.offsetHeight || 200;
+  const margin = 16;
+  let left = left0 + mapW - popW - margin;
+  if (left < left0 + margin) left = left0 + margin;
+  const minTop = top0 + 56;
+  const maxTop = Math.max(minTop, top0 + mapH - footH - popH - margin);
+  const ar = anchor ? anchor.getBoundingClientRect() : null;
+  let top = ar ? (ar.top - br.top) / s : minTop;
+  if (top < minTop) top = minTop;
+  if (top > maxTop) top = maxTop;
+  pop.style.left = Math.round(left) + "px";
+  pop.style.top = Math.round(top) + "px";
+}
 function placePop(pop, r, width, preferLeft) {
   const br = document.getElementById("board").getBoundingClientRect();
   const s = scale || 1;
@@ -1984,6 +2034,7 @@ let base = { x: 0, y: 0, w: 1000, h: 700 };
 let shiyanBase = null;
 let calcMapScope = "十堰";
 let calcChannelPick = "";
+let calcCenterPick = "";
 let shownGeo = "十堰";
 let projectFn = null;
 const distPos = {};
@@ -2048,8 +2099,10 @@ function buildMap() {
     const [lx, ly] = projectFn(clng, clat);
     const text = document.createElementNS(NS, "text");
     text.setAttribute("class", "dist-label");
+    text.setAttribute("data-name", name);
     text.setAttribute("x", (lx + dx).toFixed(1));
     text.setAttribute("y", (ly + dy).toFixed(1));
+    text.setAttribute("data-y", (ly + dy).toFixed(1));
     text.setAttribute("text-anchor", "middle");
     text.textContent = name;
     gLabel.appendChild(text);
@@ -2168,6 +2221,15 @@ function frameGeo(g) {
     w: vw,
     h: vh
   };
+  if (g === gChina) {
+    const zoom = 1.18;
+    const cx = box.x + box.width / 2;
+    const cy = box.y + box.height * 0.42;
+    base.w = vw / zoom;
+    base.h = vh / zoom;
+    base.x = cx - base.w / 2;
+    base.y = cy - base.h / 2;
+  }
   vb = { ...base };
   applyView();
 }
@@ -2196,6 +2258,7 @@ function applyMapScope() {
   drawScopeChannels();
   renderChannelList();
   renderCalcBase();
+  paintDistLabels();
 }
 
 function buildAltMaps() {
@@ -2779,16 +2842,64 @@ function drawScopeChannels() {
     gChan.appendChild(g);
   });
 }
+function centerNum(v) {
+  return parseFloat(String(v).replace(/,/g, "")) || 0;
+}
+function districtCalcStats() {
+  const book = {};
+  Object.keys(districtsMeta).forEach(name => { book[name] = { p: 0, rack: 0, card: 0 }; });
+  calcCenters.forEach(c => {
+    const b = book[c.district] || (book[c.district] = { p: 0, rack: 0, card: 0 });
+    const val = k => (c.rows.find(r => r[0] === k) || ["", "0"])[1];
+    b.p += centerNum(val("算力"));
+    b.rack += centerNum(val("机架"));
+    b.card += centerNum(val("算力卡"));
+  });
+  return book;
+}
+function paintDistLabels() {
+  document.querySelectorAll(".dist-label").forEach(text => {
+    const name = text.getAttribute("data-name");
+    if (!name) return;
+    const y = text.getAttribute("data-y");
+    if (y) text.setAttribute("y", y);
+    while (text.firstChild) text.removeChild(text.firstChild);
+    text.textContent = name;
+  });
+}
+function toggleCalcCenter(name, anchor) {
+  const pop = document.getElementById("unitPop");
+  if (calcCenterPick === name) {
+    calcCenterPick = "";
+    pop.classList.remove("show");
+    pop.dataset.pinned = "";
+  } else {
+    calcCenterPick = name;
+    const a = calcCenters.find(c => c.name === name);
+    if (a && anchor) showCloudCard(a.name, a.rows, anchor, true);
+  }
+  drawCalcMarkers();
+}
 function drawCalcMarkers() {
-  calcNodes.forEach(m => {
-    if (activeDistrict !== "全市" && m.district !== activeDistrict) return;
+  gMark.innerHTML = "";
+  if (!projectFn || calcMapScope !== "十堰") return;
+  calcCenters.forEach(m => {
     const [x, y] = projectFn(m.lng, m.lat);
-    const fill = m.kind === "center" ? "#111" : m.kind === "local" ? "#fff" : "#888";
+    const on = m.name === calcCenterPick;
     const g = document.createElementNS(NS, "g");
-    g.setAttribute("class", "marker");
-    g.innerHTML = `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="${fill}"></circle>`;
-    bindMapCard(g, m.name, m.rows);
+    g.setAttribute("class", "marker calc-center-dot" + (on ? " on" : ""));
+    g.innerHTML = `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${on ? 9 : 7}"></circle>`;
+    g.addEventListener("click", e => {
+      e.stopPropagation();
+      const i = calcCenters.findIndex(c => c.name === m.name);
+      const row = document.querySelector('#calcCenters .center-card[data-i="' + i + '"]');
+      toggleCalcCenter(m.name, row || g);
+    });
     gMark.appendChild(g);
+  });
+  document.querySelectorAll("#calcCenters .center-card").forEach(el => {
+    const a = calcCenters[+el.dataset.i];
+    el.classList.toggle("on", !!a && a.name === calcCenterPick);
   });
 }
 function addNetLink(cls, x1, y1, x2, y2, label, lx, ly, title, rows) {
@@ -3216,6 +3327,12 @@ function showDistrict(name, clientX, clientY) {
     const share = { "茅箭区": "22%", "张湾区": "18%", "丹江口市": "16%", "郧阳区": "14%", "郧西县": "8%", "竹山县": "8%", "房县": "8%", "竹溪县": "6%" };
     const axes = d ? ["云", "网", "数", "算", "安", "产"].map(k => `<p>${k}　<b>${d.axes[k]}</b></p>`).join("") : "";
     pop.innerHTML = `<h3>${name}</h3><p>数字经济占比　<b>${share[name] || "—"}</b></p><p>综合指数　<b>${d ? d.score : meta.score}</b></p>${axes}`;
+  } else if (boardMode === "算") {
+    const s = districtCalcStats()[name] || { p: 0, rack: 0, card: 0 };
+    pop.innerHTML = `<h3>${name}</h3>
+    <p>算力　<b>${s.p}P</b></p>
+    <p>机架　<b>${s.rack.toLocaleString("en-US")}</b></p>
+    <p>算力卡　<b>${s.card.toLocaleString("en-US")}张</b></p>`;
   } else {
     const n = events.filter(e => e.district === name).length;
     pop.innerHTML = `<h3>${name}</h3>
@@ -3497,7 +3614,7 @@ bindClick(document.getElementById("netOrders"), ".alarm-row", document.getElemen
 renderCalcLists();
 bindClick(document.getElementById("calcCenters"), ".app-row", document.getElementById("unitPop"), row => {
   const a = calcCenters[+row.dataset.i];
-  showCloudCard(a.name, a.rows, row, true);
+  toggleCalcCenter(a.name, row);
 });
 document.getElementById("calcAlarms").addEventListener("click", e => {
   const row = e.target.closest(".alarm-row");
@@ -3516,7 +3633,9 @@ document.querySelector(".calc-use").addEventListener("click", e => {
   const hit = e.target.closest(".use-hit");
   if (!hit) return;
   const card = calcUseCards[hit.dataset.k];
-  if (card) showCloudCard(card.title, card.rows, hit, true);
+  if (!card) return;
+  showCloudCard(card.title, card.rows, hit, true);
+  placeOnMap(document.getElementById("unitPop"), hit);
 });
 document.getElementById("calcBase").addEventListener("click", e => {
   const hit = e.target.closest(".base-cell");
@@ -3527,6 +3646,7 @@ document.getElementById("calcBase").addEventListener("click", e => {
 bindClick(document.getElementById("calcOrders"), ".alarm-row", document.getElementById("unitPop"), row => {
   const a = calcInd[+row.dataset.i];
   showCloudCard(a.name, a.rows, row, true);
+  placeOnMap(document.getElementById("unitPop"), row);
 });
 renderDataLists();
 document.getElementById("dataGrade").addEventListener("click", () => showCloudCard("分级分类清单", [["公共数据分级", "核心 / 重要 / 一般"], ["分类", "按领域 12 类"], ["健康度", "全市均分 86"]], document.getElementById("dataGrade"), true));
@@ -3648,6 +3768,19 @@ function hideOrgPop() {
   org.classList.remove("show");
   org.dataset.pinned = "";
 }
+function assetHead(title, searchable) {
+  const search = searchable
+    ? `<input class="asset-search" type="search" placeholder="搜索名称" autocomplete="off" aria-label="搜索名称">`
+    : "";
+  return `<div class="asset-head"><h3>${title}</h3>${search}</div>`;
+}
+function bindAssetSearch(pop, paint) {
+  const input = pop.querySelector(".asset-search");
+  if (!input) { paint(""); return; }
+  input.addEventListener("click", e => e.stopPropagation());
+  input.addEventListener("input", () => paint(input.value));
+  paint("");
+}
 function showOrgDetail(name) {
   const pop = document.getElementById("orgPop");
   const base = document.getElementById("assetPop");
@@ -3658,18 +3791,32 @@ function showOrgDetail(name) {
     ["terminal", "终端", "个"],
     ["user", "用户", "类"]
   ];
-  const body = kinds.map(([key, title, unit]) => {
+  const groups = kinds.map(([key, title, unit]) => {
     const rows = assetBooks[key].rows.filter(a => a[1] === name);
-    const n = key === "terminal" ? rows.reduce((sum, a) => sum + (parseInt(a[3], 10) || 0), 0) : rows.length;
-    const head = key === "terminal" ? "<th>名称</th><th>位置</th><th>数量</th>" : "<th>名称</th><th>位置</th><th>等级</th>";
-    const list = rows.length
-      ? `<table class="asset"><thead><tr>${head}</tr></thead><tbody>${rows.map(a => `<tr><td>${a[0]}</td><td>${a[2]}</td><td><span class="risk-low">${a[3]}</span></td></tr>`).join("")}</tbody></table>`
-      : `<div class="org-empty">暂无</div>`;
-    return `<div class="org-sec">${title} · ${n}${unit}</div>${list}`;
-  }).join("");
+    return { key, title, unit, rows };
+  });
+  const total = groups.reduce((sum, g) => sum + g.rows.length, 0);
+  const scroll = document.createElement("div");
   pop.className = "asset-pop show has-x";
   pop.dataset.pinned = "1";
-  pop.innerHTML = `<button type="button" class="pop-x" aria-label="关闭">×</button><h3>${name}</h3><div class="asset-scroll">${body}</div>`;
+  pop.innerHTML = `<button type="button" class="pop-x" aria-label="关闭">×</button>${assetHead(name, total > 10)}`;
+  scroll.className = "asset-scroll";
+  pop.appendChild(scroll);
+  const paint = (q) => {
+    const querying = String(q || "").trim() !== "";
+    const parts = groups.map(g => {
+      const rows = g.rows.filter(a => matchEventTitle(a[0], q));
+      if (querying && !rows.length) return "";
+      const n = g.key === "terminal" ? rows.reduce((sum, a) => sum + (parseInt(a[3], 10) || 0), 0) : rows.length;
+      const head = g.key === "terminal" ? "<th>名称</th><th>位置</th><th>数量</th>" : "<th>名称</th><th>位置</th><th>风险等级</th>";
+      const list = rows.length
+        ? `<table class="asset"><thead><tr>${head}</tr></thead><tbody>${rows.map(a => `<tr><td>${a[0]}</td><td>${a[2]}</td><td><span class="risk-low">${a[3]}</span></td></tr>`).join("")}</tbody></table>`
+        : `<div class="org-empty">暂无</div>`;
+      return `<div class="org-sec">${g.title} · ${n}${g.unit}</div>${list}`;
+    }).filter(Boolean);
+    scroll.innerHTML = parts.length ? parts.join("") : `<div class="org-empty">未找到相关名称</div>`;
+  };
+  bindAssetSearch(pop, paint);
   pop.style.left = base.style.left;
   pop.style.top = base.style.top;
   pop.style.width = base.offsetWidth + "px";
@@ -3682,21 +3829,34 @@ function showAsset(key) {
   const n = book.total != null ? book.total : book.rows.length;
   const head = book.total != null
     ? "<th>名称</th><th>所属单位</th><th>位置</th><th>数量</th>"
-    : "<th>名称</th><th>所属单位</th><th>位置</th><th>等级</th>";
+    : "<th>名称</th><th>所属单位</th><th>位置</th><th>风险等级</th>";
   document.querySelectorAll(".stat").forEach(el => el.classList.toggle("on", el.dataset.book === key));
   pop.className = "asset-pop show has-x";
-  pop.innerHTML = `<button type="button" class="pop-x" aria-label="关闭">×</button><h3>${book.title} · ${n}${book.unit}</h3>
-    <div class="asset-scroll"><table class="asset"><thead><tr>${head}</tr></thead><tbody>
-    ${book.rows.map(a => `<tr class="${key === "org" ? "sys-pick" : ""}"><td>${a[0]}</td><td>${a[1]}</td><td>${a[2]}</td><td><span class="risk-low">${a[3]}</span></td></tr>`).join("")}
-    </tbody></table></div>`;
-  if (key === "org") {
+  pop.innerHTML = `<button type="button" class="pop-x" aria-label="关闭">×</button>${assetHead(book.title + " · " + n + book.unit, book.rows.length > 10)}
+    <div class="asset-scroll"><table class="asset"><thead><tr>${head}</tr></thead><tbody></tbody></table></div>`;
+  let picked = "";
+  const paint = (q) => {
+    const rows = book.rows.filter(a => matchEventTitle(a[0], q));
+    const tbody = pop.querySelector("tbody");
+    if (!rows.length) {
+      tbody.innerHTML = `<tr><td class="asset-empty" colspan="4">未找到相关名称</td></tr>`;
+      if (key === "org") hideOrgPop();
+      return;
+    }
+    tbody.innerHTML = rows.map(a => `<tr class="${key === "org" ? "sys-pick" : ""}"><td>${a[0]}</td><td>${a[1]}</td><td>${a[2]}</td><td><span class="risk-low">${a[3]}</span></td></tr>`).join("");
+    if (key !== "org") return;
+    if (picked && !rows.some(a => a[0] === picked)) { picked = ""; hideOrgPop(); }
     pop.querySelectorAll("tbody tr").forEach(tr => {
+      const orgName = tr.children[0].textContent;
+      tr.classList.toggle("on", orgName === picked);
       tr.onclick = () => {
+        picked = orgName;
         pop.querySelectorAll("tbody tr").forEach(r => r.classList.toggle("on", r === tr));
-        showOrgDetail(tr.children[0].textContent);
+        showOrgDetail(orgName);
       };
     });
-  }
+  };
+  bindAssetSearch(pop, paint);
 }
 bindClick(document.querySelector(".pane-an .stats"), ".stat", document.getElementById("assetPop"), row => showAsset(row.dataset.book));
 bindPopClose(document.getElementById("assetPop"), ".pane-an .stats .stat");
