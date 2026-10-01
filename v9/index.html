@@ -321,6 +321,8 @@
   .board.mode-calc .map-foot.pane-calc .card h2 { font-size: 16px; }
   .board.mode-calc .pane-calc .card h2 i,
   .board.mode-calc .map-foot.pane-calc .card h2 i { height: 16px; }
+  .board.mode-calc .pane-calc .card:has(#calcCenters) h2 { font-size: 14px; }
+  .board.mode-calc .pane-calc .card:has(#calcCenters) h2 i { height: 14px; }
   .board.mode-calc .pane-calc .today span { font-size: 16px; }
   .board.mode-calc .pane-calc .today b { font-size: 22px; }
   .board.mode-calc .pane-calc .ee-side .today div { min-height: 68px; }
@@ -329,21 +331,8 @@
   .board.mode-calc .pane-calc .app-row .t,
   .board.mode-calc .pane-calc .alarm-row .meta,
   .board.mode-calc .pane-calc .app-row .meta { font-size: 16px; }
-  .board.mode-calc .card.maturity .center-tabs {
-    flex: none; display: flex; justify-content: center; align-items: center; margin: 0 0 2px;
-  }
-  .board.mode-calc .card.maturity .center-tabs button {
-    border: none; background: transparent; color: #888; font-weight: 500;
-    font-family: inherit; font-size: 16px; line-height: 24px; padding: 0 12px; cursor: pointer;
-  }
-  .board.mode-calc .card.maturity .center-tabs i { width: 1px; height: 14px; background: #bbb; flex: none; }
-  .board.mode-calc .card.maturity .center-tabs button.on {
-    color: #111; font-weight: 700; background: #e6e6e6; border-radius: 4px;
-  }
-  .board.mode-calc #calcCenters .name,
-  .board.mode-calc #calcBuilds .name { font-size: 16px; }
-  .board.mode-calc #calcCenters .scale,
-  .board.mode-calc #calcBuilds .scale { font-size: 16px; }
+  .board.mode-calc #calcCenters .name { font-size: 16px; }
+  .board.mode-calc #calcCenters .scale { font-size: 16px; }
   .board.mode-calc #calcCenters .energy { display: none; }
   .board.mode-calc .pane-calc.stack:not(.calc-side) > .card.maturity { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
   .board.mode-calc .pane-calc.stack:not(.calc-side) > .calc-base-side {
@@ -351,21 +340,14 @@
     overflow: hidden; display: flex; flex-direction: column;
   }
   .board.mode-calc .calc-base-side .arch-line { flex: 1; min-height: 0; padding: 0; }
-  .board.mode-calc .calc-base-side .arch-node {
-    width: 118px; height: 118px; padding: 8px 6px; gap: 4px; border-radius: 6px;
-  }
+  .board.mode-calc .calc-base-side .arch-node { width: 118px; height: 118px; padding: 8px 6px; gap: 4px; }
   .board.mode-calc .calc-base-side .arch-fig { width: 46px; height: 34px; }
   .board.mode-calc .calc-base-side .arch-name { font-size: 13px; }
-  .board.mode-calc #calcCenters,
-  .board.mode-calc #calcBuilds {
-    display: flex; flex-direction: column; justify-content: space-between; gap: 4px; flex: 1; min-height: 0;
+  .board.mode-calc #calcCenters {
+    display: flex; flex-direction: column; justify-content: space-between; gap: 6px; flex: 1;
   }
-  .board.mode-calc #calcCenters[hidden],
-  .board.mode-calc #calcBuilds[hidden] { display: none; }
-  .board.mode-calc #calcCenters .shot,
-  .board.mode-calc #calcBuilds .shot { width: 52px; height: 52px; }
-  .board.mode-calc #calcCenters .center-card,
-  .board.mode-calc #calcBuilds .center-card { flex: 1 1 auto; margin-bottom: 0; padding: 6px 8px; gap: 8px; }
+  .board.mode-calc #calcCenters .shot { width: 52px; height: 52px; }
+  .board.mode-calc #calcCenters .center-card { flex: 1 1 auto; margin-bottom: 0; padding: 6px 8px; gap: 8px; }
   .board.mode-calc .calc-use .use-sum,
   .board.mode-calc .calc-use .bh,
   .board.mode-calc .calc-use .bh b,
@@ -384,22 +366,7 @@
   .board.mode-calc .geo-label.sm { display: none; }
   .board.mode-calc .calc-channel text { font-size: 14px; }
   .board.mode-calc #calcAlarms .meta { flex-wrap: wrap; row-gap: 2px; }
-  .board.mode-calc #calcAlarms .ch-qos { white-space: nowrap; margin-left: auto; }
-  .board.mode-calc #calcAlarms .ch-line {
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    min-height: 68px; padding: 14px 12px;
-  }
-  .board.mode-calc #calcAlarms .ch-line .t { min-width: 0; flex: 1; }
-  .board.mode-calc #calcAlarms .ch-line .meta { margin-top: 0; flex: none; align-items: center; }
-  .calc-use .scene-row { display: grid; grid-template-columns: 1fr auto; column-gap: 8px; align-items: center; }
-  .calc-use .scene-row span { grid-column: 1; grid-row: 1; }
-  .calc-use .scene-row b { grid-column: 1; grid-row: 2; }
-  .calc-use .scene-row em {
-    grid-column: 2; grid-row: 1 / span 2; font-style: normal; font-weight: 700; color: #111; font-size: 16px;
-  }
-  .calc-use .line.prov-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .calc-use .line.prov-head span,
-  .calc-use .line.prov-head b { display: inline; margin-top: 0; overflow: visible; text-overflow: clip; }
+  .board.mode-calc #calcAlarms .ch-qos { white-space: nowrap; }
   .calc-ch .ch-head { min-height: 28px; }
   .calc-ch .ch-title { margin: 0 0 8px; }
   .calc-ch .ch-tabs { display: flex; gap: 6px; margin: 0 0 8px; }
@@ -410,13 +377,11 @@
   }
   .calc-ch .ch-tabs button.on { background: #e6e6e6; color: #111; }
   .calc-ch .ch-empty { color: #555; font-size: 14px; padding: 8px 2px; }
-  #calcAlarms .ch-static { cursor: pointer; }
-  #calcAlarms .ch-static:hover,
-  #calcAlarms .ch-static.on { border-color: #111; background: #f5f5f5; }
+  #calcAlarms .ch-static { cursor: default; }
+  #calcAlarms .ch-static:hover { border-color: #bbb; background: #fff; }
   .calc-hub circle { fill: #fff; stroke: #111; stroke-width: 1.6; cursor: pointer; }
-  .calc-hub.on circle { fill: #111; stroke-width: 3; }
+  .calc-hub.on circle { fill: #111; }
   .calc-hub text { font-size: 14px; fill: #111; font-weight: 700; paint-order: stroke; stroke: #fff; stroke-width: 4px; pointer-events: none; }
-  .calc-hub.on text { font-size: 16px; }
   .calc-use .use-sum { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; color: #555; margin: -2px 0 8px; }
   .calc-use .use-sum b { color: #111; font-size: 14px; }
   .calc-use .branch { border: 1px solid #bbb; border-radius: 6px; padding: 8px; margin-bottom: 6px; }
@@ -479,27 +444,20 @@
   .app-row .t, .alarm-row .t { font-size: 13px; color: #111; display: flex; align-items: center; gap: 6px; }
   .app-row .meta, .alarm-row .meta { margin-top: 3px; font-size: 12px; color: #444; display: flex; justify-content: space-between; gap: 8px; }
   .cloud-apps, .cloud-list { overflow: auto; min-height: 0; flex: 1; }
-  #calcCenters .center-card,
-  #calcBuilds .center-card { display: flex; align-items: center; gap: 10px; padding: 8px; }
-  #calcCenters .center-card:last-child,
-  #calcBuilds .center-card:last-child { margin-bottom: 0; }
-  #calcCenters .shot,
-  #calcBuilds .shot { width: 76px; height: 76px; flex: none; }
-  #calcCenters .body,
-  #calcBuilds .body { flex: 1; min-width: 0; }
-  #calcCenters .name,
-  #calcBuilds .name {
+  #calcCenters .center-card { display: flex; align-items: center; gap: 10px; padding: 8px; }
+  #calcCenters .center-card:last-child { margin-bottom: 0; }
+  #calcCenters .shot { width: 76px; height: 76px; flex: none; }
+  #calcCenters .body { flex: 1; min-width: 0; }
+  #calcCenters .name {
     display: inline-block; font-size: 18px; font-weight: 700; color: #111; line-height: 1.35;
     background: #e6e6e6; border-radius: 4px; padding: 2px 8px;
   }
-  #calcCenters .scale,
-  #calcBuilds .scale {
+  #calcCenters .scale {
     margin-top: 6px; display: grid; grid-template-columns: max-content max-content max-content;
     justify-content: space-between; column-gap: 8px;
     font-size: 12px; color: #333; line-height: 1.35;
   }
   #calcCenters .scale span,
-  #calcBuilds .scale span,
   #calcCenters .energy span { white-space: nowrap; }
   #calcCenters .energy {
     margin-top: 4px; padding-top: 4px; border-top: 1px solid #ddd;
@@ -609,8 +567,6 @@
   .calc-channel.solid path { stroke: #111; stroke-width: 1.8; stroke-dasharray: none; pointer-events: none; }
   .calc-channel.on line,
   .calc-channel.on path:not(.hit) { stroke: #111; stroke-width: 3.2; stroke-dasharray: none; }
-  #gChan.has-pick .calc-channel.solid path:not(.hit) { stroke: #bbb; stroke-width: 1.4; }
-  #gChan.has-pick .calc-channel.on path:not(.hit) { stroke: #111; stroke-width: 3.6; }
   .calc-channel .hit { stroke: transparent; stroke-width: 16; stroke-dasharray: none; fill: none; pointer-events: stroke; }
   .sw.net-wan { width: 16px; height: 5px; border-radius: 0; background: none; border-top: 1.6px solid #111; border-bottom: 1.6px solid #111; }
   .sw.net-man { width: 14px; height: 9px; border-radius: 8px; background: none; border: 1.5px solid #111; }
@@ -667,19 +623,7 @@
   .voucher-card .arch-fig { width: 52px; height: 38px; }
   .voucher-card .arch-name { font-size: 14px; }
   .voucher-card b { font-size: 18px; line-height: 1.1; font-weight: 700; color: #111; }
-  .voucher-row {
-    --end: 100px; --gap: 18px;
-    display: grid; grid-template-columns: minmax(0, 1fr) var(--end); column-gap: var(--gap);
-    align-items: start; margin-top: 8px;
-  }
-  .voucher-end {
-    width: var(--end); height: var(--end); box-sizing: border-box; position: relative; z-index: 2;
-    border: 1.5px solid transparent; border-radius: 4px; background: #fff;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 5px; padding: 4px 3px; text-align: center;
-  }
-  .voucher-end span { display: block; font-size: 12px; font-weight: 650; color: #111; line-height: 1.25; white-space: nowrap; }
-  .voucher-end i { display: block; width: 76px; height: 0; border-top: 1px dashed #111; flex: none; }
+  .voucher-benefit { margin-top: 6px; text-align: right; font-size: 13px; font-weight: 650; color: #111; }
   .float-card.voucher-pop { width: 640px; }
   .voucher-list { max-height: 460px; overflow: auto; }
   .voucher-item { border: 1px solid #bbb; border-radius: 6px; padding: 8px 10px; margin-bottom: 8px; }
@@ -687,24 +631,16 @@
   .voucher-item .top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
   .voucher-item .top b { font-size: 14px; color: #111; }
   .voucher-item .top span { font-size: 13px; color: #333; white-space: nowrap; }
-  .voucher-steps {
-    position: relative; min-width: 0; display: grid; grid-template-columns: repeat(4, 1fr);
-    padding-top: calc(var(--end) / 2 - 7px);
-  }
+  .voucher-steps { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 10px; }
   .voucher-steps::before, .voucher-steps::after {
-    content: ""; position: absolute; left: 12.5%; top: calc(var(--end) / 2 - 1px); height: 0; border-top: 2px solid #bbb;
+    content: ""; position: absolute; left: 12.5%; top: 6px; height: 0; border-top: 2px solid #bbb;
   }
   .voucher-steps::before { width: 75%; }
   .voucher-steps::after { width: calc(75% * var(--done, 0)); border-top-color: #111; z-index: 1; }
-  .voucher-step:last-child::after {
-    content: ""; position: absolute; left: 50%; top: 6px; width: calc(50% + var(--gap) + 1px);
-    height: 0; border-top: 2px solid #bbb; z-index: 1;
-  }
-  .voucher-step.done:last-child::after { border-top-color: #111; }
   .voucher-step { position: relative; z-index: 2; text-align: center; }
   .voucher-step i {
     width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid #111; background: #fff;
-    display: block; margin: 0 auto; box-sizing: border-box;
+    display: inline-block; box-sizing: border-box;
   }
   .voucher-step.done i { background: #111; }
   .voucher-step .k { display: block; margin-top: 4px; font-size: 13px; font-weight: 650; color: #111; }
@@ -777,20 +713,12 @@
   .word-cloud .cloud-word.good { color: #555; }
   .word-cloud .cloud-word.bad { color: #111; }
   .word-cloud .cloud-word.on { text-decoration: underline; }
-  .portrait-tabs {
-    flex: none; display: flex; justify-content: center; align-items: center; gap: 0; margin: 0 0 2px;
+  .portrait-head .cloud-reset {
+    border: none; background: transparent; color: #111; cursor: pointer;
+    font-family: inherit; font-size: 14px; padding: 0;
   }
-  .portrait-tabs button {
-    border: none; background: transparent; color: #888; font-weight: 500;
-    font-family: inherit; font-size: 16px; line-height: 24px; padding: 0 12px; cursor: pointer;
-  }
-  .portrait-tabs i { width: 1px; height: 14px; background: #bbb; flex: none; }
-  .portrait-tabs button.on { color: #111; font-weight: 700; background: #e6e6e6; border-radius: 4px; }
-  .portrait-report {
-    flex: 1; min-height: 0; display: flex; align-items: center;
-    padding: 2px 8px 4px; font-size: 15px; line-height: 1.7; color: #111;
-  }
-  .portrait-report[hidden], .word-cloud[hidden] { display: none; }
+  .portrait-head .cloud-reset .good { font-weight: 500; color: #555; }
+  .portrait-head .cloud-reset .bad { font-weight: 700; color: #111; margin-left: 10px; }
   .spark-legend { display: flex; flex-wrap: wrap; gap: 2px 10px; margin-top: 4px; font-size: 11px; color: #333; }
   .req-tip {
     display: none; position: absolute; z-index: 4; pointer-events: none;
@@ -953,20 +881,12 @@
   #board:not([class*="mode-"]) .pane-an .find-grid b,
   #board:not([class*="mode-"]) .pane-an .kpi4 b { font-size: 22px; }
   #board:not([class*="mode-"]) .pane-an #levelBar .k b { margin-top: 2px; }
-  #board:not([class*="mode-"]) .map-bar.pane-an #levelBar .k {
-    height: auto; min-height: 0; padding: 6px 2px;
-  }
   #board:not([class*="mode-"]) .pane-an.stack > .card.eqh {
     display: flex; flex-direction: column; overflow: hidden;
   }
   #board:not([class*="mode-"]) .pane-an .eqh .atk {
     flex: 1; min-height: 0; align-content: center;
   }
-  .risk-dist { flex: none; margin-top: 6px; }
-  .risk-dist .seg { margin: 0 0 2px; }
-  .risk-dist .seg button.on { background: #e6e6e6; color: #111; }
-  .risk-dist svg { width: 100%; height: 132px; display: block; }
-  #board:not([class*="mode-"]) .pane-an .risk-dist .seg button { height: 24px; padding: 0 10px; font-size: 13px; }
   #board:not([class*="mode-"]) .pane-an .stats .stat,
   #board:not([class*="mode-"]) .pane-an #atkGrid div,
   #board:not([class*="mode-"]) .pane-an .kpi4 .k,
@@ -1078,13 +998,10 @@
             <div class="seg" id="dateSeg"></div>
           </div>
           <div class="today atk" id="atkGrid"></div>
-          <div class="risk-dist">
-            <div class="seg" id="riskTab">
-              <button type="button" class="on" data-k="dist">市区县</button>
-              <button type="button" data-k="org">市直单位</button>
-            </div>
-            <svg id="riskBars" viewBox="0 0 460 132" preserveAspectRatio="xMidYMid meet"></svg>
-          </div>
+        </div>
+        <div class="card" style="flex-shrink:0">
+          <h2><i></i>告警数量</h2>
+          <div class="kpi4" id="levelBar"></div>
         </div>
         <div class="card find-way">
           <div class="find-scroll" id="findWay"></div>
@@ -1185,13 +1102,8 @@
             </div>
           </div>
           <div class="card maturity">
-            <div class="center-tabs" id="centerTab">
-              <button type="button" class="on" data-k="center">算力中心</button>
-              <i></i>
-              <button type="button" data-k="build">在建项目</button>
-            </div>
+            <h2><i></i>算力中心</h2>
             <div class="cloud-apps" id="calcCenters"></div>
-            <div class="cloud-apps" id="calcBuilds" hidden></div>
           </div>
           <div class="card calc-base-side">
             <h2><i></i>算力基础</h2>
@@ -1327,9 +1239,6 @@
           <div class="map-tools pane-an">
             <button type="button" id="btnLayer" title="图层">☰</button>
           </div>
-          <div class="map-bar pane-an">
-            <div class="kpi4" id="levelBar"></div>
-          </div>
           <div class="layer-panel pane-an" id="layerPanel">
             <h3>图层控制 <span id="layerCount">6/6</span></h3>
             <div id="layerList"></div>
@@ -1372,13 +1281,11 @@
               </div>
             </div>
             <div class="card portrait">
-              <div class="portrait-tabs" id="portraitTab">
-                <button type="button" class="on" data-k="cloud">安全画像</button>
-                <i></i>
-                <button type="button" data-k="ai">AI报告</button>
+              <div class="portrait-head">
+                <h2><i></i>系统安全画像</h2>
+                <button type="button" class="cloud-reset" id="portraitCap"><span class="good">成效</span><span class="bad">风险</span></button>
               </div>
               <div class="word-cloud" id="wordCloud"></div>
-              <div class="portrait-report" id="portraitReport" hidden></div>
             </div>
           </div>
           <div class="map-bar pane-cloud">
@@ -1632,20 +1539,20 @@
           </div>
           <div class="card calc-use">
             <div class="use-body">
-              <div class="use-sum"><span>消纳合计</span></div>
+              <div class="use-sum"><span>消纳合计</span><b>95P</b></div>
               <div class="branch">
-                <div class="bh"><i class="mark solid"></i>本地</div>
+                <div class="bh"><i class="mark solid"></i>本地<b>58P</b></div>
                 <div class="quad">
-                  <div class="use-hit wide scene-row" data-k="scene"><span>应用场景</span><b>政务服务 · 公安视频 · 医疗影像</b><em>170P</em></div>
+                  <div class="use-hit wide" data-k="scene"><span>应用场景</span><b>政务服务 · 公安视频 · 医疗影像</b></div>
                   <div class="use-hit" data-k="unit"><span>单位</span><b>12家</b></div>
                   <div class="use-hit" data-k="sys"><span>系统</span><b>28个</b></div>
                   <div class="use-hit" data-k="local"><span>用量</span><b>58P</b></div>
                 </div>
               </div>
               <div class="branch">
-                <div class="bh"><i class="mark"></i>外销</div>
-                <div class="line use-hit prov-head" data-k="sale"><span>供需对接、签约客户</span><b>在谈6·签约4家</b></div>
-                <div class="line use-hit prov-head" data-k="prov"><span>省数堰算情况</span><b>已接入全省算力调度</b></div>
+                <div class="bh"><i class="mark"></i>外销<b>37P</b></div>
+                <div class="line use-hit" data-k="sale"><span>供需对接、签约客户</span><b>在谈 6 · 签约 4家</b></div>
+                <div class="line use-hit" data-k="prov"><span>省数堰算情况</span><b>省级调度 32P</b></div>
               </div>
             </div>
           </div>
@@ -1897,34 +1804,7 @@ const events = [
   { id: "e44", title: "郧阳窗口终端病毒隔离", level: "橙", find: "自动发现", type: "恶意代码", source: "市政务服务局", target: "市政务服务局", system: "办事窗口终端", same: 2, status: "已闭环", stage: "办结", time: "2026-09-02 10:30", org: "市政务服务局", src: "warn-job", impact: "中", lng: 110.61, lat: 32.80, layer: "event", district: "郧阳区" },
   { id: "e45", title: "郧西专网边界扫描", level: "蓝", find: "智能发现", type: "漏洞扫描", source: "市网信办", target: "市网信办", system: "专网边界探针", same: 4, status: "待处置", stage: "研判", time: "2026-09-01 07:55", org: "市网信办（待处理）", src: "市网信办", impact: "低", lng: 110.42, lat: 33.08, layer: "event", district: "郧西县" },
   { id: "e46", title: "竹山应急值班终端离线", level: "橙", find: "自动发现", type: "设备离线", source: "市应急管理局", target: "市应急管理局", system: "应急指挥终端", same: 2, status: "待处置", stage: "督办", overdue: true, time: "2026-09-27 23:10", org: "市应急管理局（待处置）", src: "warn-job", impact: "中", lng: 110.08, lat: 32.30, layer: "event", district: "竹山县" },
-  { id: "e47", title: "竹溪污染源采集中断", level: "蓝", find: "自动发现", type: "设备离线", source: "市生态环境局", target: "市生态环境局", system: "污染源采集终端", same: 1, status: "待处置", stage: "交办", time: "2026-09-27 06:20", org: "市生态环境局", src: "warn-job", impact: "低", lng: 109.86, lat: 32.38, layer: "event", district: "竹溪县" },
-  { id: "e48", title: "茅箭政务云异常登录", level: "红", find: "自动发现", type: "暴力破解", source: "市数据局", target: "市数据局", system: "政务云认证", same: 6, status: "待处置", stage: "研判", time: "2026-10-01 08:12", org: "市数据局（待处理）", src: "warn-job", impact: "高", lng: 110.82, lat: 32.61, layer: "event", district: "茅箭区" },
-  { id: "e49", title: "张湾堡垒机新增弱口令", level: "橙", find: "智能发现", type: "弱口令", source: "市公安局", target: "市公安局", system: "运维堡垒机", same: 4, status: "处理中", stage: "办理", time: "2026-10-01 09:18", org: "网安（处理中）", src: "市公安局", impact: "中", lng: 110.72, lat: 32.68, layer: "event", district: "张湾区" },
-  { id: "e50", title: "丹江口取水口通信中断", level: "黄", find: "自动发现", type: "设备离线", source: "市公安局", target: "市公安局", system: "丹江口取水口", same: 2, status: "待处置", stage: "交办", time: "2026-10-01 10:06", org: "市公安局（待处置）", src: "warn-job", impact: "低", lng: 111.49, lat: 32.54, layer: "event", district: "丹江口市" },
-  { id: "e51", title: "郧阳防火墙策略已恢复", level: "蓝", find: "自动发现", type: "策略失效", source: "warn-job", target: "郧阳区政府", system: "区县防火墙", same: 1, status: "已闭环", stage: "办结", time: "2026-10-01 11:32", org: "市数据局", src: "warn-job", impact: "低", lng: 110.67, lat: 32.81, layer: "event", district: "郧阳区" },
-  { id: "e52", title: "房县门户新暴露面", level: "红", find: "被动发现", type: "暴露面", source: "房县政府", target: "房县政府", system: "县门户", same: 5, status: "待处置", stage: "督办", overdue: true, time: "2026-10-01 13:08", org: "网安（待处置）", src: "房县政府", impact: "高", lng: 110.73, lat: 32.09, layer: "event", district: "房县" },
-  { id: "e53", title: "竹山应急专线抖动", level: "橙", find: "自动发现", type: "线路预警", source: "市应急管理局", target: "市应急管理局", system: "应急指挥专线", same: 3, status: "待处置", stage: "研判", time: "2026-10-01 14:22", org: "市应急管理局", src: "市应急管理局", impact: "中", lng: 110.19, lat: 32.27, layer: "event", district: "竹山县" },
-  { id: "e54", title: "竹溪审计日志中断", level: "黄", find: "智能发现", type: "日志异常", source: "竹溪县政府", target: "竹溪县政府", system: "日志审计", same: 2, status: "处理中", stage: "办理", time: "2026-10-01 15:46", org: "市数据局（处理中）", src: "竹溪县政府", impact: "低", lng: 109.80, lat: 32.34, layer: "event", district: "竹溪县" },
-  { id: "e55", title: "郧西边界探针离线", level: "蓝", find: "自动发现", type: "探针离线", source: "市网信办", target: "市网信办", system: "边界探针", same: 1, status: "待处置", stage: "交办", time: "2026-10-01 16:18", org: "市网信办（待处置）", src: "warn-job", impact: "低", lng: 110.41, lat: 33.01, layer: "event", district: "郧西县" },
-  { id: "e56", title: "茅箭邮件网关木马拦截", level: "红", find: "自动发现", type: "恶意代码", source: "市数据局", target: "市数据局", system: "邮件网关", same: 4, status: "处理中", stage: "办理", time: "2026-10-02 09:10", org: "网安（处理中）", src: "warn-job", impact: "高", lng: 110.84, lat: 32.58, layer: "event", district: "茅箭区" },
-  { id: "e57", title: "张湾核心交换温度告警", level: "橙", find: "自动发现", type: "资源告警", source: "市公安局", target: "市公安局", system: "市局核心交换", same: 2, status: "待处置", stage: "督办", overdue: true, time: "2026-10-02 15:20", org: "市公安局（待处置）", src: "warn-job", impact: "中", lng: 110.75, lat: 32.65, layer: "event", district: "张湾区" },
-  { id: "e58", title: "武当山票务接口越权", level: "橙", find: "智能发现", type: "越权访问", source: "市文旅局", target: "市文旅局", system: "文旅票务", same: 3, status: "处理中", stage: "办理", time: "2026-10-03 11:05", org: "市文旅局（处理中）", src: "市文旅局", impact: "中", lng: 111.04, lat: 32.43, layer: "event", district: "丹江口市" },
-  { id: "e59", title: "郧阳终端高危补丁缺失", level: "黄", find: "智能发现", type: "漏洞扫描", source: "warn-job", target: "郧阳区政府", system: "办公终端", same: 8, status: "待处置", stage: "研判", time: "2026-10-03 08:40", org: "市数据局（待处理）", src: "warn-job", impact: "低", lng: 110.65, lat: 32.85, layer: "event", district: "郧阳区" },
-  { id: "e60", title: "竹山县网站疑似篡改", level: "红", find: "被动发现", type: "网页篡改", source: "竹山县政府", target: "竹山县政府", system: "县政府网站", same: 1, status: "待处置", stage: "交办", time: "2026-10-04 17:12", org: "市网信办（待处置）", src: "竹山县政府", impact: "高", lng: 110.21, lat: 32.26, layer: "event", district: "竹山县" },
-  { id: "e61", title: "竹溪关基水位越限", level: "红", find: "自动发现", type: "关基告警", source: "市水利和湖泊局", target: "市水利和湖泊局", system: "水库监测站", same: 2, status: "处理中", stage: "办理", time: "2026-10-05 06:18", org: "市应急管理局（处理中）", src: "warn-job", impact: "高", lng: 109.91, lat: 32.29, layer: "event", district: "竹溪县" },
-  { id: "e62", title: "房县勒索线索待核实", level: "红", find: "被动发现", type: "勒索线索", source: "房县政府", target: "房县政府", system: "文件服务器", same: 1, status: "待处置", stage: "督办", overdue: true, time: "2026-10-06 21:35", org: "网安（待处置）", src: "房县政府", impact: "高", lng: 110.62, lat: 32.15, layer: "event", district: "房县" },
-  { id: "e63", title: "茅箭终端挖矿外联", level: "红", find: "智能发现", type: "挖矿告警", source: "市数据局", target: "市数据局", system: "办公终端", same: 5, status: "待处置", stage: "督办", overdue: true, time: "2026-10-07 20:08", org: "网安（待处置）", src: "warn-job", impact: "高", lng: 110.79, lat: 32.55, layer: "event", district: "茅箭区" },
-  { id: "e64", title: "张湾账号异地登录", level: "黄", find: "智能发现", type: "账号异常", source: "市公安局", target: "市公安局", system: "网络安全通报系统", same: 3, status: "待处置", stage: "交办", time: "2026-10-08 19:26", org: "市公安局（待处置）", src: "市公安局", impact: "低", lng: 110.76, lat: 32.70, layer: "event", district: "张湾区" },
-  { id: "e65", title: "丹江口景区广播已恢复", level: "橙", find: "自动发现", type: "设备离线", source: "市文旅局", target: "市文旅局", system: "景区广播终端", same: 2, status: "已闭环", stage: "办结", time: "2026-10-08 09:02", org: "市文旅局", src: "warn-job", impact: "中", lng: 111.08, lat: 32.47, layer: "event", district: "丹江口市" },
-  { id: "e66", title: "郧西通报事项已复核", level: "蓝", find: "被动发现", type: "通报核查", source: "郧西县政府", target: "郧西县政府", system: "县门户", same: 1, status: "已闭环", stage: "办结", time: "2026-10-09 16:10", org: "市网信办", src: "郧西县政府", impact: "低", lng: 110.33, lat: 32.95, layer: "event", district: "郧西县" },
-  { id: "e67", title: "茅箭共享交换接口超时", level: "黄", find: "自动发现", type: "资源告警", source: "市数据局", target: "市数据局", system: "数据共享交换系统", same: 4, status: "处理中", stage: "办理", time: "2026-10-10 11:22", org: "市数据局（处理中）", src: "warn-job", impact: "低", lng: 110.78, lat: 32.56, layer: "event", district: "茅箭区" },
-  { id: "e68", title: "张湾摄像头批量离线", level: "橙", find: "自动发现", type: "设备离线", source: "市公安局", target: "市公安局", system: "雪亮工程平台", same: 7, status: "处理中", stage: "办理", time: "2026-10-11 07:12", org: "市公安局（处理中）", src: "warn-job", impact: "中", lng: 110.69, lat: 32.68, layer: "event", district: "张湾区" },
-  { id: "e69", title: "房县高危端口对外映射", level: "红", find: "自动发现", type: "暴露面", source: "房县政府", target: "房县政府", system: "政务外网", same: 4, status: "待处置", stage: "研判", time: "2026-10-12 13:38", org: "网安（待处理）", src: "warn-job", impact: "高", lng: 110.83, lat: 32.03, layer: "event", district: "房县" },
-  { id: "e70", title: "竹山医保结算专线拥塞", level: "橙", find: "自动发现", type: "线路预警", source: "市医保局", target: "市医保局", system: "医保结算专网", same: 3, status: "待处置", stage: "交办", time: "2026-10-13 18:02", org: "市医保局（待处置）", src: "市医保局", impact: "中", lng: 110.27, lat: 32.23, layer: "event", district: "竹山县" },
-  { id: "e71", title: "郧阳窗口终端病毒已隔离", level: "橙", find: "自动发现", type: "恶意代码", source: "市政务服务局", target: "市政务服务局", system: "办事窗口终端", same: 2, status: "已闭环", stage: "办结", time: "2026-10-14 10:18", org: "市政务服务局", src: "warn-job", impact: "中", lng: 110.62, lat: 32.79, layer: "event", district: "郧阳区" },
-  { id: "e72", title: "竹溪污染源采集再次中断", level: "蓝", find: "自动发现", type: "设备离线", source: "市生态环境局", target: "市生态环境局", system: "污染源采集终端", same: 1, status: "待处置", stage: "交办", time: "2026-10-15 06:40", org: "市生态环境局", src: "warn-job", impact: "低", lng: 109.85, lat: 32.37, layer: "event", district: "竹溪县" },
-  { id: "e73", title: "丹江口取水口门禁异常", level: "橙", find: "智能发现", type: "关基告警", source: "市公安局", target: "市公安局", system: "丹江口取水口", same: 2, status: "待处置", stage: "研判", time: "2026-10-15 09:28", org: "市公安局（待处理）", src: "市公安局", impact: "中", lng: 111.51, lat: 32.56, layer: "event", district: "丹江口市" },
-  { id: "e74", title: "茅箭等保测评即将到期", level: "红", find: "自动发现", type: "等保到期", source: "等保到期", target: "市公安局", system: "雪亮工程平台", same: 12, status: "待处置", stage: "督办", overdue: true, time: "2026-10-01 16:42", org: "市公安局（待处理）", src: "warn-job", impact: "高", lng: 110.81, lat: 32.62, layer: "event", district: "茅箭区" }
+  { id: "e47", title: "竹溪污染源采集中断", level: "蓝", find: "自动发现", type: "设备离线", source: "市生态环境局", target: "市生态环境局", system: "污染源采集终端", same: 1, status: "待处置", stage: "交办", time: "2026-09-27 06:20", org: "市生态环境局", src: "warn-job", impact: "低", lng: 109.86, lat: 32.38, layer: "event", district: "竹溪县" }
 ];
 const findTypeBook = {
   "自动发现": ["态势感知", "弱信检测", "防火墙", "僵木蠕"],
@@ -2765,11 +2645,11 @@ const netOrders = [
   { title: "IPv6 委办局改造", type: "地址改造", status: "处置中", rows: [["进度", "64%"], ["数量", "186 套"], ["状态", "分批割接"]] }
 ];
 const calcNodes = [
-  { kind: "center", name: "国芯一号数据中心", district: "竹溪县", lng: 109.72, lat: 32.32, rows: [["位置", "竹溪县"], ["状态", "一期建成"], ["算力", "50P"], ["投资", "3.2亿元"], ["算力卡", "160张"], ["计价", "9.6元/卡·时"], ["规划", "650P"], ["主体", "科大讯飞 · 华为"], ["芯片", "昇腾910B"]], intro: "<p>位于竹溪县，由科大讯飞联合华为承建并共同运营，采用全国产化软硬件，搭载华为昇腾910B，构建“一中心三区域”体系，打造全栈自主创新的国产化算力底座。</p><p>规划总算力650P。一期已建成50P国产化算力底座，二期正在建设，预计新增100P。面向政务、农业、文旅、生态推动数实融合，打造山区县域数字经济“竹溪样板”。</p>" },
-  { kind: "center", name: "工业大数据中心", district: "茅箭区", lng: 110.93, lat: 32.56, rows: [["位置", "十堰经开区"], ["状态", "已投产"], ["算力", "50P"], ["投资", "2.4亿元"], ["算力卡", "160张"], ["计价", "6.8元/卡·时"], ["机架", "118组"], ["类型", "通算为主"], ["承载", "服务器1400余台"]], intro: "<p>位于十堰经开区，由十堰经济技术开发区、中国联通十堰分公司、联高数字科技（十堰）有限公司共同规划。联高数科建设，联合十堰联通运营，以数据存储为主。</p><p>2021年启动建设。118组标准机柜已全部投产，可承载服务器1400余台，支撑不低于600G数据流量。可用算力以通算为主，达50P，服务十堰工业数字化转型。</p>" },
-  { kind: "center", name: "十堰经开区智算中心", district: "茅箭区", lng: 111.00, lat: 32.63, rows: [["位置", "十堰经开区"], ["状态", "已建约150P"], ["算力", "150P"], ["投资", "5.8亿元"], ["算力卡", "480张"], ["计价", "10.5元/卡·时"], ["规划", "2000P通算+100P智算"], ["主体", "湖北国芯智算"], ["用地", "10亩 · 约4000㎡"]], intro: "<p>位于十堰经开区，由湖北国芯智算科技有限公司投资建设，对白浪电信园区进行改造升级。占地10亩，建筑面积约4000平方米。</p><p>规划打造国产化双算力集群，含2000P通用算力和100P智能算力。目前已建算力约150P。</p>" },
+  { kind: "center", name: "国芯一号数据中心", district: "竹溪县", lng: 109.72, lat: 32.32, rows: [["位置", "竹溪县"], ["状态", "一期建成"], ["算力", "50P"], ["算力卡", "160张"], ["计价", "9.6元/卡·时"], ["规划", "650P"], ["主体", "科大讯飞 · 华为"], ["芯片", "昇腾910B"]], intro: "<p>位于竹溪县，由科大讯飞联合华为承建并共同运营，采用全国产化软硬件，搭载华为昇腾910B，构建“一中心三区域”体系，打造全栈自主创新的国产化算力底座。</p><p>规划总算力650P。一期已建成50P国产化算力底座，二期正在建设，预计新增100P。面向政务、农业、文旅、生态推动数实融合，打造山区县域数字经济“竹溪样板”。</p>" },
+  { kind: "center", name: "工业大数据中心", district: "茅箭区", lng: 110.93, lat: 32.56, rows: [["位置", "十堰经开区"], ["状态", "已投产"], ["算力", "50P"], ["算力卡", "160张"], ["计价", "6.8元/卡·时"], ["机架", "118组"], ["类型", "通算为主"], ["承载", "服务器1400余台"]], intro: "<p>位于十堰经开区，由十堰经济技术开发区、中国联通十堰分公司、联高数字科技（十堰）有限公司共同规划。联高数科建设，联合十堰联通运营，以数据存储为主。</p><p>2021年启动建设。118组标准机柜已全部投产，可承载服务器1400余台，支撑不低于600G数据流量。可用算力以通算为主，达50P，服务十堰工业数字化转型。</p>" },
+  { kind: "center", name: "十堰经开区智算中心", district: "茅箭区", lng: 111.00, lat: 32.63, rows: [["位置", "十堰经开区"], ["状态", "已建约150P"], ["算力", "150P"], ["算力卡", "480张"], ["计价", "10.5元/卡·时"], ["规划", "2000P通算+100P智算"], ["主体", "湖北国芯智算"], ["用地", "10亩 · 约4000㎡"]], intro: "<p>位于十堰经开区，由湖北国芯智算科技有限公司投资建设，对白浪电信园区进行改造升级。占地10亩，建筑面积约4000平方米。</p><p>规划打造国产化双算力集群，含2000P通用算力和100P智能算力。目前已建算力约150P。</p>" },
   { kind: "center", name: "移动通信数据中心", district: "张湾区", lng: 110.68, lat: 32.71, rows: [["位置", "张湾区"], ["状态", "8月完工"], ["算力", "200P"], ["算力卡", "800张"], ["计价", "8.8元/卡·时"], ["机架", "1,400架"], ["投资", "约7亿元"], ["面积", "1.1万平方米"]], intro: "<p>位于张湾区，由十堰移动公司投资建设，累计投资约7亿元。规划面积1.1万平方米、装机能力1400架，今年8月已完工，算力200P。</p><p>为十堰政务云平台提供高标准、低时延、安全可控的机房与计算存储，实现政务数据本地化处理。同时赋能车路云、低空经济，吸引算力相关企业集聚。</p>" },
-  { kind: "center", name: "武当云谷大数据中心", district: "丹江口市", lng: 111.18, lat: 32.50, rows: [["位置", "丹江口市"], ["状态", "一期投运"], ["算力", "3,300P"], ["投资", "35亿元"], ["算力卡", "3,200张"], ["计价", "7.5元/卡·时"], ["机架", "1,500架"], ["出租率", "超90%"], ["称号", "国家绿色数据中心"]], intro: "<p>分二期建设6栋数据中心机房，总建筑面积6.6万平方米，机架约10000架，可容纳20万台服务器，投资约35亿元。一期2栋已全面投运，建筑面积1.2万平方米，部署机架1500个，出租率超90%，已落地省政务灾备、十堰武当云、三大运营商、中贝通信、东风通信、华为等业务，形成3300P，单体规模全省第一、华中前列，获国家绿色数据中心称号。</p><p>二期规划4栋、机架8500架，承载算力约10万P。土建已完成，4#机电及室外工程完成率超90%，预计9月首批节点上线，总体算力将突破1万P。以武当云谷为核心规划丹江口市智算产业园，锚定今年9月底破1万P、2027年5万P、2030年10万P。</p>" },
+  { kind: "center", name: "武当云谷大数据中心", district: "丹江口市", lng: 111.18, lat: 32.50, rows: [["位置", "丹江口市"], ["状态", "一期投运"], ["算力", "3,300P"], ["算力卡", "3,200张"], ["计价", "7.5元/卡·时"], ["机架", "1,500架"], ["出租率", "超90%"], ["称号", "国家绿色数据中心"]], intro: "<p>分二期建设6栋数据中心机房，总建筑面积6.6万平方米，机架约10000架，可容纳20万台服务器，投资约35亿元。一期2栋已全面投运，建筑面积1.2万平方米，部署机架1500个，出租率超90%，已落地省政务灾备、十堰武当云、三大运营商、中贝通信、东风通信、华为等业务，形成3300P，单体规模全省第一、华中前列，获国家绿色数据中心称号。</p><p>二期规划4栋、机架8500架，承载算力约10万P。土建已完成，4#机电及室外工程完成率超90%，预计9月首批节点上线，总体算力将突破1万P。以武当云谷为核心规划丹江口市智算产业园，锚定今年9月底破1万P、2027年5万P、2030年10万P。</p>" },
   { kind: "local", name: "一网通办推理", district: "茅箭区", lng: 110.83, lat: 32.58, rows: [["场景", "办事咨询"], ["单位", "市数据局"], ["系统", "一网通办"], ["用量", "6P"]] },
   { kind: "local", name: "雪亮视频解析", district: "张湾区", lng: 110.70, lat: 32.69, rows: [["场景", "视频解析"], ["单位", "市公安局"], ["系统", "雪亮工程"], ["用量", "18P"]] },
   { kind: "local", name: "应急推演", district: "茅箭区", lng: 110.77, lat: 32.63, rows: [["场景", "指挥推演"], ["单位", "市应急管理局"], ["系统", "应急指挥"], ["用量", "3P"]] },
@@ -2784,11 +2664,6 @@ const calcCenters = calcNodes.filter(n => n.kind === "center").sort((a, b) => {
   const p = n => centerNum((n.rows.find(r => r[0] === "算力") || ["", "0"])[1]);
   return p(b) - p(a);
 });
-const calcBuilds = [
-  { name: "武当云谷二期", rows: [["位置", "丹江口市"], ["规模", "约10万P"], ["进度", "机电超90%"], ["建设", "4栋 · 机架8500架"], ["投资", "18亿元"], ["计划", "首批节点上线"]] },
-  { name: "国芯一号二期", rows: [["位置", "竹溪县"], ["规模", "新增100P"], ["进度", "建设中"], ["主体", "科大讯飞 · 华为"], ["投资", "1.8亿元"]] },
-  { name: "武当云谷智算产业园", rows: [["位置", "丹江口市"], ["规模", "约580亩"], ["进度", "规划"], ["依托", "武当云谷大数据中心"], ["投资", "规划测算"]] }
-];
 const calcAlarms = [
   { level: "红", tag: "PUE", title: "武当山中心 PUE 超阈值", time: "2026-09-22 15:20", rows: [["等级", "红"], ["实时 PUE", "1.46"], ["阈值", "1.40"], ["建议", "检查制冷"]] },
   { level: "红", tag: "故障", title: "市级中心训练集群降级", time: "2026-09-22 10:05", rows: [["等级", "红"], ["现象", "部分算力卡离线"], ["影响", "训练任务排队"], ["建议", "隔离故障卡"]] },
@@ -3196,8 +3071,8 @@ function shiyanRay(deg) {
   return [[hx, hy], [hx + dx * t, hy + dy * t]];
 }
 const calcChannels = [
-  { name: "西安—京津冀方向", map: "西安—京津冀", meta: "出省通道", bw: "200G", delay: "16ms", nat: { name: "武汉", map: "武汉", bw: "500G", delay: "10ms" }, off: -8, labelAt: 12, nudge: [-70, -28], pts: [[110.80, 32.65], [110.73, 32.70], [110.43, 32.99], [109.94, 33.87], [108.95, 34.27], [109.50, 34.50], [111.00, 35.03], [112.45, 34.62], [113.63, 34.75], [113.88, 35.30], [114.35, 36.10], [114.49, 36.61], [114.51, 38.04], [115.46, 38.87], [116.41, 39.90], [114.88, 40.77]] },
-  { name: "西安—庆阳方向", map: "西安—庆阳", meta: "出省通道", bw: "200G", delay: "12ms", nat: { name: "西安", map: "西安", bw: "100G", delay: "8ms" }, off: 8, labelAt: 7, alwaysNudge: true, nudge: [-8, 26], pts: [[110.80, 32.65], [110.82, 32.83], [110.43, 32.99], [109.94, 33.87], [108.95, 34.27], [108.71, 34.33], [108.08, 35.03], [107.64, 35.73]] },
+  { name: "西安—京津冀方向", map: "西安—京津冀", meta: "出省通道", bw: "200G", delay: "16ms", off: -8, labelAt: 12, nudge: [-70, -28], pts: [[110.80, 32.65], [110.73, 32.70], [110.43, 32.99], [109.94, 33.87], [108.95, 34.27], [109.50, 34.50], [111.00, 35.03], [112.45, 34.62], [113.63, 34.75], [113.88, 35.30], [114.35, 36.10], [114.49, 36.61], [114.51, 38.04], [115.46, 38.87], [116.41, 39.90], [114.88, 40.77]] },
+  { name: "西安—庆阳方向", map: "西安—庆阳", meta: "出省通道", bw: "200G", delay: "12ms", off: 8, labelAt: 7, alwaysNudge: true, nudge: [-8, 26], pts: [[110.80, 32.65], [110.82, 32.83], [110.43, 32.99], [109.94, 33.87], [108.95, 34.27], [108.71, 34.33], [108.08, 35.03], [107.64, 35.73]] },
   { name: "武汉—长三角方向", map: "武汉—长三角", meta: "出省通道", bw: "200G", delay: "13ms", off: -8, labelAt: 9, alwaysNudge: true, nudge: [-28, -6], pts: [[110.80, 32.65], [111.51, 32.54], [112.14, 32.04], [113.38, 31.69], [113.92, 30.93], [114.31, 30.59], [114.87, 30.45], [116.51, 31.75], [117.28, 31.86], [118.80, 32.06], [120.30, 31.57], [121.47, 31.23]] },
   { name: "武汉—粤港澳大湾区方向", map: "武汉—粤港澳", meta: "出省通道", bw: "200G", delay: "15ms", off: 8, labelAt: 6, nudge: [-60, 28], pts: [[110.80, 32.65], [111.51, 32.54], [112.14, 32.04], [112.20, 31.04], [114.31, 30.59], [113.13, 29.36], [112.98, 28.19], [112.57, 26.89], [113.60, 24.81], [113.26, 23.13]] }
 ];
@@ -3217,7 +3092,6 @@ const calcHubs = [
 ];
 function channelBook() {
   if (calcMapScope === "湖北") return calcChannelsHubei;
-  if (calcMapScope === "中国") return calcChannels;
   return [];
 }
 function offsetPolyline(pts, offset) {
@@ -3282,7 +3156,7 @@ function drawCalcHubs() {
     const g = document.createElementNS(NS, "g");
     g.setAttribute("class", "calc-hub" + (on ? " on" : ""));
     const label = h.name === "粤港澳大湾区" ? "粤港澳" : h.name;
-    g.innerHTML = `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${on ? 9 : 6}"></circle><text x="${(x + (h.dx || 12)).toFixed(1)}" y="${(y + (h.dy || -8)).toFixed(1)}">${label}</text>`;
+    g.innerHTML = `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${on ? 8 : 6}"></circle><text x="${(x + (h.dx || 12)).toFixed(1)}" y="${(y + (h.dy || -8)).toFixed(1)}">${label}</text>`;
     g.addEventListener("click", e => { e.stopPropagation(); toggleHub(h.name); });
     gChan.appendChild(g);
   });
@@ -3309,12 +3183,9 @@ function appendChannelLines(book, project) {
     const pts = offsetPolyline(ch.pts.map(p => project(p[0], p[1])), ch.off || 0);
     const d = smoothRoute(pts);
     const g = document.createElementNS(NS, "g");
-    const on = ch.name === calcChannelPick;
-    g.setAttribute("class", "calc-channel solid" + (on ? " on" : ""));
+    g.setAttribute("class", "calc-channel solid");
     const mid = channelLabelPoint(pts, ch);
-    const label = (calcMapScope === "中国" && ch.nat) ? ch.nat.map : ch.map;
-    g.innerHTML = `<path class="hit" d="${d}"></path><path d="${d}"></path><text x="${mid[0].toFixed(1)}" y="${mid[1].toFixed(1)}">${label}</text>`;
-    g.addEventListener("click", e => { e.stopPropagation(); toggleChannel(ch.name); });
+    g.innerHTML = `<path d="${d}"></path><text x="${mid[0].toFixed(1)}" y="${mid[1].toFixed(1)}">${ch.map}</text>`;
     gChan.appendChild(g);
   });
 }
@@ -3323,8 +3194,8 @@ function drawScopeChannels() {
   gChan.classList.toggle("has-pick", !!calcChannelPick);
   if (boardMode !== "算" || !projectFn) return;
   if (calcMapScope === "中国" && projectChina) {
-    if (calcChTab === "hub") drawCalcHubs();
-    else appendChannelLines(calcChannels, projectChina);
+    appendChannelLines(calcChannels, projectChina);
+    drawCalcHubs();
     return;
   }
   if (calcMapScope === "湖北" && projectHubei) appendChannelLines(calcChannelsHubei, projectHubei);
@@ -3616,12 +3487,7 @@ function renderCalcLists() {
   const centerShot = `<svg class="shot" viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="18" width="52" height="38" fill="#fff" stroke="#111" stroke-width="1.4"/><path d="M20 18V11h24v7" fill="none" stroke="#111" stroke-width="1.4"/><rect x="12" y="24" width="9" height="24" fill="#d5d5d5" stroke="#111"/><rect x="24" y="24" width="9" height="24" fill="#eee" stroke="#111"/><rect x="36" y="24" width="9" height="24" fill="#d5d5d5" stroke="#111"/><rect x="48" y="30" width="5" height="5" fill="#111"/></svg>`;
   const centerVal = (a, k) => (a.rows.find(r => r[0] === k) || ["", "—"])[1];
   document.getElementById("calcCenters").innerHTML = calcCenters.map((a, i) =>
-    `<div class="app-row center-card" data-i="${i}">${centerShot}<div class="body"><div class="name">${a.name}</div><div class="scale"><span>算力 ${centerVal(a, "算力")}</span><span>${centerVal(a, "位置")}</span><span>${centerVal(a, "投资")}</span></div></div></div>`).join("");
-  const builds = document.getElementById("calcBuilds");
-  if (builds) {
-    builds.innerHTML = calcBuilds.map((a, i) =>
-      `<div class="app-row center-card" data-i="${i}">${centerShot}<div class="body"><div class="name">${a.name}</div><div class="scale"><span>${centerVal(a, "规模")}</span><span>${centerVal(a, "位置")}</span><span>${centerVal(a, "进度")}</span></div></div></div>`).join("");
-  }
+    `<div class="app-row center-card" data-i="${i}">${centerShot}<div class="body"><div class="name">${a.name}</div><div class="scale"><span>算力 ${centerVal(a, "算力")}</span><span>${centerVal(a, "位置")}</span><span>${centerVal(a, "状态")}</span></div></div></div>`).join("");
   renderChannelList();
   document.getElementById("calcOrders").innerHTML = calcInd.map((a, i) =>
     `<div class="alarm-row" data-i="${i}"><div class="t">${a.dot ? '<i class="mark"></i>' : ""}${a.name}</div><div class="meta"><span>${a.meta}</span></div></div>`).join("");
@@ -3642,10 +3508,9 @@ function renderChannelList() {
     ).join("");
     return;
   }
-  el.innerHTML = calcChannels.map(a => {
-    const view = calcMapScope === "中国" && a.nat ? a.nat : a;
-    return `<div class="alarm-row ch-static ch-line${a.name === calcChannelPick ? " on" : ""}" data-ch="${a.name}"><div class="t">${view.name}</div><div class="meta"><span class="ch-qos">${view.bw} · ${view.delay}</span></div></div>`;
-  }).join("");
+  el.innerHTML = calcChannels.map(a =>
+    `<div class="alarm-row ch-static"><div class="t">${a.name}</div><div class="meta"><span>${a.meta}</span><span class="ch-qos">${a.bw} · ${a.delay}</span></div></div>`
+  ).join("");
 }
 function fitCalcShiyan() {
   if (boardMode !== "算" || calcMapScope !== "十堰" || !shiyanBase) return;
@@ -3707,7 +3572,7 @@ function showVoucherPop() {
     }).join("");
     const doneN = a.steps.filter(s => s[0]).length;
     const ratio = doneN <= 1 ? 0 : ((doneN - 1) / 3).toFixed(3);
-    return `<div class="voucher-item"><div class="top"><b>${a.name}</b></div><div class="voucher-row"><div class="voucher-steps" style="--done:${ratio}">${steps}</div><div class="voucher-end"><span>投资额 ${a.amount}</span><i></i><span>惠及企业${a.firms}家</span></div></div></div>`;
+    return `<div class="voucher-item"><div class="top"><b>${a.name}</b><span>金额 ${a.amount}</span></div><div class="voucher-steps" style="--done:${ratio}">${steps}</div><div class="voucher-benefit">惠及企业${a.firms}家</div></div>`;
   }).join("");
   pop.innerHTML = `<button type="button" class="pop-x" aria-label="关闭">×</button><h3>算力券发放</h3><div class="voucher-list">${items}</div>`;
   const br = document.getElementById("board").getBoundingClientRect();
@@ -3990,7 +3855,6 @@ function refreshLists() {
   renderLevel();
   renderEvents();
   renderAttack();
-  renderRiskBars();
   renderFindWay();
   renderCompliance();
   if (projectFn) drawMarkers();
@@ -4089,43 +3953,6 @@ function renderAtkMap() {
     gAtk.appendChild(text);
   });
 }
-let riskTab = "dist";
-const riskBureaus = ["市公安局", "市数据局", "市网信办", "市应急局", "市政务局", "市水利局", "市文旅局", "市卫健委"];
-const riskBureauWeight = [22, 18, 14, 12, 10, 9, 8, 7];
-function renderRiskBars() {
-  const svg = document.getElementById("riskBars");
-  if (!svg) return;
-  document.querySelectorAll("#riskTab button").forEach(b => b.classList.toggle("on", b.dataset.k === riskTab));
-  const totals = attackByRange[dateRange] || attackByRange["本月"];
-  const sum = totals.reduce((s, n) => s + n, 0);
-  let series;
-  if (riskTab === "org") {
-    const counts = splitCount(sum, riskBureauWeight);
-    series = riskBureaus.map((name, i) => [name, counts[i]]);
-  } else {
-    const acc = atkNames.map(() => 0);
-    totals.forEach((total, ti) => {
-      splitCount(total, atkWeight[ti]).forEach((n, i) => { acc[i] += n; });
-    });
-    series = atkNames.map((name, i) => [name, acc[i]]);
-  }
-  const max = Math.max(1, ...series.map(s => s[1]));
-  const W = 460, baseY = 104, topY = 18;
-  const slot = W / series.length;
-  const bw = Math.min(26, slot - 12);
-  svg.innerHTML = `<line x1="4" y1="${baseY}" x2="${W - 4}" y2="${baseY}" stroke="#888" stroke-width="1"/>` + series.map((s, i) => {
-    const h = Math.round((s[1] / max) * (baseY - topY));
-    const x = slot * i + (slot - bw) / 2;
-    const y = baseY - h;
-    return `<rect x="${x.toFixed(1)}" y="${y}" width="${bw}" height="${Math.max(h, s[1] ? 2 : 0)}" fill="#888"></rect><text x="${(x + bw / 2).toFixed(1)}" y="${Math.max(12, y - 3)}" text-anchor="middle" font-size="11" fill="#333">${s[1]}</text><text x="${(x + bw / 2).toFixed(1)}" y="120" text-anchor="middle" font-size="11" fill="#333">${s[0]}</text>`;
-  }).join("");
-}
-document.getElementById("riskTab").addEventListener("click", e => {
-  const btn = e.target.closest("button");
-  if (!btn || btn.dataset.k === riskTab) return;
-  riskTab = btn.dataset.k;
-  renderRiskBars();
-});
 function renderAttack() {
   const box = document.getElementById("atkGrid");
   if (!box) return;
@@ -4290,41 +4117,14 @@ bindClick(document.getElementById("netOrders"), ".alarm-row", document.getElemen
   showCloudCard(a.title, a.rows, row, true);
 });
 renderCalcLists();
-let centerTab = "center";
-function showCenterTab() {
-  document.querySelectorAll("#centerTab button").forEach(b => b.classList.toggle("on", b.dataset.k === centerTab));
-  const centers = document.getElementById("calcCenters");
-  const builds = document.getElementById("calcBuilds");
-  if (!centers || !builds) return;
-  centers.hidden = centerTab !== "center";
-  builds.hidden = centerTab !== "build";
-}
-document.getElementById("centerTab").addEventListener("click", e => {
-  const btn = e.target.closest("button");
-  if (!btn || btn.dataset.k === centerTab) return;
-  centerTab = btn.dataset.k;
-  const pop = document.getElementById("unitPop");
-  pop.classList.remove("show");
-  pop.dataset.pinned = "";
-  calcCenterPick = "";
-  drawCalcMarkers();
-  showCenterTab();
-});
 bindClick(document.getElementById("calcCenters"), ".app-row", document.getElementById("unitPop"), row => {
   const a = calcCenters[+row.dataset.i];
   toggleCalcCenter(a.name, row);
-});
-bindClick(document.getElementById("calcBuilds"), ".app-row", document.getElementById("unitPop"), row => {
-  const a = calcBuilds[+row.dataset.i];
-  calcCenterPick = "";
-  drawCalcMarkers();
-  showCloudCard(a.name, a.rows, row, true);
 });
 document.getElementById("calcAlarms").addEventListener("click", e => {
   const row = e.target.closest(".alarm-row");
   if (!row) return;
   if (row.dataset.hub) toggleHub(row.dataset.hub);
-  else if (row.dataset.ch) toggleChannel(row.dataset.ch);
 });
 document.getElementById("chTabs").addEventListener("click", e => {
   const btn = e.target.closest("button");
@@ -4341,12 +4141,12 @@ document.getElementById("chTabs").addEventListener("click", e => {
   drawScopeChannels();
 });
 const calcUseCards = {
-  scene: { title: "服务本地 · 应用场景", rows: [["分支", "服务本地情况"], ["应用场景", "政务服务、公安视频、医疗影像"], ["用量", "170P"], ["说明", "本地政务与民生推理"]] },
+  scene: { title: "服务本地 · 应用场景", rows: [["分支", "服务本地情况"], ["应用场景", "政务服务、公安视频、医疗影像"], ["用量", "58P"], ["说明", "本地政务与民生推理"]] },
   unit: { title: "服务本地 · 单位", rows: [["分支", "服务本地情况"], ["接入单位", "12家"], ["主要用户", "市公安局 28%"], ["用量", "58P"]] },
   sys: { title: "服务本地 · 系统", rows: [["分支", "服务本地情况"], ["接入系统", "28个"], ["覆盖", "政务、公安、卫健"], ["用量", "58P"]] },
-  local: { title: "服务本地 · 用量", rows: [["分支", "服务本地情况"], ["用量", "58P"], ["说明", "本地服务用量"]] },
-  sale: { title: "算力外销 · 供需对接、签约客户", rows: [["分支", "算力外销情况"], ["供需对接", "在谈6"], ["签约客户", "4家"]] },
-  prov: { title: "算力外销 · 省数堰算情况", rows: [["分支", "算力外销情况"], ["省数堰算", "已接入全省算力调度"], ["调度规模", "32P"], ["典型任务", "省水利厅水利模型"], ["状态", "已开通"]] }
+  local: { title: "服务本地 · 用量", rows: [["分支", "服务本地情况"], ["用量", "58P"], ["说明", "本地服务用量"], ["消纳合计", "95P"]] },
+  sale: { title: "算力外销 · 供需对接、签约客户", rows: [["分支", "算力外销情况"], ["供需对接", "在谈 6 项"], ["签约客户", "4家"], ["外销用量", "37P"], ["其中省数堰算", "32P"]] },
+  prov: { title: "算力外销 · 省数堰算情况", rows: [["分支", "算力外销情况"], ["省数堰算", "已纳入省级调度"], ["调度规模", "32P"], ["典型任务", "省水利厅水利模型"], ["状态", "已开通"]] }
 };
 document.querySelector(".calc-use").addEventListener("click", e => {
   const hit = e.target.closest(".use-hit");
@@ -5005,7 +4805,6 @@ const portraitGroups = (() => {
 })();
 const cityPortrait = avgRadar(units);
 let portraitWord = "";
-let portraitTab = "cloud";
 const portraitWords = [
   { t: "等保达标", w: 22, tone: "good" },
   { t: "基线合规", w: 20, tone: "good" },
@@ -5041,24 +4840,16 @@ const portraitWords = [
   { t: "口令复用", w: 14, tone: "bad" }
 ];
 let portraitWait = false;
-function portraitReportText() {
-  return "本月共发现风险86起，拦截率99.2%。突出问题是弱口令、暴露面、高危漏洞和等保过期。等保达标、零信任和通报闭环保持较好，建议优先完成超期整改。";
-}
-function showPortraitTab() {
-  document.querySelectorAll("#portraitTab button").forEach(b => b.classList.toggle("on", b.dataset.k === portraitTab));
-  const cloud = document.getElementById("wordCloud");
-  const report = document.getElementById("portraitReport");
-  if (!cloud || !report) return;
-  cloud.hidden = portraitTab !== "cloud";
-  report.hidden = portraitTab !== "ai";
-  if (portraitTab === "ai") report.textContent = portraitReportText();
-  else drawPortrait();
-}
 function drawPortrait() {
   const box = document.getElementById("wordCloud");
-  if (!box || portraitTab !== "cloud") return;
+  const cap = document.getElementById("portraitCap");
+  if (!box || !cap) return;
   const list = portraitWords;
   if (portraitWord && !list.some(w => w.t === portraitWord)) portraitWord = "";
+  const picked = list.find(w => w.t === portraitWord);
+  cap.innerHTML = picked
+    ? `${picked.t}<span class="${picked.tone}">${picked.tone === "bad" ? "风险" : "成效"}</span>`
+    : `<span class="good">成效</span><span class="bad">风险</span>`;
   box.innerHTML = "";
   const width = box.clientWidth;
   const height = box.clientHeight;
@@ -5115,11 +4906,9 @@ document.getElementById("wordCloud").addEventListener("click", e => {
   portraitWord = portraitWord === btn.textContent ? "" : btn.textContent;
   drawPortrait();
 });
-document.getElementById("portraitTab").addEventListener("click", e => {
-  const btn = e.target.closest("button");
-  if (!btn || btn.dataset.k === portraitTab) return;
-  portraitTab = btn.dataset.k;
-  showPortraitTab();
+document.getElementById("portraitCap").addEventListener("click", () => {
+  portraitWord = "";
+  drawPortrait();
 });
 function tickCharts() {
   defenses.forEach(d => {
